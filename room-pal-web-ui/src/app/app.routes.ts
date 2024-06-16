@@ -1,3 +1,9 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 
-export const routes: Routes = [];
+const accountRoutes = () =>
+  import('./modules/account/account.routes').then(r => r.routes)
+
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'account' },
+  { path: 'account', loadChildren: accountRoutes },
+]
