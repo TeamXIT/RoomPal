@@ -1,21 +1,4 @@
 const mongoose=require('mongoose');
-const feedbackSchema= new mongoose.Schema({
-    user_id: {
-        type:mongoose.Types.ObjectId,
-        ref:'User',
-        required:true,
-        unique:false
-    },
-    comment:{
-        type:String,
-        required:true
-    },
-    room_id:{
-       type:mongoose.Types.ObjectId,
-       ref:'Room',
-       required:true
-    }
-},{timestamp:true,versionKey:false});
 const  roomSchema= new mongoose.Schema({
     roomName: {
         type: String,
@@ -106,7 +89,6 @@ const  roomSchema= new mongoose.Schema({
       }
 }, { timestamps: true,versionKey:false });
 
-const Feedback = mongoose.model('feedbacks',feedbackSchema);
 const Room = mongoose.model('rooms', roomSchema);
 
-module.exports = {Room,Feedback};
+module.exports = {Room};
