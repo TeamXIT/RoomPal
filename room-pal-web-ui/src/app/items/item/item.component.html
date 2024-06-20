@@ -11,7 +11,23 @@
       placeholder="first name"
       formControlName="firstName"
       class="form-control"
+      [ngClass]="
+        registerFormGroup.controls['firstName'].errors ? 'is-invalid' : ''
+      "
     />
+    @if (registerFormGroup.controls["firstName"].errors) {
+      @if (registerFormGroup.controls["firstName"].errors["required"]) {
+        <div class="invalid-feedback">First name is required</div>
+      }
+      @if (registerFormGroup.controls["firstName"].errors["minlength"]) {
+        <div class="invalid-feedback">Minimum 3 characters required</div>
+      }
+      @if (registerFormGroup.controls["firstName"].errors["maxlength"]) {
+        <div class="invalid-feedback">Maximum 16 characters allowed</div>
+      }
+    }
+
+    <pre>{{ registerFormGroup.controls["firstName"].errors | json }}</pre>
   </div>
   <div class="mb-3 col">
     <label class="form-label">Last name</label>
@@ -45,3 +61,5 @@
 
   <button type="submit" class="btn btn-primary btn-raised">Register</button>
 </form>
+
+<pre>{{ registerFormGroup.value | json }}</pre>
