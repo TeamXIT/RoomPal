@@ -10,7 +10,8 @@ const baseResponses = {
         USER_LOGGED_IN:(data=null) =>baseResponses.success('User logged in successfully',data),
         ROOM_CREATED_SUCCESSFULLY:(data=null) =>baseResponses.success('Room created successfully',data),
         FEEDBACK:(data=null)=> baseResponses.success('Feedback updated successfully',data),
-        FEEDBACK_NOT_FOUND:(data=null)=> baseResponses.error('Feedbacks are not given till now',data)
+        FEEDBACK_NOT_FOUND:(data=null)=> baseResponses.error('Feedbacks are not given till now',data),
+        RATING_GIVEN:(data=null)=> baseResponses.success('Rating given successfully',data),
     }
 };
 module.exports = {baseResponses};

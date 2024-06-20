@@ -12,15 +12,16 @@ const giveRatings = async(req,res)=>{
             rating
         });
         await newRating.save();
-        return res.status(200).json(baseResponses.success(newRating));
+        return res.status(200).json(baseResponses.constantMessages.RATING_GIVEN());
     }catch(error){
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
 const getRating = async(req, res) => {
     try{
-        const{user_id}=req.params.user_id;
-        const{room_id}=req.params.room_id;
+        const user_id=req.query.user_id;
+        const room_id=req.query.room_id;
+    
         if(!user_id || !room_id){
             return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
         }
@@ -47,7 +48,7 @@ const getAllRatings = async (req, res) => {
         if(!rating) {
             return res.status(404).json(null);
         }
-        return res.status(200).json(totalPages,count,rating);
+        return res.status(200).json({totalPages,count,rating});
     }catch(error){
         return res.status(500).json(baseResponses.error(error.message));
     }
