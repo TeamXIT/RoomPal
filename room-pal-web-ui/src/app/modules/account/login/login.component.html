@@ -1,1 +1,47 @@
-<p>login works!</p>
+<div class="row d-flex justify-content-center mt-5">
+  <div class="col-md-5 card">
+    <div class="card-body">
+      <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="" class="form-label">Mobile Numer</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="mobileNumber"
+            [ngClass]="
+              loginFormGroup.controls['mobileNumber'].errors &&
+              loginFormGroup.controls['mobileNumber'].touched
+                ? 'is-invalid'
+                : ''
+            " />
+
+          @if (
+            loginFormGroup.controls["mobileNumber"].errors &&
+            loginFormGroup.controls["mobileNumber"].touched
+          ) {
+            @if (loginFormGroup.controls["mobileNumber"].errors["required"]) {
+              <div class="invalid-feedback">Mobile Number is required</div>
+            }
+
+            @if (loginFormGroup.controls["mobileNumber"].errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 10 digits required</div>
+            }
+
+            @if (loginFormGroup.controls["mobileNumber"].errors["maxlength"]) {
+              <div class="invalid-feedback">Maximum 10 digits allowed</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label for="" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-raised">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
