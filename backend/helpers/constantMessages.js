@@ -2,7 +2,8 @@ const BASE_RESPONSE_MESSAGES = {
     SUCCESS:{
         USER_REGISTERED: 'User registered successfully',
         USER_LOGGED_IN: 'User logged in successfully',
-        ROOM_CREATED_SUCCESSFULLY:'Room created successfully'
+        ROOM_CREATED_SUCCESSFULLY:'Room created successfully',
+        RATING_GIVEN: 'Rating given successfully',
 
     },
     ERROR:{
