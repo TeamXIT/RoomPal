@@ -12,6 +12,8 @@ const baseResponses = {
         FEEDBACK:(data=null)=> baseResponses.success('Feedback updated successfully',data),
         FEEDBACK_NOT_FOUND:(data=null)=> baseResponses.error('Feedbacks are not given till now',data),
         RATING_GIVEN:(data=null)=> baseResponses.success('Rating given successfully',data),
+        ORDER_CREATED_SUCCESSFULLY:(data=null)=> baseResponses.success('Order created successfully',data),
+        ORDER_FETCHED_SUCCESSFULLY:(data=null)=> baseResponses.success('Order fetched successfully',data),
     }
 };
 module.exports = {baseResponses};
