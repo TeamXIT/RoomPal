@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch, useSelector } from 'react-redux'; // Import useSelector
+import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { error, isBusy } = useSelector(state => state.auth.screen); // Assuming your slice is named 'auth'
+  const { error, isBusy, success } = useSelector(state => state.auth.screen);
+  const authToken = useSelector(state => state.auth.data.authToken);
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [mobileNumberError, setMobileNumberError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
   const validateMobileNumber = (mobile) => {
-    // Implement your validation logic for mobile number
-    // Example: Check if it's a valid mobile number format
     return mobile.trim().length === 10 && /^\d+$/.test(mobile);
   };
 
@@ -39,9 +37,14 @@ const LoginScreen = ({ navigation }) => {
     }
 
     if (valid) {
-      // Proceed with login
-      dispatch(signIn(mobileNumber, password));
-      console.log('Logging in...');
+      dispatch(signIn(mobileNumber, password)).then((result) => {
+        if (result) {
+          console.log('Login successful, navigating to RoomDetails');
+          navigation.navigate('RoomDetails');
+        } else {
+          console.log('Login failed, staying on LoginScreen');
+        }
+      });
     }
   };
 
@@ -53,24 +56,12 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('ForgotPassword');
   };
 
-  // Effect to handle navigation upon successful login
   useEffect(() => {
-    if (error === '' && !isBusy && isLoggedIn) {
+    if (success) {
+      console.log('Navigation effect triggered, navigating to RoomDetails');
       navigation.navigate('RoomDetails');
     }
-  }, [error, isBusy, navigation, isLoggedIn]);
-
-  // Effect to check login status on component mount
-  useEffect(() => {
-    setIsLoggedIn(false); // Reset login status on mount
-  }, []);
-
-  // Effect to update login status when error changes
-  useEffect(() => {
-    if (error === '' && !isBusy && mobileNumber && password) {
-      setIsLoggedIn(true);
-    }
-  }, [error, isBusy, mobileNumber, password]);
+  }, [success, navigation]);
 
   return (
     <View style={styles.container}>
