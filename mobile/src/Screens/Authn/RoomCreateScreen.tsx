@@ -1,161 +1,163 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, PermissionsAndroid, Platform, Linking } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from '../molecule/TeamxCheckBox';
 import Geolocation from 'react-native-geolocation-service';
+import MapView, { Marker } from 'react-native-maps';
 import ProfileComponent from '../molecule/ProfileComponent';
 import { primaryColor } from '../Styles/Styles'; // Ensure this is correctly imported
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
+
 const RoomCreateScreen = () => {
-    const [roomName, setRoomName] = useState('');
-    const [description, setDescription] = useState('');
-    const [capacity, setCapacity] = useState(0);
-    const [amenities, setAmenities] = useState([
-        { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false },
-        { name: 'Kitchen', image: require('../Images/ic_kitchen.png'), checked: false },
-        { name: 'Air Conditioning', image: require('../Images/ic_airconditioner.png'), checked: false },
-        { name: 'Bathroom', image: require('../Images/ic_bathRoom.png'), checked: false },
-        { name: 'Parking', image: require('../Images/ic_parking.png'), checked: false },
-    ]);
-    const [address, setAddress] = useState('');
-    const [location, setLocation] = useState(null);
-    const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
-    const [rent, setRent] = useState('');
-    const [preferences, setPreferences] = useState([
-        { name: 'Vegetarian', checked: false },
-        { name: 'Non-Vegetarian', checked: false },
-        { name: 'Smoking', checked: false },
-        { name: 'Drinking', checked: false },
-    ]);
-    const [error, setError] = useState(null);
+  const [roomName, setRoomName] = useState('');
+  const [description, setDescription] = useState('');
+  const [capacity, setCapacity] = useState(0);
+  const [amenities, setAmenities] = useState([
+    { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false },
+    { name: 'Kitchen', image: require('../Images/ic_kitchen.png'), checked: false },
+    { name: 'Air Conditioning', image: require('../Images/ic_airconditioner.png'), checked: false },
+    { name: 'Bathroom', image: require('../Images/ic_bathRoom.png'), checked: false },
+    { name: 'Parking', image: require('../Images/ic_parking.png'), checked: false },
+  ]);
+  const [address, setAddress] = useState('');
+  const [location, setLocation] = useState(null);
+  const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
+  const [rent, setRent] = useState('');
+  const [preferences, setPreferences] = useState([
+    { name: 'Vegetarian', checked: false },
+    { name: 'Non-Vegetarian', checked: false },
+    { name: 'Smoking', checked: false },
+    { name: 'Drinking', checked: false },
+  ]);
+  const [error, setError] = useState(null);
 
-    const getLocation = async () => {
-        const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        if (granted) {
-            Geolocation.getCurrentPosition(
-                position => {
-                    console.log(position);
-                    setLocation(position);
-                },
-                error => {
-                    // See error code charts below.
-                    console.log(error.code, error.message);
-                    setLocation(false);
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-            );
-        } else {
-            const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-            if (permission === PermissionsAndroid.RESULTS.GRANTED) {
-                Geolocation.getCurrentPosition(
-                    position => {
-                        console.log(position);
-                        setLocation(position);
-                    },
-                    error => {
-                        // See error code charts below.
-                        console.log(error.code, error.message);
-                        setLocation(false);
-                    },
-                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-                );
-            } else if (permission === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-                Alert.alert(
-                    'Location Permission',
-                    'You need to enable location permission in the device settings to use this feature.',
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => Linking.openSettings(),
-                        },
-                    ],
-                    { cancelable: false },
-                );
-            } else {
-                console.log('Location permission not granted');
-            }
-        }
-    };
+  const getLocation = async () => {
+    const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+    if (granted) {
+      Geolocation.getCurrentPosition(
+        position => {
+          console.log(position);
+          setLocation(position);
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+          setLocation(false);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      );
+    } else {
+      const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+      if (permission === PermissionsAndroid.RESULTS.GRANTED) {
+        Geolocation.getCurrentPosition(
+          position => {
+            console.log(position);
+            setLocation(position);
+          },
+          error => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+            setLocation(false);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        );
+      } else if (permission === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+        Alert.alert(
+          'Location Permission',
+          'You need to enable location permission in the device settings to use this feature.',
+          [
+            {
+              text: 'OK',
+              onPress: () => Linking.openSettings(),
+            },
+          ],
+          { cancelable: false },
+        );
+      } else {
+        console.log('Location permission not granted');
+      }
+    }
+  };
 
-const handleAmenityChange = (index) => {
-        const updatedAmenities = [...amenities];
-        updatedAmenities[index].checked = !updatedAmenities[index].checked;
-        setAmenities(updatedAmenities);
-    };
+  const handleAmenityChange = (index) => {
+    const updatedAmenities = [...amenities];
+    updatedAmenities[index].checked = !updatedAmenities[index].checked;
+    setAmenities(updatedAmenities);
+  };
 
-    const handlePreferenceChange = (index) => {
-        const updatedPreference = [...preferences];
-        updatedPreference[index].checked = !updatedPreference[index].checked;
-        setPreferences(updatedPreference);
-    };
+  const handlePreferenceChange = (index) => {
+    const updatedPreference = [...preferences];
+    updatedPreference[index].checked = !updatedPreference[index].checked;
+    setPreferences(updatedPreference);
+  };
 
-    const handleSubmitData = () => {
-        console.log('Form submitted:', {
-            roomName,
-            description,
-            capacity,
-            amenities,
-            address,
-            location,
-            roomImages,
-            rent,
-            preferences,
-        });
-    };
+  const handleSubmitData = () => {
+    console.log('Form submitted:', {
+      roomName,
+      description,
+      capacity,
+      amenities,
+      address,
+      location,
+      roomImages,
+      rent,
+      preferences,
+    });
+  };
 
-    const increaseCapacity = () => {
-        setCapacity(capacity + 1);
-    };
+  const increaseCapacity = () => {
+    setCapacity(capacity + 1);
+  };
 
-    const decreaseCapacity = () => {
-        if (capacity > 0) {
-            setCapacity(capacity - 1);
-        }
-    };
+  const decreaseCapacity = () => {
+    if (capacity > 0) {
+      setCapacity(capacity - 1);
+    }
+  };
 
-    const handleAddRoomImage = (imageUri) => {
-        setRoomImages([...roomImages, imageUri]);
-    };
+  const handleAddRoomImage = (imageUri) => {
+    setRoomImages([...roomImages, imageUri]);
+  };
 
-    const handleRemoveRoomImage = (index) => {
-        if (index >= 0 && index < roomImages.length) {
-            const updatedImages = [...roomImages];
-            updatedImages.splice(index, 1);
-            setRoomImages(updatedImages);
-        }
-    };
+  const handleRemoveRoomImage = (index) => {
+    if (index >= 0 && index < roomImages.length) {
+      const updatedImages = [...roomImages];
+      updatedImages.splice(index, 1);
+      setRoomImages(updatedImages);
+    }
+  };
 
-    const renderRoomImages = () => {
-        const rows = [];
-        for (let i = 0; i < roomImages.length; i += 3) {
-            const rowImages = roomImages.slice(i, i + 3);
-            rows.push(
-                <View key={i} style={styles.imageRow}>
-                    {rowImages.map((imageUri, index) => (
-                        <View key={index} style={styles.imageWrapper}>
-                            <Image source={{ uri: imageUri }} style={styles.roomImage} />
-                            <TouchableOpacity
-                                style={styles.removeButton}
-                                onPress={() => handleRemoveRoomImage(i + index)}
-                            >
-                                <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
-                            </TouchableOpacity>
-                        </View>
-                    ))}
-                    {rowImages.length < 3 && (
-                        <ProfileComponent setImageUri={handleAddRoomImage} />
-                    )}
-                </View>
-            );
-        }
-        if (roomImages.length % 3 === 0) {
-            rows.push(
-                <View key={roomImages.length} style={styles.imageRow}>
-                    <ProfileComponent setImageUri={handleAddRoomImage} />
-                </View>
-            );
-        }
-        return rows;
-    };
+  const renderRoomImages = () => {
+    const rows = [];
+    for (let i = 0; i < roomImages.length; i += 3) {
+      const rowImages = roomImages.slice(i, i + 3);
+      rows.push(
+        <View key={i} style={styles.imageRow}>
+          {rowImages.map((imageUri, index) => (
+            <View key={index} style={styles.imageWrapper}>
+              <Image source={{ uri: imageUri }} style={styles.roomImage} />
+              <TouchableOpacity
+                style={styles.removeButton}
+                onPress={() => handleRemoveRoomImage(i + index)}
+              >
+                <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
+              </TouchableOpacity>
+            </View>
+          ))}
+          {rowImages.length < 3 && (
+            <ProfileComponent setImageUri={handleAddRoomImage} />
+          )}
+        </View>
+      );
+    }
+    if (roomImages.length % 3 === 0) {
+      rows.push(
+        <View key={roomImages.length} style={styles.imageRow}>
+          <ProfileComponent setImageUri={handleAddRoomImage} />
+        </View>
+      );
+    }
+    return rows;
+  };
 
     return (
         <ScrollView style={styles.container}>

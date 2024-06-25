@@ -98,9 +98,22 @@ const RegisterScreen = ({ navigation }) => {
     setErrors(errors);
 
     if (Object.keys(errors).length === 0) {
+      console.log({
+        fullName,
+        email,
+        mobileNumber,
+        dateOfBirth,
+        gender,
+        lookingForRoom: lookingForRoom === 'yes',
+        lookingForRoommate: lookingForRoommate === 'yes',
+        preferences,
+        makeMobilePrivate,
+        password,
+        confirmPassword
+      });
+
       Alert.alert("Success", "Registration successful!");
 
-      // Dispatch the register action with correct argument names
       dispatch(register(fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom === 'yes', lookingForRoommate === 'yes', preferences, makeMobilePrivate, password));
 
       // Reset state values
