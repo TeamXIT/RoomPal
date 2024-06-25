@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken'); // Ensure JWT is required
+const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const { baseResponses } = require('../helpers/baseResponses');
 
