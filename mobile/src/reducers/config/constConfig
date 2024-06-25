@@ -1,0 +1,8 @@
+export const enum RouteNames {
+    Intro="Intro",
+    Signin = "Signin",
+    Signup = "Signup",
+    ForgotPassword = "ForgotPassword",
+    Verification = "Verification",
+    UserTypeSelection="UserTypeSelection",
+};
