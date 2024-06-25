@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         required:true,
     },
-    lookingForRoomMate:{
+    lookingForRoommate:{
         type:Boolean,
         required:true,
     },

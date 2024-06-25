@@ -1,7 +1,48 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const { baseResponses } = require('../helpers/baseResponses');
-
+const Register = async (req,res)=>{
+    try{
+       let {
+            fullName,
+            email,
+            mobileNumber,
+            dateOfBirth,
+            gender,
+            lookingForRoom,
+            lookingForRoommate,
+            preferences,
+            makeMobilePrivate,
+            password,
+            confirmPassword
+        }=req.body;
+        if (!fullName || !email || !mobileNumber || !dateOfBirth || !gender || 
+            lookingForRoom === undefined || lookingForRoommate === undefined || 
+            !password || !confirmPassword) {
+          return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED);
+        }
+        if(password!==confirmPassword){
+            return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
+        }
+        gender=gender.toLowerCase();
+        const newuser = new User({
+            fullName,
+            email,
+            mobileNumber,
+            dateOfBirth,
+            gender,
+            lookingForRoom,
+            lookingForRoommate,
+            preferences,
+            makeMobilePrivate,
+            password
+        });
+        await newuser.save();
+        return res.status(200).json(baseResponses.constantMessages.USER_REGISTERED());
+    }catch (error){
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
 const SignIn = async (req, res) => {
     try {
         const { mobileNumber, password } = req.body;
