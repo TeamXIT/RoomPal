@@ -38,7 +38,7 @@ const Register = async (req, res) => {
             email,
             mobileNumber,
             dateOfBirth,
-            gender,
+            gender: gender,
             lookingForRoom,
             lookingForRoommate,  // Use consistent field name
             preferences,

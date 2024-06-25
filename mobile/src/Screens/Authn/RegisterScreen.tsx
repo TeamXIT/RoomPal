@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { register } from '../../reducers/auth/authSlice';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { styles } from '../Styles/Styles';
-import Checkbox from '../molecule/TeamxCheckBox'; // Assuming this is correctly imported
+import Checkbox from '../molecule/TeamxCheckBox';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 
 const RegisterScreen = ({ navigation }) => {
@@ -58,7 +58,7 @@ const RegisterScreen = ({ navigation }) => {
     } else if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
       errors.email = "Please enter a valid email address.";
     } else if (email.length < 8) {
-      errors.email = "Email must be at least 8 characters."
+      errors.email = "Email must be at least 8 characters.";
     }
 
     if (!mobileNumber) {
@@ -114,7 +114,19 @@ const RegisterScreen = ({ navigation }) => {
 
       Alert.alert("Success", "Registration successful!");
 
-      dispatch(register(fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom === 'yes', lookingForRoommate === 'yes', preferences, makeMobilePrivate, password));
+      dispatch(register(
+        fullName, 
+        email, 
+        mobileNumber, 
+        dateOfBirth, 
+        gender, 
+        lookingForRoom === 'yes', 
+        lookingForRoommate === 'yes', 
+        preferences, 
+        makeMobilePrivate, 
+        password,
+        confirmPassword
+      ));
 
       // Reset state values
       setFullName('');
@@ -149,7 +161,6 @@ const RegisterScreen = ({ navigation }) => {
     setDateOfBirth(date.toLocaleDateString('en-GB'));
     hideDatePicker();
   };
-
   return (
     <ScrollView contentContainerStyle={styles.registercontainer}>
       <View style={{ alignSelf: 'center' }}>
