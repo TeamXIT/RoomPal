@@ -51,22 +51,44 @@ export const authSlice = createSlice({
 
 export const { setBusy, setError, setSuccess, setAuthToken, setMobileNumber } = authSlice.actions;
 
+const handleError = (error: any, dispatch: any) => {
+  if (axios.isAxiosError(error)) {
+      console.error(error)
+      if (error.response) {
+          console.log(error);
+          // Server responded with a status code outside of 2xx
+          const errorMessage = error.response.data?.response.Message || 'An error occurred';
+          dispatch(setError(errorMessage));
+      } else {
+          // Request was made but no response received
+          dispatch(setError('Network Error: Please check your internet connection'));
+      }
+  }
+};
+
 export const signIn = (mobileNumber: string, password: string): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/signIn`, { mobileNumber, password });
-    dispatch(setAuthToken(response.data.token));
-    dispatch(setMobileNumber(mobileNumber));
-    dispatch(setSuccess('User logged in successfully.'));
+    if (response.status === 200) {
+      dispatch(setAuthToken(response.data.token));
+      dispatch(setMobileNumber(mobileNumber));
+      dispatch(setSuccess('User logged in successfully.'));
+      return true; // Login was successful
+    } else {
+      dispatch(setError('Login failed'));
+      return false;
+    }
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Sign in failed'));
-    console.log(error);
+    return false;
   } finally {
     dispatch(setBusy(false));
   }
 };
+
 
 export const register = (
   fullName: string,

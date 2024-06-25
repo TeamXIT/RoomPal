@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; // Import useSelector
 import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { error, isBusy } = useSelector(state => state.auth.screen); // Assuming your slice is named 'auth'
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [mobileNumberError, setMobileNumberError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
   const validateMobileNumber = (mobile) => {
     // Implement your validation logic for mobile number
@@ -50,6 +52,25 @@ const LoginScreen = ({ navigation }) => {
   const handleForgotPasswordPress = () => {
     navigation.navigate('ForgotPassword');
   };
+
+  // Effect to handle navigation upon successful login
+  useEffect(() => {
+    if (error === '' && !isBusy && isLoggedIn) {
+      navigation.navigate('RoomDetails');
+    }
+  }, [error, isBusy, navigation, isLoggedIn]);
+
+  // Effect to check login status on component mount
+  useEffect(() => {
+    setIsLoggedIn(false); // Reset login status on mount
+  }, []);
+
+  // Effect to update login status when error changes
+  useEffect(() => {
+    if (error === '' && !isBusy && mobileNumber && password) {
+      setIsLoggedIn(true);
+    }
+  }, [error, isBusy, mobileNumber, password]);
 
   return (
     <View style={styles.container}>
