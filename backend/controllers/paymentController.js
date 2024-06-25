@@ -1,9 +1,10 @@
 const { Cashfree } = require('cashfree-pg');
 const moment = require('moment');
+require('dotenv').config();
 const Order = require('../models/paymentModel');
 const { baseResponses } = require('../helpers/baseResponses');
-Cashfree.XClientId = "";
-Cashfree.XClientSecret = "";
+Cashfree.XClientId = process.env.X_CLIENT_ID;
+Cashfree.XClientSecret = process.env.X_CLIENT_SECRET;
 Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
 
 const createOrder = async (req, res) => {
@@ -17,7 +18,7 @@ const createOrder = async (req, res) => {
                 customer_phone: req.body.customer_details.customer_phone,
                 customer_email: req.body.customer_details.customer_email
             },
-            order_meta: { return_url: req.body.order_meta.return_url }
+            // order_meta: { return_url: req.body.order_meta.return_url }
         };
         //console.log(request);
         // const newOrder = new Order({
@@ -53,5 +54,13 @@ const fetchOrder = async (req, res) => {
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
+const webhook = async (req, res) => {
+    try{
+        Cashfree.PGVerifyWebhookSignature(req.headers["x-webhook-signature"],req.rawBody,req.headers["x-webhook-timestamps"]);
+    }catch(error){
+        console.log(error);
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
 
-module.exports = { createOrder, fetchOrder }
+module.exports = { createOrder, fetchOrder, webhook}
