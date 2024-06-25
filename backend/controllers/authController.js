@@ -1,16 +1,17 @@
 const User = require('../models/userModel');
 const { baseResponses } = require('../helpers/baseResponses');
+const jwt = require('jsonwebtoken');
 
 const Register = async (req, res) => {
     try {
-        const {
+        let {
             fullName,
             email,
             mobileNumber,
             dateOfBirth,
             gender,
             lookingForRoom,
-            lookingForRoommate,  // Use consistent field name
+            lookingForRoommate,
             preferences,
             makeMobilePrivate,
             password,
@@ -18,7 +19,7 @@ const Register = async (req, res) => {
         } = req.body;
 
         // Validate required fields
-        if (!fullName || !email || !mobileNumber || !dateOfBirth || !gender || 
+        if (!fullName || !email || !mobileNumber || !dateOfBirth || !gender ||
             lookingForRoom === undefined || lookingForRoommate === undefined || 
             !password || !confirmPassword) {
             return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED);
@@ -40,7 +41,7 @@ const Register = async (req, res) => {
             dateOfBirth,
             gender: gender,
             lookingForRoom,
-            lookingForRoommate,  // Use consistent field name
+            lookingForRoommate,
             preferences,
             makeMobilePrivate,
             password
