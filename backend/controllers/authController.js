@@ -22,7 +22,8 @@ const SignIn = async (req, res) => {
         }
 
         let _secret = process.env.JWT_SECRET || 'rajasekhar-secret-key'; // Ensure this key is correct and secure
-        const token = jwt.sign({ mobileNumber }, _secret, { expiresIn: '1h' });
+        const token = jwt.sign({ mobileNumber:mobileNumber }, _secret, { expiresIn: '1h' });
+        console.log(token);
 
         return res.status(200).json(baseResponses.constantMessages.USER_LOGGED_IN(token));
     } catch (error) {
