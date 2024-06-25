@@ -75,7 +75,7 @@ export const register = (
   dateOfBirth: string,
   gender: string,
   lookingForRoom: boolean,
-  lookingForRoomMate: boolean,
+  lookingForRoommate: boolean,
   preferences: {
     clean: boolean;
     pets: boolean;
@@ -97,7 +97,7 @@ export const register = (
       dateOfBirth,
       gender,
       lookingForRoom,
-      lookingForRoomMate,
+      lookingForRoommate,
       preferences,
       makeMobilePrivate,
       password,

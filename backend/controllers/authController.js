@@ -70,12 +70,12 @@ const SignIn = async (req, res) => {
             return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
         }
 
-        // Validate password
         if (user.password !== password) {
             return res.status(400).json(baseResponses.constantMessages.INVALID_PASSWORD());
         }
-
-        return res.status(200).json(baseResponses.constantMessages.USER_LOGGED_IN());
+        let _secret = process.env.JWT_SECRET || 'rajasekhar-secret-key';
+        const token = jwt.sign({ mobileNumber }, _secret, { expiresIn: '1h' });
+        return res.status(200).json(baseResponses.constantMessages.USER_LOGGED_IN(token));
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
     }

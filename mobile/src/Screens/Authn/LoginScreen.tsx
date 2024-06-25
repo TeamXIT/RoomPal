@@ -1,29 +1,32 @@
-//LoginScreen
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import { useDispatch } from 'react-redux';
+import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const dispatch = useDispatch();
+  const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [mobileNumberError, setMobileNumberError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
+  const validateMobileNumber = (mobile) => {
+    // Implement your validation logic for mobile number
+    // Example: Check if it's a valid mobile number format
+    return mobile.trim().length === 10 && /^\d+$/.test(mobile);
   };
 
   const handleLoginPress = () => {
     let valid = true;
 
-    if (!validateEmail(email)) {
-      setEmailError('Invalid email address');
+    if (!validateMobileNumber(mobileNumber)) {
+      setMobileNumberError('Invalid mobile number');
       valid = false;
     } else {
-      setEmailError('');
+      setMobileNumberError('');
     }
 
     if (!password) {
@@ -35,6 +38,7 @@ const LoginScreen = ({ navigation }) => {
 
     if (valid) {
       // Proceed with login
+      dispatch(signIn(mobileNumber, password));
       console.log('Logging in...');
     }
   };
@@ -51,15 +55,15 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <TeamXLogoImage />
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>Mobile Number</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter email"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
+          placeholder="Enter mobile number"
+          keyboardType="numeric"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
         />
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+        {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
         <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.input}
