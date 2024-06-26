@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const { baseResponses } = require('../helpers/baseResponses');
+const {generateOTP,verifyOTP}= require('../helpers/otpGeneration');
 const Register = async (req,res)=>{
     try{
        let {
