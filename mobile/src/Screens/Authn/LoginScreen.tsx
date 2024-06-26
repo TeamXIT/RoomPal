@@ -39,11 +39,11 @@ const LoginScreen = ({ navigation }) => {
 
     if (valid) {
       dispatch(signIn(mobileNumber, password)).then((result) => {
-        if (result) {
+        if (result.success) {
           console.log('Login successful, navigating to RoomDetails');
           navigation.navigate('RoomDetails');
         } else {
-          console.log('Login failed, staying on LoginScreen');
+          setMobileNumber('login failed');
         }
       });
     }

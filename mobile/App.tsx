@@ -21,7 +21,7 @@ const Stack = createStackNavigator();
 const Authn = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
-    <Stack.Navigator initialRouteName="RoomCreateScreen">
+    <Stack.Navigator initialRouteName="LoginScreen">
       <Stack.Screen
         name="Intro"
         component={RoomPalIntro}
