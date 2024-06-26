@@ -104,12 +104,12 @@ const resetPassword = async (req, res) => {
         return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
       }
   
-      const user = await User.findOne({ mobileNumber });
+      let user = await User.findOne({ mobileNumber: mobileNumber});
       if (!user) {
         return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
       }
-  
-      user.password = newPassword;
+       user = await User.findOneAndUpdate({ mobileNumber: mobileNumber},{password: newPassword});
+      
       await user.save();
   
       return res.status(200).json(baseResponses.constantMessages.PASSWORD_RESET_SUCCESS());
