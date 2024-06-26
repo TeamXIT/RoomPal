@@ -1,0 +1,67 @@
+.otp-container {
+  max-width: 3000px;
+  margin: 8% auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 70vh;
+  background-color: white;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  font-size: 23px;
+
+}
+.logo {
+  width: 60%;
+  height: 14vh;
+  margin-top: -10%;
+}
+h2{
+  color: #6b23d4;
+  font-size: 28px;
+  text-align: left;
+}
+
+.otp-container p {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #8a8a8a;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+button {
+  width: 106%;
+  padding: 10px;
+  background-color: #6b23d4;
+  font-size: 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor:not-allowed;
+}
+
+a{
+  color: #1008ff;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -1,1 +1,21 @@
-<p>validate-otp works!</p>
+<div class="otp-container">
+  <img src="images/logo.jpg" alt="Logo" class="logo"/>
+  <p>Please enter the OTP sent to your registered email address.</p>
+  <form (ngSubmit)="onSubmit()" [formGroup]="otpForm">
+    <div class="form-group">
+      <h2>OTP</h2>
+      <input formControlName="otp" placeholder="Enter OTP" />
+      <div *ngIf="otpForm.get('otp').invalid && (otpForm.get('otp').dirty || otpForm.get('otp').touched)">
+        <div *ngIf="otpForm.get('otp').errors.required">OTP is required</div>
+        <div *ngIf="otpForm.get('otp').errors.minlength">OTP must be exactly 6 characters long</div>
+        <div *ngIf="otpForm.get('otp').errors.maxlength">OTP must be exactly 6 characters long</div>
+        <div *ngIf="otpForm.get('otp').errors.pattern">Invalid OTP format (should contain only numbers)</div>
+      </div>
+    </div>
+    <button type="submit" [disabled]="!otpForm.valid">Verify OTP &#10004;</button>
+  </form>
+  <p>
+    Didn't receive OTP? 
+    <a href="#" (click)="resendOTP($event)">Resend OTP</a>
+  </p>
+</div>

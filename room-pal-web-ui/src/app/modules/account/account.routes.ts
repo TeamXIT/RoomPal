@@ -33,6 +33,13 @@ const SetPasswordSuccessComponent = () =>
 const ValidateOtpComponent = () =>
   import('./validate-otp/validate-otp.component').then(c => c.ValidateOtpComponent)
 
+const WelcomeScreenComponent = () =>
+  import('./welcome-screen/welcome-screen.component').then(c =>c.WelcomeScreenComponent )
+
+
+const IntroductionScreenComponent = () =>
+  import('./introduction-screen/introduction-screen.component').then(c =>c.IntroductionScreenComponent )
+
 export const routes: Routes = [
   {
     path: '',
@@ -47,6 +54,8 @@ export const routes: Routes = [
       { path: 'set-password-failure', loadComponent: SetPasswordFailureComponent },
       { path: 'set-password-success', loadComponent: SetPasswordSuccessComponent },
       { path: 'validate-otp', loadComponent: ValidateOtpComponent },
+      { path: 'welcome-screen',loadComponent: WelcomeScreenComponent},
+      { path: 'introduction-screen',loadComponent: IntroductionScreenComponent},
     ],
   },
 ]
