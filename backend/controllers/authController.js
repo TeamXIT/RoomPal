@@ -99,8 +99,8 @@ const resetPassword = async (req, res) => {
             return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
         }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        user.password = hashedPassword;
+       
+        user.password = newPassword;
         await user.save();
 
         return res.status(200).json(baseResponses.constantMessages.PASSWORD_RESET_SUCCESS());
