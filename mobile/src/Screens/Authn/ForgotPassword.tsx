@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from '../../reducers/store'; // Update these imports according to your project structure
+import { AppDispatch, RootState } from '../../reducers/store';
 import { forgotPassword } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from "../molecule/TeamXLogoImage";
 
@@ -10,17 +10,17 @@ const ForgotPassword = ({ navigation }) => {
   const [mobileNumberError, setMobileNumberError] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   const { screen } = useSelector((state: RootState) => state.auth);
+  const { data } = useSelector((state: RootState) => state.auth);
 
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');
   };
 
-  const handleResetPassword = async () => {
+  const handleRequestOTP = async () => {
     if (validateMobileNumber()) {
-      // Dispatch the forgotPassword action and get the success flag
-      const success = await dispatch(forgotPassword(mobileNumber));
-      if (success) {
-        navigation.navigate('ResetPasswordScreen');
+      await dispatch(forgotPassword(mobileNumber));
+      if (data.otp) {
+        navigation.navigate('VerifyOTPScreen', { mobileNumber });
       }
     }
   };
@@ -51,8 +51,8 @@ const ForgotPassword = ({ navigation }) => {
         />
         {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
         {screen.error ? <Text style={styles.errorText}>{screen.error}</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-          <Text style={styles.buttonText}>Reset Password</Text>
+        <TouchableOpacity style={styles.button} onPress={handleRequestOTP}>
+          <Text style={styles.buttonText}>Request OTP</Text>
           <Image
             source={require('../Images/ic_lock.png')}
             style={styles.lockIcon}

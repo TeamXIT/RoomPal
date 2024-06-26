@@ -1,4 +1,3 @@
-//VerificationScreen
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
@@ -9,7 +8,8 @@ const VerificationScreen = ({ navigation }) => {
 
   const handleVerificationPress = () => {
     if (validateOtp()) {
-      navigation.navigate('SucessPasswordScreen');
+      // Navigate to the next screen upon successful OTP verification
+      navigation.navigate('SuccessPasswordScreen');
     }
   };
 
@@ -26,17 +26,22 @@ const VerificationScreen = ({ navigation }) => {
     }
   };
 
+  const handleResendOTP = () => {
+    // Implement logic to resend OTP
+    console.log('Resend OTP logic here');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <TeamXLogoImage />
-        <Text style={styles.otptext}>Please enter the OTP sent to your registered email address.</Text>
+        <Text style={styles.otptext}>Please enter the OTP sent to your registered mobile number.</Text>
         
         <Text style={styles.label}>OTP</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter OTP"
-          secureTextEntry
+          keyboardType="numeric"
           value={otp}
           onChangeText={setOtp}
         />
@@ -50,7 +55,7 @@ const VerificationScreen = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.inlineTextContainer}>
           <Text style={styles.text}>Didn't receive OTP?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleResendOTP}>
             <Text style={styles.registerLink}> Resend OTP</Text>
           </TouchableOpacity>
         </View>
@@ -82,7 +87,7 @@ const styles = StyleSheet.create({
     color: '#6b21a8',
     marginBottom: 5,
     alignSelf: 'flex-start',
-    fontWeight:"bold"
+    fontWeight: 'bold',
   },
   input: {
     height: 40,
@@ -94,12 +99,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
   },
-  otptext:{
-    textAlign:"center",
-    marginBottom:10,
-    padding:10,
-    fontSize:18
- 
+  otptext: {
+    textAlign: 'center',
+    marginBottom: 10,
+    padding: 10,
+    fontSize: 18,
   },
   button: {
     backgroundColor: '#9333ea',
@@ -114,12 +118,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    marginRight: 10, 
+    marginRight: 10,
   },
   lockIcon: {
     width: 20,
     height: 20,
-    tintColor:'white'
+    tintColor: 'white',
   },
   text: {
     color: '#6b21a8',
@@ -138,7 +142,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: 10,
   },
-  
 });
 
 export default VerificationScreen;
