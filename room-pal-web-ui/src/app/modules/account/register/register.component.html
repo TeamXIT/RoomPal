@@ -1,1 +1,178 @@
-<p>register works!</p>
+<div class="container1">
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <div class="card">
+    <img src="images/logo.jpg" alt="Logo" class="logo" />
+    <h1>Registration Form</h1>
+
+    <div>
+      <h3>Mobile Number</h3>
+      <input type="text"
+        formControlName="mobileNumber"
+        class="input-field"
+        placeholder="Enter your mobile number"
+        [ngClass]="registrationForm.controls['mobileNumber'].errors &&
+         registrationForm.controls['mobileNumber'].touched? 'is-invalid' : ''   "/>
+
+@if (
+  registrationForm.controls["mobileNumber"].errors &&
+  registrationForm.controls["mobileNumber"].touched
+  ){
+
+    @if (registrationForm.controls["mobileNumber"].errors["required"]) {
+      <div class="invalid-feedback">Mobile Number is required</div>
+    }
+
+    @if (registrationForm.controls["mobileNumber"].errors["minlength"]) {
+      <div class="invalid-feedback">Minimum 10 digits required</div>
+    }
+    @if (registrationForm.controls["mobileNumber"].errors["maxlength"]) {
+      <div class="invalid-feedback">Maximum 10 digits allowed</div>
+    }
+}
+    </div>
+
+    <div>
+      <h3>Date of Birth</h3>
+      <input id="dateOfBirth" type="date"
+        class="input-field" />
+    </div>
+
+    <div>
+      <h3>Gender</h3>
+      <div>
+        <label class="text">
+          <input type="radio" value="Male"
+            class="gender" /> Male
+        </label>
+        <label class="text">
+          <input type="radio"  value="Female"
+            class="gender" /> Female
+        </label>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="question">
+        <h3>Looking for Roommate?</h3>
+        <div class="button-group">
+          <input type="radio" name="roommateToggle" id="button1"
+            class="input-hidden" >
+          <label for="button1" class="btn">Yes</label>
+
+          <input type="radio" name="roommateToggle" id="button2"
+            class="input-hidden" >
+          <label for="button2" class="btn">No</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <h3>Looking for Room?</h3>
+        <div class="button-group">
+          <input type="radio" name="roomToggle" id="button3"
+            class="input-hidden" >
+          <label for="button3" class="btn">Yes</label>
+
+          <input type="radio" name="roomToggle" id="button4"
+            class="input-hidden">
+          <label for="button4" class="btn">No</label>
+        </div>
+      </div>
+    </div>
+
+    <div >
+      <h3>Preferences</h3>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"  /> Clean
+        </label>
+        <label>
+          <input type="checkbox" /> Pets Allowed
+        </label>
+        <label>
+          <input type="checkbox"  /> Smoking Allowed
+        </label>
+        <label>
+          <input type="checkbox"  /> Drinking Allowed
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3>Mobile Number Public?</h3>
+      <label class="checkbox">
+        <input type="checkbox"/> Yes,
+        make it public
+      </label>
+    </div>
+
+    <div>
+      <h3>Password</h3>
+      <input type="password"
+        class="input-field"
+        formControlName="password"
+        placeholder="Enter your password"
+        [ngClass]="
+        registrationForm.controls['password'].errors &&
+        registrationForm.controls['password'].touched
+          ? 'is-invalid'
+          : ''   "/>
+  
+       
+          @if (
+            registrationForm.controls["password"].errors &&
+              registrationForm.controls["password"].touched
+              ){
+
+            @if (registrationForm.controls["password"].errors["required"]) {
+              <div class="invalid-feedback">Password is required</div>
+             }
+
+            @if (registrationForm.controls["password"].errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 6 characters required</div>
+            }
+            @if (registrationForm.controls["password"].errors["maxlength"]) {
+              <div class="invalid-feedback">Maximum 16 characters allowed..</div>
+            }
+            }
+    </div>
+
+    <div>
+      <h3>Confirm Password</h3>
+      <input type="password"
+        class="input-field"
+        formControlName="confirmPassword"
+        placeholder="Confirm your password"
+        [ngClass]="
+        registrationForm.controls['confirmPassword'].errors &&
+        registrationForm.controls['confirmPassword'].touched
+          ? 'is-invalid'
+          : ''   "/>
+  
+       
+          @if (
+            registrationForm.controls["confirmPassword"].errors &&
+              registrationForm.controls["confirmPassword"].touched
+              ){
+
+            @if (registrationForm.controls["confirmPassword"].errors["required"]) {
+              <div class="invalid-feedback">Password is required</div>
+             }
+
+            @if (registrationForm.controls["confirmPassword"].errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 6 characters required</div>
+            }
+            @if (registrationForm.controls["confirmPassword"].errors["maxlength"]) {
+              <div class="invalid-feedback">Maximum 16 characters allowed..</div>
+            }
+            }
+    </div>
+
+    <button type="submit" >Register &#8594;</button>
+    <div>
+      <p>Already have an account? <a href="#">Login</a></p>
+    </div>
+  </div>
+</form>
+</div>
+
+    

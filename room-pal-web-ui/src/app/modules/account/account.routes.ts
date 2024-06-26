@@ -11,6 +11,12 @@ const ForgetPasswordComponent = () =>
 const HomeComponent = () =>
   import('./home/home.component').then(c => c.HomeComponent)
 
+const IntroductionScreenComponent = () =>
+  import('./introduction-screen/introduction-screen.component').then(c => c.IntroductionScreenComponent)
+
+const WelcomeScreenComponent = () =>
+  import('./welcome-screen/welcome-screen.component').then(c => c.WelcomeScreenComponent)
+
 const LoginComponent = () =>
   import('./login/login.component').then(c => c.LoginComponent)
 
@@ -40,6 +46,8 @@ export const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'home' },
       { path: 'home', loadComponent: HomeComponent },
+      { path: 'welcome-screen', loadComponent: WelcomeScreenComponent },
+      { path: 'introduction-screen', loadComponent: IntroductionScreenComponent },
       { path: 'login', loadComponent: LoginComponent },
       { path: 'register', loadComponent: RegisterComponent },
       { path: 'forget-password', loadComponent: ForgetPasswordComponent },

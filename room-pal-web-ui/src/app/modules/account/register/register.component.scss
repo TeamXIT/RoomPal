@@ -1,0 +1,166 @@
+.container1{
+  background-color: #f3ebff;
+}
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 30px;
+    justify-content: space-between;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.854);
+    width: 45%;
+    margin: auto;
+    font-size: 21px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+  }
+  
+  .logo {
+    width: 60%;
+    height: 19vh;
+    margin: auto;
+  }
+  
+  h1 {
+    color: #6b23d4;
+  }
+  
+  h3 {
+    color: #6b23d4;
+    font-size: 28px;
+    text-align: left;
+    padding: 13px;
+  }
+  
+  ::placeholder {
+    font-size: larger;
+  }
+  
+  #dateOfBirth {
+    font-size: 20px;
+    color: rgb(99, 103, 106);
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .gender,
+  .text {
+    display: flex;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+  
+  .question {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 0px;
+  }
+  
+  .input-hidden {
+    display: none;
+  }
+  
+  #button1 + .btn,
+  #button3 + .btn,
+  #button2 + .btn,
+  #button4 + .btn {
+    background-color: #6b23d4;
+  }
+  
+  #button1:checked + .btn,
+  #button3:checked + .btn,
+  #button2:checked + .btn,
+  #button4:checked + .btn {
+    background-color: #d3b5ff;
+    color: #000000;
+  }
+  
+  .btn {
+    border-radius: 50px;
+    width: 20%;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid transparent;
+    transition: background-color 0.3s, border 0.3s;
+    color: #ffffff;
+  }
+  
+  .checkbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
+  }
+  
+  input[type="checkbox"] {
+    transform: scale(1.5);
+    margin: 10px;
+  }
+  
+  input[type="radio"] {
+    transform: scale(1.5);
+    margin: 10px;
+  }
+  
+  .checkbox label {
+    flex: 1 1 45%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  button {
+    background-color: #6b23d4;
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 20px;
+  }
+  
+  button:hover {
+    background-color: #b98aff;
+    color: #000;
+  }
+  
+  a {
+    color: #6b23d4;
+    text-decoration: none;
+    position: relative;
+  }
+  
+  span {
+    top: 10px;
+    font-size: 25px;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    text-align: left;
+  }
