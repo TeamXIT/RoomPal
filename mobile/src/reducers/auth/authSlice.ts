@@ -12,6 +12,7 @@ type AuthState = {
   data: {
     mobileNumber: string;
     authToken: string;
+    resetToken: string;
   };
 };
 
@@ -24,6 +25,7 @@ const initialState: AuthState = {
   data: {
     mobileNumber: '',
     authToken: '',
+    resetToken: '',
   },
 };
 
@@ -46,25 +48,13 @@ export const authSlice = createSlice({
     setMobileNumber: (state, action: PayloadAction<string>) => {
       state.data.mobileNumber = action.payload;
     },
+    setResetToken: (state, action: PayloadAction<string>) => {
+      state.data.resetToken = action.payload;
+    },
   },
 });
 
-export const { setBusy, setError, setSuccess, setAuthToken, setMobileNumber } = authSlice.actions;
-
-const handleError = (error: any, dispatch: any) => {
-  if (axios.isAxiosError(error)) {
-      console.error(error)
-      if (error.response) {
-          console.log(error);
-          // Server responded with a status code outside of 2xx
-          const errorMessage = error.response.data?.response.Message || 'An error occurred';
-          dispatch(setError(errorMessage));
-      } else {
-          // Request was made but no response received
-          dispatch(setError('Network Error: Please check your internet connection'));
-      }
-  }
-};
+export const { setBusy, setError, setSuccess, setAuthToken, setMobileNumber, setResetToken } = authSlice.actions;
 
 export const signIn = (mobileNumber: string, password: string): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
@@ -72,23 +62,16 @@ export const signIn = (mobileNumber: string, password: string): AppThunk => asyn
   dispatch(setSuccess(''));
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/signIn`, { mobileNumber, password });
-    if (response.status === 200) {
-      dispatch(setAuthToken(response.data.token));
-      dispatch(setMobileNumber(mobileNumber));
-      dispatch(setSuccess('User logged in successfully.'));
-      return true; // Login was successful
-    } else {
-      dispatch(setError('Login failed'));
-      return false;
-    }
+    dispatch(setAuthToken(response.data.token));
+    dispatch(setMobileNumber(mobileNumber));
+    dispatch(setSuccess('User logged in successfully.'));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Sign in failed'));
-    return false;
+    console.log(error);
   } finally {
     dispatch(setBusy(false));
   }
 };
-
 
 export const register = (
   fullName: string,
@@ -131,6 +114,45 @@ export const register = (
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Registration failed'));
     console.log(error)
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatch) => {
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  dispatch(setSuccess(''));
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/forgotPassword`, { mobileNumber });
+    if (response.status === 200) {
+      dispatch(setResetToken(response.data.resetToken));
+      dispatch(setMobileNumber(mobileNumber));
+      dispatch(setSuccess('Reset token sent to mobile number.'));
+      return true; // Indicate success
+    } else {
+      dispatch(setError('Failed to send reset token'));
+      return false; // Indicate failure
+    }
+  } catch (error) {
+    dispatch(setError(error.response?.data?.message || error.message || 'Failed to send reset token'));
+    return false; // Indicate failure
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+export const resetPassword = (newPassword: string, confirmPassword: string): AppThunk => async (dispatch, getState) => {
+  const { mobileNumber, resetToken } = getState().auth.data;
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  dispatch(setSuccess(''));
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword, resetToken });
+    dispatch(setSuccess('Password reset successfully.'));
+  } catch (error) {
+    dispatch(setError(error.response?.data?.message || error.message || 'Failed to reset password'));
+    console.log(error);
   } finally {
     dispatch(setBusy(false));
   }

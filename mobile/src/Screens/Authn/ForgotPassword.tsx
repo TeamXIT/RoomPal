@@ -1,32 +1,39 @@
-//ForgotPassword
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from '../../reducers/store'; // Update these imports according to your project structure
+import { forgotPassword } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from "../molecule/TeamXLogoImage";
 
 const ForgotPassword = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [mobileNumberError, setMobileNumberError] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const { screen } = useSelector((state: RootState) => state.auth);
 
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');
   };
 
-  const handleresetpassword = () => {
-    if (validateEmail()) {
-      // Proceed to reset password
-      navigation.navigate('ResetPasswordScreen');
+  const handleResetPassword = async () => {
+    if (validateMobileNumber()) {
+      // Dispatch the forgotPassword action and get the success flag
+      const success = await dispatch(forgotPassword(mobileNumber));
+      if (success) {
+        navigation.navigate('ResetPasswordScreen');
+      }
     }
   };
 
-  const validateEmail = () => {
-    if (!email) {
-      setEmailError('Email is required');
+  const validateMobileNumber = () => {
+    if (!mobileNumber) {
+      setMobileNumberError('Mobile number is required');
       return false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Please enter a valid email address');
+    } else if (!/^\d+$/.test(mobileNumber)) {
+      setMobileNumberError('Please enter a valid mobile number');
       return false;
     } else {
-      setEmailError('');
+      setMobileNumberError('');
       return true;
     }
   };
@@ -35,15 +42,16 @@ const ForgotPassword = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <TeamXLogoImage />
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>Mobile Number</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your email address"
-          value={email}
-          onChangeText={setEmail}
+          placeholder="Enter your mobile number"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
         />
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={handleresetpassword}>
+        {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
+        {screen.error ? <Text style={styles.errorText}>{screen.error}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
           <Text style={styles.buttonText}>Reset Password</Text>
           <Image
             source={require('../Images/ic_lock.png')}
