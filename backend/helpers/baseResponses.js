@@ -14,6 +14,7 @@ const baseResponses = {
         RATING_GIVEN:(data=null)=> baseResponses.success('Rating given successfully',data),
         ORDER_CREATED_SUCCESSFULLY:(data=null)=> baseResponses.success('Order created successfully',data),
         ORDER_FETCHED_SUCCESSFULLY:(data=null)=> baseResponses.success('Order fetched successfully',data),
+        PASSWORD_RESET_SUCCESS:(data=null)=> baseResponses.success('Password updated successfully',data),
     }
 };
 module.exports = {baseResponses};
