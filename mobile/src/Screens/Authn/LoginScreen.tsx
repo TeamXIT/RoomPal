@@ -4,6 +4,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
+import PhoneInput from 'react-native-phone-number-input';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -68,13 +69,32 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.innerContainer}>
         <TeamXLogoImage />
         <Text style={styles.label}>Mobile Number</Text>
-        <TextInput
-          style={styles.input}
+        <PhoneInput
+          defaultValue={mobileNumber}
+          defaultCode="IN"
+          layout="first"
+          onChangeText={setMobileNumber} // Use the custom change handler
+          containerStyle={[styles.input, { width: '100%' },]}
+          textContainerStyle={{
+            paddingVertical: 10,
+            backgroundColor: 'white',
+          }}
+          textInputStyle={{
+            paddingVertical: 0,
+            fontSize: 16,
+            color: 'black'
+          }}
+          countryPickerButtonStyle={{ paddingVertical: 0 }}
+          renderDropdownImage={<Text >▼</Text>}
           placeholder="Enter mobile number"
-          keyboardType="numeric"
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
+          keyboardType="number-pad"
         />
+
+
+
+
+
+
         {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
         <Text style={styles.label}>Password</Text>
         <TextInput
