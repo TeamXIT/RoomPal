@@ -93,30 +93,35 @@ const OTPverification = async (req, res) => {
     }
 };
 const resetPassword = async (req, res) => {
-    try {
-      const { mobileNumber, newPassword, confirmPassword} = req.body;
-  
-      if (!newPassword || !confirmPassword || !mobileNumber ) {
-        return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
-      }
-  
-      if (newPassword !== confirmPassword) {
-        return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
-      }
-  
-      let user = await User.findOne({ mobileNumber: mobileNumber});
-      if (!user) {
-        return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
-      }
-       user = await User.findOneAndUpdate({ mobileNumber: mobileNumber},{password: newPassword});
-      
-      await user.save();
-  
-      return res.status(200).json(baseResponses.constantMessages.PASSWORD_RESET_SUCCESS());
-    } catch (error) {
-      return res.status(500).json(baseResponses.error(error.message));
+  try {
+    const { mobileNumber, newPassword, confirmPassword } = req.body;
+
+    if (!newPassword || !confirmPassword || !mobileNumber) {
+      return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
-  };
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
+    }
+
+    // Find the user
+    let user = await User.findOne({ mobileNumber });
+    if (!user) {
+      return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+    await user.save();
+
+    // Return success response
+    return res.status(200).json(baseResponses.constantMessages.PASSWORD_RESET_SUCCESS());
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    return res.status(500).json(baseResponses.error(error.message));
+  }
+};
+
   
   const forgotPassword = async (req, res) => {
     try {
