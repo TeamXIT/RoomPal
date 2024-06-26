@@ -72,23 +72,35 @@ const SignIn = async (req, res) => {
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
+const verifyOTP = async (req, res) => {
+    try {
+        const { mobileNumber, otp } = req.body;
 
+        if (!mobileNumber || !otp) {
+            return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+        }
+
+        // Verify OTP
+        const { success, message } = verifyOTP(mobileNumber, otp);
+        if (!success) {
+            return res.status(400).json({ message });
+        }
+
+        return res.status(200).json(baseResponses.constantMessages.OTP_VERIFIED());
+    } catch (error) {
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
 const resetPassword = async (req, res) => {
     try {
-      const { mobileNumber, newPassword, confirmPassword, otp } = req.body;
+      const { mobileNumber, newPassword, confirmPassword} = req.body;
   
-      if (!newPassword || !confirmPassword || !mobileNumber || !otp) {
+      if (!newPassword || !confirmPassword || !mobileNumber ) {
         return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
       }
   
       if (newPassword !== confirmPassword) {
         return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
-      }
-  
-      // Verify OTP
-      const { success, message } = verifyOTP(mobileNumber, otp);
-      if (!success) {
-        return res.status(400).json({ message });
       }
   
       const user = await User.findOne({ mobileNumber });
