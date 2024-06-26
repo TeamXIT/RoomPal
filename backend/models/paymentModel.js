@@ -25,6 +25,6 @@ const orderSchema = new mongoose.Schema({
     },
     order_status: { type: String, default: 'PENDING' },
     created_at: { type: Date, default: Date.now }
-});
+},{timestamps:true, versionKey:false});
 const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;

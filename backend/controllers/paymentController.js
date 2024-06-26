@@ -10,31 +10,31 @@ Cashfree.XEnvironment = 'SANDBOX';
 const createOrder = async (req, res) => {
     try {
         const request = {
-            order_id: req.body.order_id,
-            order_amount: req.body.order_amount,
-            order_currency: req.body.order_currency,
+            order_id,
+            order_amount,
+            order_currency,
             customer_details: {
-                customer_id: req.body.customer_details.customer_id,
-                customer_phone: req.body.customer_details.customer_phone,
-                customer_email: req.body.customer_details.customer_email
+                customer_id,
+                customer_phone,
+                customer_email
             },
-            // order_meta: { return_url: req.body.order_meta.return_url }
-        };
+             order_meta: { return_url }
+        }=req.body;
         console.log(request);
-        // const newOrder = new Order({
-        //     order_id: order_id,
-        //     order_amount: order_amount,
-        //     order_currency: order_currency,
-        //     customer_details: {
-        //         customer_id: customer_id,
-        //         customer_phone: customer_phone,
-        //         customer_email: customer_email
-        //     },
-        //     order_meta: {
-        //         return_url:return_url,
-        //     }
-        // });
-        // newOrder.save();
+         const newOrder = new Order({
+           order_id,
+           order_amount,
+           order_currency,
+            customer_details: {
+               customer_id,
+               customer_phone,
+               customer_email
+            },
+            order_meta: {
+               return_url,
+            }
+        });
+        newOrder.save();
         const response = await Cashfree.PGCreateOrder('2022-09-01', request);
         console.log(response);
         return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(response.data));
@@ -46,9 +46,14 @@ const createOrder = async (req, res) => {
 
 const fetchOrder = async (req, res) => {
     try {
-        const order_id = req.params.order_id;
-        const response = await Cashfree.PGFetchOrder('2022-09-01', order_id);
-        res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(response.data));
+        const order_id = req.query.order_id;
+        // const response = await Cashfree.PGFetchOrder('2022-09-01', order_id);
+        // res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(response.data));
+        const order = await Order.findOne({order_id:order_id});
+        if(!order){
+            return res.status(404).json(baseResponses.constantMessages.ORDER_NOT_FOUND());
+        }
+        res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(order));
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
     }
@@ -61,5 +66,23 @@ const webhook = async (req, res) => {
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
+const getAllOrders = async (req, res) => {
+    try{
+        const recLimit = parseInt(req.query.limit) || 10;
+        const pageNumber = parseInt(req.query.page) || 1;
+        const count = await Order.countDocuments();
+        const totalPages = Math.ceil(count / recLimit);
+        const orders = await Order.find()
+        .skip((pageNumber-1)*recLimit)
+        .limit(recLimit);
+        
+        if(!orders) {
+            return res.status(404).json(null);
+        }
+        return res.status(200).json({totalPages,count,orders});
+    }catch(error){
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+}
 
-module.exports = { createOrder, fetchOrder, webhook}
+module.exports = { createOrder, fetchOrder, webhook, getAllOrders}
