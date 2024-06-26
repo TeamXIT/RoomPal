@@ -141,4 +141,4 @@ const resetPassword = async (req, res) => {
     }
   };
   
-  module.exports = { Register, SignIn, forgotPassword, resetPassword };
+  module.exports = { Register, SignIn, forgotPassword, resetPassword, verifyOTP };
