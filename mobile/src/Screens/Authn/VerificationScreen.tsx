@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import { useDispatch, useSelector } from "react-redux";
 import {  AppDispatch,RootState } from '../../reducers/store';
+import { resendOtp } from '../../reducers/auth/authSlice';
 
 const VerificationScreen = ({ navigation }) => {
   const [otp, setOtp] = useState('');
@@ -34,9 +35,9 @@ const VerificationScreen = ({ navigation }) => {
     }
   };
 
-  const handleResendOTP = () => {
-    // Implement logic to resend OTP
-    console.log('Resend OTP logic here');
+  const handleResendOTP = async () => {
+    await dispatch(resendOtp())
+    
   };
 
   return (
