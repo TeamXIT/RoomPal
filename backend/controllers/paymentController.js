@@ -5,7 +5,7 @@ const Order = require('../models/paymentModel');
 const { baseResponses } = require('../helpers/baseResponses');
 Cashfree.XClientId = process.env.X_CLIENT_ID;
 Cashfree.XClientSecret = process.env.X_CLIENT_SECRET;
-Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
+Cashfree.XEnvironment = 'SANDBOX';
 
 const createOrder = async (req, res) => {
     try {
@@ -20,7 +20,7 @@ const createOrder = async (req, res) => {
             },
             // order_meta: { return_url: req.body.order_meta.return_url }
         };
-        //console.log(request);
+        console.log(request);
         // const newOrder = new Order({
         //     order_id: order_id,
         //     order_amount: order_amount,
@@ -35,11 +35,11 @@ const createOrder = async (req, res) => {
         //     }
         // });
         // newOrder.save();
-        let order_date = moment().format('YYYY-MM-DD');
-        const response = await Cashfree.PGCreateOrder(order_date, request);
+        const response = await Cashfree.PGCreateOrder('2022-09-01', request);
         console.log(response);
         return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(response.data));
     } catch (error) {
+        console.log(error)
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
@@ -47,8 +47,7 @@ const createOrder = async (req, res) => {
 const fetchOrder = async (req, res) => {
     try {
         const order_id = req.params.order_id;
-        const orderDate = moment().format('YYYY-MM-DD');
-        const response = await Cashfree.PGFetchOrder(orderDate, order_id);
+        const response = await Cashfree.PGFetchOrder('2022-09-01', order_id);
         res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(response.data));
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
