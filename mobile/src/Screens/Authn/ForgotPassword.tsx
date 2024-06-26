@@ -1,32 +1,52 @@
-//ForgotPassword
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState, store } from '../../reducers/store';
+import { forgotPassword } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from "../molecule/TeamXLogoImage";
 
 const ForgotPassword = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [mobileNumberError, setMobileNumberError] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const { screen, data } = useSelector((state: RootState) => state.auth);
 
+ 
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');
   };
 
-  const handleresetpassword = () => {
-    if (validateEmail()) {
-      // Proceed to reset password
-      navigation.navigate('ResetPasswordScreen');
+  const handleRequestOTP = async () => {
+    if (validateMobileNumber()) {
+      await dispatch(forgotPassword(mobileNumber));
+  
+      // Define a sleep function to pause execution for a specified duration
+      const sleep = (milliseconds:number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
+      };
+  
+      // Wait for 3 seconds (3000 milliseconds)
+      await sleep(150);
+  
+      // Check if OTP is received
+      const { otp } = store.getState().auth.data; // Ensure you're fetching the latest state from the store
+      if (otp) {
+        navigation.navigate('VerificationScreen');
+      } else {
+        setMobileNumberError('User Not Found');
+      }
     }
   };
 
-  const validateEmail = () => {
-    if (!email) {
-      setEmailError('Email is required');
+  const validateMobileNumber = () => {
+    if (!mobileNumber) {
+      setMobileNumberError('Mobile number is required');
       return false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('Please enter a valid email address');
+    } else if (!/^\d+$/.test(mobileNumber)) {
+      setMobileNumberError('Please enter a valid mobile number');
       return false;
     } else {
-      setEmailError('');
+      setMobileNumberError('');
       return true;
     }
   };
@@ -35,16 +55,17 @@ const ForgotPassword = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <TeamXLogoImage />
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>Mobile Number</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your email address"
-          value={email}
-          onChangeText={setEmail}
+          placeholder="Enter your mobile number"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
         />
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={handleresetpassword}>
-          <Text style={styles.buttonText}>Reset Password</Text>
+        {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
+        {screen.error ? <Text style={styles.errorText}>{screen.error}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleRequestOTP}>
+          <Text style={styles.buttonText}>Request OTP</Text>
           <Image
             source={require('../Images/ic_lock.png')}
             style={styles.lockIcon}
@@ -136,3 +157,7 @@ const styles = StyleSheet.create({
 });
 
 export default ForgotPassword;
+function sleep(arg0: number) {
+  throw new Error("Function not implemented.");
+}
+
