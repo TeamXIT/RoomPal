@@ -164,21 +164,23 @@ export const verifyOTP = ( otp: string): AppThunk => async (dispatch,getState) =
 
 export const resetPassword = (newPassword: string, confirmPassword: string): AppThunk => async (dispatch, getState) => {
   const { mobileNumber } = getState().auth.data;
-  console.log(mobileNumber);
+  console.log("Resetting password for mobile number:", mobileNumber);
+
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
+
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword });
-    console.log(response);
+    console.log("Reset password response:", response.data.status);
+
     dispatch(clearOTP());
     dispatch(setSuccess('Password reset successfully.'));
   } catch (error) {
-    console.log(error);
+    console.error("Error in resetPassword:", error.response || error.message);
     dispatch(setError(error.response?.data?.message || error.message || 'Failed to reset password'));
   } finally {
     dispatch(setBusy(false));
   }
 };
-
 export default authSlice.reducer;
