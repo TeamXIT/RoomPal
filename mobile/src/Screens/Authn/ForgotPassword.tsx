@@ -9,8 +9,7 @@ const ForgotPassword = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [mobileNumberError, setMobileNumberError] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const { screen } = useSelector((state: RootState) => state.auth);
-  const { data } = useSelector((state: RootState) => state.auth);
+  const { screen, data } = useSelector((state: RootState) => state.auth);
 
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');

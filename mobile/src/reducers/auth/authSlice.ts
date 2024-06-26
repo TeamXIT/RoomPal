@@ -123,8 +123,10 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
+  console.log(mobileNumber)
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/forgotPassword`, { mobileNumber });
+    console.log(response.data)
     if (response.status === 200) {
       dispatch(setMobileNumber(mobileNumber));
       dispatch(setSuccess('OTP sent to mobile number.'));
@@ -138,12 +140,15 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
   }
 };
 
-export const verifyOTP = (mobileNumber: string, otp: string): AppThunk => async (dispatch) => {
+export const verifyOTP = ( otp: string): AppThunk => async (dispatch,getState) => {
+  const { mobileNumber } = getState().auth.data;
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber, otp });
+   
+    const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber,otp });
+    console.log(response.data);
     if (response.status === 200) {
       dispatch(setOTP(otp));
       dispatch(setSuccess('OTP verified successfully.'));
@@ -158,12 +163,12 @@ export const verifyOTP = (mobileNumber: string, otp: string): AppThunk => async 
 };
 
 export const resetPassword = (newPassword: string, confirmPassword: string): AppThunk => async (dispatch, getState) => {
-  const { mobileNumber, otp } = getState().auth.data;
+  const { mobileNumber } = getState().auth.data;
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword, otp });
+    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword });
     dispatch(clearOTP());
     dispatch(setSuccess('Password reset successfully.'));
   } catch (error) {
