@@ -125,7 +125,7 @@ const resetPassword = async (req, res) => {
         return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
       }
   
-      const user = await User.findOne({ mobileNumber });
+      const user = await User.findOne({ mobileNumber: mobileNumber});
       if (!user) {
         return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
       }
