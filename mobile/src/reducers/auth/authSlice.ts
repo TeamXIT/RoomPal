@@ -12,7 +12,7 @@ type AuthState = {
   data: {
     mobileNumber: string;
     authToken: string;
-    otp: string | null; // Store OTP in Redux state
+    otp: string | null;
   };
 };
 
@@ -145,7 +145,7 @@ export const verifyOTP = (mobileNumber: string, otp: string): AppThunk => async 
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber, otp });
     if (response.status === 200) {
-      dispatch(setOTP(otp)); // Store OTP in Redux state
+      dispatch(setOTP(otp));
       dispatch(setSuccess('OTP verified successfully.'));
     } else {
       dispatch(setError('Invalid OTP'));
@@ -163,8 +163,8 @@ export const resetPassword = (newPassword: string, confirmPassword: string): App
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, otp });
-    dispatch(clearOTP()); // Clear OTP from Redux state after successful password reset
+    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword, otp });
+    dispatch(clearOTP());
     dispatch(setSuccess('Password reset successfully.'));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Failed to reset password'));
