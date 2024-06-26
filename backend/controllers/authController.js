@@ -132,7 +132,8 @@ const resetPassword = async (req, res) => {
       }
   
       // Generate and send OTP
-      const { otp, expirationTimestamp } = generateOTP(mobileNumber, 6, 300); // 6-digit OTP, valid for 5 minutes
+      const { otp, expirationTimestamp } = generateOTP(mobileNumber, 6, 300);
+      console.log(otp) // 6-digit OTP, valid for 5 minutes
   
       // Here you should send the OTP to the user's mobile number via SMS
       // For now, we'll return it in the response for simplicity

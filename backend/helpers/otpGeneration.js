@@ -1,7 +1,7 @@
 // Global OTP storage using a Map
 const otpStorage = new Map();
 
-const generateOTP = (phoneNumber, digitCount, expirationTimeInSeconds) => {
+const generateOTP = (mobileNumber, digitCount, expirationTimeInSeconds) => {
   if (typeof digitCount !== 'number' || digitCount <= 0) {
     throw new Error('Invalid digit count. Please provide a positive integer.');
   }
@@ -15,14 +15,14 @@ const generateOTP = (phoneNumber, digitCount, expirationTimeInSeconds) => {
   const expirationTimestamp = timestamp + expirationTimeInSeconds;
 
   // Store OTP information in the global otpStorage
-  otpStorage.set(phoneNumber, { otp, expirationTimestamp });
+  otpStorage.set(mobileNumber, { otp, expirationTimestamp });
 
   // Return OTP along with the expiration timestamp
   return { otp, expirationTimestamp };
 };
 
-const verifyOTP = (phoneNumber, userEnteredOTP) => {
-  const storedData = otpStorage.get(phoneNumber);
+const verifyOTP = (mobileNumber, userEnteredOTP) => {
+  const storedData = otpStorage.get(mobileNumber);
 
   if (!storedData || !storedData.otp || !storedData.expirationTimestamp) {
     return { success: false, message: 'Invalid OTP or OTP expired' };
@@ -37,11 +37,11 @@ const verifyOTP = (phoneNumber, userEnteredOTP) => {
   const currentTimestamp = Math.floor(Date.now() / 1000);
   if (currentTimestamp > expirationTimestamp) {
     // Clear the expired OTP from storage
-    otpStorage.delete(phoneNumber);
+    otpStorage.delete(mobileNumber);
     return { success: false, message: 'OTP has expired' };
   }
 
-  otpStorage.delete(phoneNumber); // Clear the OTP from storage (OTP can only be used once)
+  otpStorage.delete(mobileNumber); // Clear the OTP from storage (OTP can only be used once)
 
   return { success: true, message: 'OTP verification successful' };
 };
