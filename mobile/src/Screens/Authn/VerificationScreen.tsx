@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
+import { useDispatch, useSelector } from "react-redux";
+import {  AppDispatch,RootState } from '../../reducers/store';
 
 const VerificationScreen = ({ navigation }) => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const { screen, data } = useSelector((state: RootState) => state.auth);
 
   const handleVerificationPress = () => {
-    if (validateOtp()) {
+    if (validateOtp() && data.otp==otp) {
       // Navigate to the next screen upon successful OTP verification
-      navigation.navigate('SuccessPasswordScreen');
+      navigation.navigate('ResetPasswordScreen');
+    }
+    else{
+      console.log(data.otp);
+      setOtpError('Invalid OTP')
     }
   };
 

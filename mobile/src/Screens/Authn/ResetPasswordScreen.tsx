@@ -11,7 +11,7 @@ const ResetPasswordScreen = ({ navigation }) => {
 
   const handleResetPasswordPress = () => {
     if (validatePasswords()) {
-      navigation.navigate('VerificationScreen');
+      navigation.navigate('SucessPasswordScreen');
     }
   };
 

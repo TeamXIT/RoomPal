@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from '../../reducers/store';
@@ -11,6 +11,7 @@ const ForgotPassword = ({ navigation }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { screen, data } = useSelector((state: RootState) => state.auth);
 
+ 
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');
   };
@@ -18,9 +19,7 @@ const ForgotPassword = ({ navigation }) => {
   const handleRequestOTP = async () => {
     if (validateMobileNumber()) {
       await dispatch(forgotPassword(mobileNumber));
-      if (data.otp) {
-        navigation.navigate('VerifyOTPScreen', { mobileNumber });
-      }
+      navigation.navigate('VerificationScreen');
     }
   };
 
