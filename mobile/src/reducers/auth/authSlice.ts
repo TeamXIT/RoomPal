@@ -12,7 +12,7 @@ type AuthState = {
   data: {
     mobileNumber: string;
     authToken: string;
-    resetToken: string;
+    otp: string | null; // Store OTP in Redux state
   };
 };
 
@@ -25,7 +25,7 @@ const initialState: AuthState = {
   data: {
     mobileNumber: '',
     authToken: '',
-    resetToken: '',
+    otp: null,
   },
 };
 
@@ -48,13 +48,16 @@ export const authSlice = createSlice({
     setMobileNumber: (state, action: PayloadAction<string>) => {
       state.data.mobileNumber = action.payload;
     },
-    setResetToken: (state, action: PayloadAction<string>) => {
-      state.data.resetToken = action.payload;
+    setOTP: (state, action: PayloadAction<string>) => {
+      state.data.otp = action.payload;
+    },
+    clearOTP: (state) => {
+      state.data.otp = null;
     },
   },
 });
 
-export const { setBusy, setError, setSuccess, setAuthToken, setMobileNumber, setResetToken } = authSlice.actions;
+export const { setBusy, setError, setSuccess, setAuthToken, setMobileNumber, setOTP, clearOTP } = authSlice.actions;
 
 export const signIn = (mobileNumber: string, password: string): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
@@ -67,7 +70,6 @@ export const signIn = (mobileNumber: string, password: string): AppThunk => asyn
     dispatch(setSuccess('User logged in successfully.'));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Sign in failed'));
-    console.log(error);
   } finally {
     dispatch(setBusy(false));
   }
@@ -106,14 +108,12 @@ export const register = (
       preferences,
       makeMobilePrivate,
       password,
-      confirmPassword
+      confirmPassword,
     });
-    console.log(response);
     dispatch(setSuccess('User registered successfully.'));
-    dispatch(signIn(mobileNumber, password)); // Automatically sign in the user after registration
+    dispatch(signIn(mobileNumber, password));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Registration failed'));
-    console.log(error)
   } finally {
     dispatch(setBusy(false));
   }
@@ -126,33 +126,48 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/forgotPassword`, { mobileNumber });
     if (response.status === 200) {
-      dispatch(setResetToken(response.data.resetToken));
       dispatch(setMobileNumber(mobileNumber));
-      dispatch(setSuccess('Reset token sent to mobile number.'));
-      return true; // Indicate success
+      dispatch(setSuccess('OTP sent to mobile number.'));
     } else {
-      dispatch(setError('Failed to send reset token'));
-      return false; // Indicate failure
+      dispatch(setError('Failed to send OTP'));
     }
   } catch (error) {
-    dispatch(setError(error.response?.data?.message || error.message || 'Failed to send reset token'));
-    return false; // Indicate failure
+    dispatch(setError(error.response?.data?.message || error.message || 'Failed to send OTP'));
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+export const verifyOTP = (mobileNumber: string, otp: string): AppThunk => async (dispatch) => {
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  dispatch(setSuccess(''));
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber, otp });
+    if (response.status === 200) {
+      dispatch(setOTP(otp)); // Store OTP in Redux state
+      dispatch(setSuccess('OTP verified successfully.'));
+    } else {
+      dispatch(setError('Invalid OTP'));
+    }
+  } catch (error) {
+    dispatch(setError(error.response?.data?.message || error.message || 'Failed to verify OTP'));
   } finally {
     dispatch(setBusy(false));
   }
 };
 
 export const resetPassword = (newPassword: string, confirmPassword: string): AppThunk => async (dispatch, getState) => {
-  const { mobileNumber, resetToken } = getState().auth.data;
+  const { mobileNumber, otp } = getState().auth.data;
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword, resetToken });
+    const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, otp });
+    dispatch(clearOTP()); // Clear OTP from Redux state after successful password reset
     dispatch(setSuccess('Password reset successfully.'));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Failed to reset password'));
-    console.log(error);
   } finally {
     dispatch(setBusy(false));
   }
