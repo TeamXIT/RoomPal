@@ -2,15 +2,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../reducers/store';
+import { resetPassword } from '../../reducers/auth/authSlice';
 
 const ResetPasswordScreen = ({ navigation }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleResetPasswordPress = () => {
+  const handleResetPasswordPress = async () => {
     if (validatePasswords()) {
+      await dispatch(resetPassword(newPassword,confirmPassword));
       navigation.navigate('SucessPasswordScreen');
     }
   };

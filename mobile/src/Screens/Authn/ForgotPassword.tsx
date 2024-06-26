@@ -19,7 +19,13 @@ const ForgotPassword = ({ navigation }) => {
   const handleRequestOTP = async () => {
     if (validateMobileNumber()) {
       await dispatch(forgotPassword(mobileNumber));
-      navigation.navigate('VerificationScreen');
+      if (!data.otp){
+        setMobileNumberError('User Not Found')
+      }
+      else{
+        navigation.navigate('VerificationScreen');
+      }
+     
     }
   };
 

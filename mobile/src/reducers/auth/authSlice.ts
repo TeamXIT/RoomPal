@@ -134,7 +134,7 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
       dispatch(setError('Failed to send OTP'));
     }
   } catch (error) {
-    dispatch(setError(error.response?.data?.message || error.message || 'Failed to send OTP'));
+    dispatch(setError(error.response?.data?.error || error.message || 'Failed to send OTP'));
   } finally {
     dispatch(setBusy(false));
   }
@@ -164,6 +164,7 @@ export const verifyOTP = ( otp: string): AppThunk => async (dispatch,getState) =
 
 export const resetPassword = (newPassword: string, confirmPassword: string): AppThunk => async (dispatch, getState) => {
   const { mobileNumber } = getState().auth.data;
+  console.log(mobileNumber);
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
