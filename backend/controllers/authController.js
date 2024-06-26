@@ -73,4 +73,64 @@ const SignIn = async (req, res) => {
     }
 };
 
-module.exports = { Register, SignIn };
+
+const resetPassword = async (req, res) => {
+    try {
+        const { mobileNumber, newPassword, confirmPassword, resetToken } = req.body;
+
+        if (!newPassword || !confirmPassword || !mobileNumber || !resetToken) {
+            return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
+        }
+
+        // Verify the reset token
+        const _secret = process.env.JWT_SECRET || 'rajasekhar-secret-key';
+        try {
+            jwt.verify(resetToken, _secret);
+        } catch (error) {
+            return res.status(400).json(baseResponses.constantMessages.INVALID_RESET_TOKEN());
+        }
+
+        const user = await User.findOne({ mobileNumber });
+        if (!user) {
+            return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.status(200).json(baseResponses.constantMessages.PASSWORD_RESET_SUCCESS());
+    } catch (error) {
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
+
+const forgotPassword = async (req, res) => {
+    try {
+        const { mobileNumber } = req.body;
+
+        if (!mobileNumber) {
+            return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+        }
+
+        const user = await User.findOne({ mobileNumber });
+        if (!user) {
+            return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+        }
+
+        const _secret = process.env.JWT_SECRET || 'rajasekhar-secret-key';
+        const resetToken = jwt.sign({ mobileNumber: user.mobileNumber }, _secret, { expiresIn: '1h' });
+
+        // Here you can send the reset token to the user's mobile number via SMS
+        // For now, we'll return it in the response for simplicity
+        return res.status(200).json({ resetToken });
+    } catch (error) {
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
+
+module.exports = { Register, SignIn, forgotPassword, resetPassword };
