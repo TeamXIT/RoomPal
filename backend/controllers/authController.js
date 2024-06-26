@@ -73,7 +73,7 @@ const SignIn = async (req, res) => {
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
-const verifyOTP = async (req, res) => {
+const OTPverification = async (req, res) => {
     try {
         const { mobileNumber, otp } = req.body;
 
@@ -143,4 +143,4 @@ const resetPassword = async (req, res) => {
     }
   };
   
-  module.exports = { Register, SignIn, forgotPassword, resetPassword, verifyOTP };
+  module.exports = { Register, SignIn, forgotPassword, resetPassword, OTPverification };
