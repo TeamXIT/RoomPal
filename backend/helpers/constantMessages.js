@@ -8,6 +8,7 @@ const BASE_RESPONSE_MESSAGES = {
         ORDER_FETCHED_SUCCESSFULLY: 'Order fetched successfully',
         REFUND_CREATED: 'Refund created successfully',
         REFUND_FETCHED: 'Refund fetched successfully',
+        PAYMENT_CREATED: 'Payment created successfully'
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',

@@ -16,7 +16,8 @@ const baseResponses = {
         ORDER_FETCHED_SUCCESSFULLY:(data=null)=> baseResponses.success('Order fetched successfully',data),
         ORDER_NOT_FOUND:(data=null)=> baseResponses.error('Order not found',data),
         REFUND_CREATED:(data=null)=> baseResponses.success('Refund created successfully',data),
-        REFUND_FETCHED:(data=null)=> baseResponses.success('Refund fetched successfully',data)
+        REFUND_FETCHED:(data=null)=> baseResponses.success('Refund fetched successfully',data),
+        PAYMENT_CREATED:(data=null)=> baseResponses.success('Payment created successfully',data),
     }
 };
 module.exports = {baseResponses};
