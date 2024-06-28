@@ -14,6 +14,7 @@ import RoomDetails from './src/Screens/Authn/RoomDetails';
 import RoomCreateScreen from './src/Screens/Authn/RoomCreateScreen';
 import { store } from './src/reducers/store';
 import { Provider } from 'react-redux';
+import ListOfRooms from './src/Screens/Authn/ListOfRooms';
 
 
 const Stack = createStackNavigator();
@@ -21,13 +22,15 @@ const Stack = createStackNavigator();
 const Authn = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
+
+
     <Stack.Navigator initialRouteName="LoginScreen">
+
       <Stack.Screen
         name="Intro"
         component={RoomPalIntro}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -59,19 +62,15 @@ const Authn = () => {
       <Stack.Screen
         name="RoomDetails"
         component={RoomDetails}
-        options={{
-          headerShown: false
-        }}
-
-      />
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="RoomCreateScreen"
         component={RoomCreateScreen}
-        options={{
-          headerShown: false
-        }}
-
-      />
+        options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ListOfRooms"
+        component={ListOfRooms}
+        options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
@@ -81,17 +80,17 @@ function App(): React.JSX.Element {
   return (
 
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Authn">
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Authn">
 
-        {/* Auth Navigator: Include Login and Signup */}
-        <Stack.Screen
-          name="Authn"
-          component={Authn}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          {/* Auth Navigator: Include Login and Signup */}
+          <Stack.Screen
+            name="Authn"
+            component={Authn}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
 
   );
