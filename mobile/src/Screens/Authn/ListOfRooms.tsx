@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { primaryColor } from '../Styles/Styles';
-import { TextInput } from 'react-native-gesture-handler';
 
 const data = [
   {
@@ -69,14 +68,16 @@ const data = [
 ];
 
 const ListOfRooms = () => {
-  const [openGender, setOpenGender] = useState(false); // State to manage gender dropdown open/close
-  const [filterGender, setFilterGender] = useState('Both'); // State to manage the selected gender filter
-  const [openLocation, setOpenLocation] = useState(false); // State to manage location dropdown open/close
-  const [filterLocation, setFilterLocation] = useState('All Delhi'); // State to manage the selected location filter
+  const [openGender, setOpenGender] = useState(false);
+  const [filterGender, setFilterGender] = useState('Both');
+  const [openLocation, setOpenLocation] = useState(false);
+  const [filterLocation, setFilterLocation] = useState('All Delhi');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-      
       <View style={{ flexDirection: 'row' }}>
         <Image source={{ uri: item.image }} style={styles.image} />
         <View style={styles.info}>
@@ -87,7 +88,7 @@ const ListOfRooms = () => {
           </View>
           <View style={{ flexDirection: 'row', gap: 30 }}>
             <Text style={[{ paddingLeft: 5, fontSize: 16 }]}>Rent</Text>
-            <Text style={[, { paddingLeft: 51, fontSize: 16 }]}>Looking for</Text>
+            <Text style={[{ paddingLeft: 51, fontSize: 16 }]}>Looking for</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 45, paddingBottom: 10 }}>
             <Text style={[styles.rent, { marginRight: 20 }]}> ₹{item.rent}</Text>
@@ -97,18 +98,14 @@ const ListOfRooms = () => {
             <Text style={styles.distance}>{item.distance} Km</Text>
             <Text style={{ fontSize: 16, color: '#000' }}> from your search</Text>
           </View>
-          <View style={{flexDirection:'row',gap:20}}>
-              <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
-              <TouchableOpacity style={styles.detailsButton}>
-                <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
-              </TouchableOpacity>
+          <View style={{ flexDirection: 'row', gap: 20 }}>
+            <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
+            <TouchableOpacity style={styles.detailsButton}>
+              <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-
-
-
-
     </View>
   );
 
@@ -127,17 +124,27 @@ const ListOfRooms = () => {
   ];
 
   const applyFilters = () => {
-    // Filter data based on selected filters
     let filteredData = data;
 
-    // Filter by gender
     if (filterGender !== 'Both') {
       filteredData = filteredData.filter(item => item.lookingFor === filterGender);
     }
 
-    // Filter by location
     if (filterLocation !== 'All Delhi') {
       filteredData = filteredData.filter(item => item.location === filterLocation);
+    }
+
+    if (searchQuery.trim() !== '') {
+      filteredData = filteredData.filter(item =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.location.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (minPrice !== '' && maxPrice !== '') {
+      filteredData = filteredData.filter(item =>
+        item.rent >= parseInt(minPrice) && item.rent <= parseInt(maxPrice)
+      );
     }
 
     return filteredData;
@@ -145,9 +152,15 @@ const ListOfRooms = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize:30,color:'#000',fontWeight:'bold'}}>Listed Rooms</Text>
-      <TextInput placeholder='Search Here..'placeholderTextColor={''} style={{height:50,width:200,backgroundColor:'#f1f1f1',borderRadius:10,borderColor:'black',borderWidth:1,paddingLeft:20,marginTop:20,marginBottom:20,fontSize:16,color:'black'}}/>
-      <View style={{ flexDirection: 'row', gap: -260 }}>
+      <Text style={{ fontSize: 30, color: '#000', fontWeight: 'bold' }}>Listed Rooms</Text>
+      <TextInput
+        placeholder='Search by name or location...'
+        placeholderTextColor='#666'
+        style={styles.searchInput}
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
         <DropDownPicker
           open={openGender}
           value={filterGender}
@@ -158,24 +171,30 @@ const ListOfRooms = () => {
           containerStyle={styles.dropdownContainer}
           dropDownContainerStyle={styles.dropdown}
         />
-        <DropDownPicker
-          open={openLocation}
-          value={filterLocation}
-          items={locationItems}
-          setOpen={setOpenLocation}
-          setValue={setFilterLocation}
-          style={styles.dropdownPicker}
-          containerStyle={styles.dropdownContainer}
-          dropDownContainerStyle={styles.dropdown}
-        />
+        <View style={styles.priceFilter}>
+          <TextInput
+            style={styles.priceInput}
+            placeholder='Min ₹'
+            keyboardType='numeric'
+            value={minPrice}
+            onChangeText={text => setMinPrice(text)}
+          />
+          <TextInput
+            style={styles.priceInput}
+            placeholder='Max ₹'
+            keyboardType='numeric'
+            value={maxPrice}
+            onChangeText={text => setMaxPrice(text)}
+          />
+        </View>
         <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
           <Text style={styles.applyButtonText}>Apply Filters</Text>
         </TouchableOpacity>
       </View>
       <FlatList
-        data={applyFilters()} // Render filtered data
+        data={applyFilters()}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
       />
     </View>
   );
@@ -187,20 +206,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 10,
   },
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start'
-
-
-  },
-  filterText: {
+  searchInput: {
+    height: 50,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 10,
+    borderColor: '#666',
+    borderWidth: 1,
+    paddingLeft: 20,
+    marginBottom: 10,
     fontSize: 16,
+    color: '#000',
   },
   dropdownPicker: {
     backgroundColor: '#f1f1f1',
     borderRadius: 5,
     width: 100,
-
   },
   dropdownContainer: {
     marginBottom: 10,
@@ -210,7 +230,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     width: 100,
-
+  },
+  priceFilter: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  priceInput: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    color: '#000',
+    backgroundColor: '#f1f1f1',
+    borderRadius: 5,
+    marginRight: 10,
   },
   applyButton: {
     backgroundColor: primaryColor,
@@ -218,12 +251,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 100,
     height: 50,
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   applyButtonText: {
     color: '#fff',
-    fontSize:14
+    fontSize: 14,
   },
   card: {
     backgroundColor: '#fff',
@@ -232,16 +265,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     elevation: 2,
     borderColor: '#000',
-    borderWidth: 3
+    borderWidth: 3,
   },
   image: {
     width: 100,
     height: 100,
     borderRadius: 50,
     margin: 10,
-    justifyContent:'center',
-    alignSelf:'center'
-
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   info: {
     flex: 1,
@@ -251,7 +283,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000'
+    color: '#000',
   },
   location: {
     fontSize: 16,
@@ -270,21 +302,21 @@ const styles = StyleSheet.create({
   match: {
     fontSize: 16,
     color: '#666',
-    top:5
+    top: 5,
   },
   distance: {
     fontSize: 16,
     color: '#000',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   detailsButton: {
     marginTop: 10,
-    height:35,
-    width:120,
-    justifyContent:'center',
+    height: 35,
+    width: 120,
+    justifyContent: 'center',
     backgroundColor: primaryColor,
     borderRadius: 8,
-    top:-10
+    top: -10,
   },
   detailsButtonText: {
     color: '#fff',
