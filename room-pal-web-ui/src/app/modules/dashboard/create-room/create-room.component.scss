@@ -1,0 +1,81 @@
+.card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 60px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.854);
+    width: 45%;
+    margin: auto;
+    font-size: 25px;
+  
+  }
+  
+  .logo {
+    width: 60%;
+    height: 19vh;
+    margin-top: -10%;
+    margin-left: 15%;
+
+  }
+  
+    
+    h2 {
+      color: #6b23d4;
+      font-size: 23px;
+      text-align: left;
+      margin: 10px 0;
+    }
+   
+    input, textarea, button {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      box-sizing: border-box;
+     font-size: 17px;
+    }
+  
+    .checkbox [type="checkbox"] {
+      margin: 10% 10px 11% 0;
+      transform: scale(1.5); 
+     
+  }
+  
+     .checkbox{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+     }
+  
+    .checkbox img {
+      margin-right: 10px; 
+      margin-top: -10px;
+      height: 4vh;
+      width: 2.5vw;
+  }
+    .checkbox label {
+      display: flex;
+      align-items: center;
+      padding-top: 10px;
+  }
+  
+  ::placeholder{
+    font-size: 20px;
+  }
+    button {
+      background-color: #6b23d4;
+      color: white;
+      border: none;
+      padding: 15px;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 20px;
+      margin-top: 10%;
+    }
+    button:hover {
+      background-color: #b98aff;
+      color: #000;
+    }

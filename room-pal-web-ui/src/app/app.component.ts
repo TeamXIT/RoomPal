@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ItemComponent } from './items/item/item.component';
 import { LoginComponent } from './modules/account/login/login.component';
 import { SetPasswordSuccessComponent } from './modules/account/set-password-success/set-password-success.component';
 import { SetPasswordFailureComponent } from './modules/account/set-password-failure/set-password-failure.component';
