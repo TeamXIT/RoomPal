@@ -1,0 +1,136 @@
+<form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+    <div class="card">
+      <img src="images/logo.jpg" alt="Logo" class="logo"/>
+    
+      <div>
+        <h2>Room Name</h2>
+        <input id="roomName" formControlName="roomName" placeholder="Enter Room Name">
+        <div *ngIf="roomForm.get('roomName').invalid && (roomForm.get('roomName').dirty || roomForm.get('roomName').touched)">
+          <div *ngIf="roomForm.get('roomName').errors.required">Room name is required</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Description</h2>
+        <textarea id="description" formControlName="description" placeholder="Room Description"></textarea>
+        <div *ngIf="roomForm.get('description').invalid && (roomForm.get('description').dirty || roomForm.get('description').touched)">
+          <div *ngIf="roomForm.get('description').errors.required">Description is required</div>
+          <div *ngIf="roomForm.get('description').errors.maxLength">Description cannot exceed 500 characters</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Capacity</h2>
+        <input id="capacity" type="number" formControlName="capacity">
+        <div *ngIf="roomForm.get('capacity').invalid && (roomForm.get('capacity').dirty || roomForm.get('capacity').touched)">
+          <div *ngIf="roomForm.get('capacity').errors.required">Capacity is required</div>
+          <div *ngIf="roomForm.get('capacity').errors.min">Minimum capacity is 1</div>
+          <div *ngIf="roomForm.get('capacity').errors.max">Maximum capacity is 5</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>WhatsApp Link</h2>
+        <input id="whatsappLink" formControlName="whatsappLink" placeholder="WhatsApp Link">
+        <div *ngIf="roomForm.get('whatsappLink').invalid && (roomForm.get('whatsappLink').dirty || roomForm.get('whatsappLink').touched)">
+          <div *ngIf="roomForm.get('whatsappLink').errors.required">WhatsApp link is required</div>
+          <div *ngIf="roomForm.get('whatsappLink').errors.pattern">Invalid URL format</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Telegram Link</h2>
+        <input id="telegramLink" formControlName="telegramLink" placeholder="Telegram Link">
+        <div *ngIf="roomForm.get('telegramLink').invalid && (roomForm.get('telegramLink').dirty || roomForm.get('telegramLink').touched)">
+          <div *ngIf="roomForm.get('telegramLink').errors.required">Telegram link is required</div>
+          <div *ngIf="roomForm.get('telegramLink').errors.pattern">Invalid URL format</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Amenities</h2>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" formControlName="amenity1"><img src="images/wifi.jpg"> Wifi
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity2"><img src="images/freezer.jpg">Kitchen
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity3"> <img src="images/airconditioner.jpg">AC
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity3"> <img src="images/bathroom.jpg">Bathroom
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity3"> <img src="images/parkedcar.jpg">Parking
+          </label>
+        </div>
+      </div>
+      <div>
+        <h2>Address</h2>
+         <textarea name="" id="" cols="30" rows="5" placeholder="Enter Your Address"></textarea>
+        <div *ngIf="roomForm.get('address').invalid && (roomForm.get('address').dirty || roomForm.get('address').touched)">
+          <div *ngIf="roomForm.get('address').errors.required">Address is required</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Location</h2>
+        <input id="location" formControlName="location">
+        <div *ngIf="roomForm.get('location').invalid && (roomForm.get('location').dirty || roomForm.get('location').touched)">
+          <div *ngIf="roomForm.get('location').errors.required">Location is required</div>
+        </div>
+      </div>
+      
+      <!-- <div>
+        <h2>Room Images</h2>
+        <input id="roomImages" type="file" (change)="onFileChange($event)" multiple>
+        <div *ngIf="roomForm.get('roomImages').invalid && (roomForm.get('roomImages').dirty || roomForm.get('roomImages').touched)">
+          <div *ngIf="roomForm.get('roomImages').errors.required">Room images are required</div>
+        </div>
+      </div> -->
+  
+      <div>
+        <h2>Room Images</h2>
+        <input id="roomImages" type="file" (change)="onFileChange($event)" multiple>
+        <div *ngIf="roomForm.get('roomImages').invalid && (roomForm.get('roomImages').dirty || roomForm.get('roomImages').touched)">
+          <div *ngIf="roomForm.get('roomImages').errors.required">Room images are required</div>
+        </div>
+        <div formArrayName="roomImages">
+          <div *ngFor="let imgCtrl of roomImages.controls; let i = index">
+            <p>{{ imgCtrl.value.name }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Rent</h2>
+        <input id="rent" type="number" formControlName="rent">
+        <div *ngIf="roomForm.get('rent').invalid && (roomForm.get('rent').dirty || roomForm.get('rent').touched)">
+          <div *ngIf="roomForm.get('rent').errors.required">Rent is required</div>
+          <div *ngIf="roomForm.get('rent').errors.min">Rent cannot be negative</div>
+        </div>
+      </div>
+      
+      <div>
+        <h2>Preferences</h2>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" formControlName="preference1" class="veg">Veg
+          </label>
+          <label>
+            <input type="checkbox" formControlName="preference2">Nonveg
+          </label>
+          <label>
+            <input type="checkbox" formControlName="preference3">Smoking
+          </label>
+          <label>
+            <input type="checkbox" formControlName="preference4">Drinking
+          </label>
+        </div>
+      </div>
+      
+      <button type="submit">Create Room</button>
+    </div>
+  </form>
