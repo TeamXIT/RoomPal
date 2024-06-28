@@ -88,7 +88,7 @@ const RegisterScreen = ({ navigation }) => {
     if (!mobileNumber) {
       setMobileNumberError("Please provide your mobile number.")
       hasError = true;
-    } else if (!/^\d{10}$/.test(mobile)) {
+    } else if (!/^\d{10}$/.test(mobileNumber)) {
       setMobileNumberError("Mobile number must be 10 digits.")
       hasError = true;
     } else {

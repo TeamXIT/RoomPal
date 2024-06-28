@@ -5,7 +5,8 @@ const BASE_RESPONSE_MESSAGES = {
         ROOM_CREATED_SUCCESSFULLY:'Room created successfully',
         RATING_GIVEN: 'Rating given successfully',
         ORDER_CREATED_SUCCESSFULLY: 'Order created successfully',
-        ORDER_FETCHED_SUCCESSFULLY: 'Order fetched successfully'
+        ORDER_FETCHED_SUCCESSFULLY: 'Order fetched successfully',
+        PASSWORD_RESET_SUCCESS:"Password updated successfully"
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',

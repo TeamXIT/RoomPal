@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import PhoneInput from 'react-native-phone-number-input';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { error, isBusy, success } = useSelector(state => state.auth.screen);
+  const authToken = useSelector(state => state.auth.data.authToken);
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -15,8 +17,6 @@ const LoginScreen = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState('');
 
   const validateMobileNumber = (mobile) => {
-    // Implement your validation logic for mobile number
-    // Example: Check if it's a valid mobile number format
     return mobile.trim().length === 10 && /^\d+$/.test(mobile);
   };
 
@@ -38,9 +38,14 @@ const LoginScreen = ({ navigation }) => {
     }
 
     if (valid) {
-      // Proceed with login
-      dispatch(signIn(mobileNumber, password));
-      console.log('Logging in...');
+      dispatch(signIn(mobileNumber, password)).then((result) => {
+        if (result.success) {
+          console.log('Login successful, navigating to RoomDetails');
+          navigation.navigate('RoomDetails');
+        } else {
+          setMobileNumber('login failed');
+        }
+      });
     }
   };
 
@@ -51,6 +56,13 @@ const LoginScreen = ({ navigation }) => {
   const handleForgotPasswordPress = () => {
     navigation.navigate('ForgotPassword');
   };
+
+  useEffect(() => {
+    if (success) {
+      console.log('Navigation effect triggered, navigating to RoomDetails');
+      navigation.navigate('RoomDetails');
+    }
+  }, [success, navigation]);
 
   return (
     <View style={styles.container}>
