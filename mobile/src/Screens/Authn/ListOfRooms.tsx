@@ -73,8 +73,8 @@ const ListOfRooms = () => {
   const [openLocation, setOpenLocation] = useState(false);
   const [filterLocation, setFilterLocation] = useState('All Delhi');
   const [searchQuery, setSearchQuery] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  
+  
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -171,22 +171,6 @@ const ListOfRooms = () => {
           containerStyle={styles.dropdownContainer}
           dropDownContainerStyle={styles.dropdown}
         />
-        <View style={styles.priceFilter}>
-          <TextInput
-            style={styles.priceInput}
-            placeholder='Min ₹'
-            keyboardType='numeric'
-            value={minPrice}
-            onChangeText={text => setMinPrice(text)}
-          />
-          <TextInput
-            style={styles.priceInput}
-            placeholder='Max ₹'
-            keyboardType='numeric'
-            value={maxPrice}
-            onChangeText={text => setMaxPrice(text)}
-          />
-        </View>
         <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
           <Text style={styles.applyButtonText}>Apply Filters</Text>
         </TouchableOpacity>
@@ -231,20 +215,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 100,
   },
-  priceFilter: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  priceInput: {
-    flex: 1,
-    height: 40,
-    paddingHorizontal: 10,
-    fontSize: 16,
-    color: '#000',
-    backgroundColor: '#f1f1f1',
-    borderRadius: 5,
-    marginRight: 10,
-  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   applyButton: {
     backgroundColor: primaryColor,
     padding: 10,

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, PermissionsAndroid, Platform, Linking } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Slider from 'react-native-slider';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Geolocation from 'react-native-geolocation-service';
 import { request, PERMISSIONS } from 'react-native-permissions';
 import ProfileComponent from '../molecule/ProfileComponent';
@@ -10,8 +11,8 @@ import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import TeamXErrorText from '../molecule/TeamXErrorText';
 const RoomCreateScreen = () => {
     const [roomName, setRoomName] = useState('');
-    const [description, setDescription] = useState('');
-    const [capacity, setCapacity] = useState(0);
+    const [details, setDetails] = useState('');
+    const [availability, setAvailability] = useState(0);
     const [amenities, setAmenities] = useState([
         { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false },
         { name: 'Kitchen', image: require('../Images/ic_kitchen.png'), checked: false },
@@ -23,6 +24,9 @@ const RoomCreateScreen = () => {
     const [location, setLocation] = useState(null);
     const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
     const [rent, setRent] = useState('');
+    const [floor, setFloor] = useState('');
+    const [roomType, setRoomType] = useState(''); // State for room type
+    const [roomTypeOpen, setRoomTypeOpen] = useState(false);
     const [whatsappLink, setWhatsappLink] = useState('')
     const [telegramLink, setTelegramLink] = useState('')
     const [preferences, setPreferences] = useState([
@@ -35,19 +39,23 @@ const RoomCreateScreen = () => {
     const [formState, setFormState] = useState<Record<string, any>>({});
 
     const [roomNameError, setRoomNameError] = useState('');
-    const [descriptionError, setDescriptionError] = useState('');
-    const [capacityError, setCapacityError] = useState('');
+    const [detailsError, setDetailsError] = useState('');
+    const [availabilityError, setAvailabilityError] = useState('');
     const [locationError, setLocationError] = useState('');
     const [addressError, setAddressError] = useState('');
     const [rentError, setRentError] = useState('');
+    const [floorError, setFloorError] = useState('');
+    const [roomTypeError, setRoomTypeError] = useState(''); // State for room type
     const [whatsappLinkError, setWhatsappLinkError] = useState('')
     const [telegramLinkError, setTelegramLinkError] = useState('')
+
     const [showMap, setShowMap] = useState(false); // State to control map visibility
 
 
 
-    const descriptionRef = useRef(null);
+    const detailsRef = useRef(null);
     const rentRef = useRef(null);
+    const floorRef = useRef(null);
     const whatsappLinkRef = useRef(null)
     const telegramLinkRef = useRef(null)
     const addressRef = useRef(null);
@@ -62,17 +70,17 @@ const RoomCreateScreen = () => {
             setRoomNameError('')
         }
 
-        if (!description) {
-            setDescriptionError('Please provide your description ')
+        if (!details) {
+            setDetailsError('Please provide your details ')
             hasError = true;
         } else {
-            setDescriptionError('')
+            setDetailsError('')
         }
-        if (capacity === 0) {
-            setCapacityError('Please select a capacity of at least 1')
+        if (availability === 0) {
+            setAvailabilityError('Please select a capacity of at least 1')
             hasError = true;
         } else {
-            setCapacityError('')
+            setAvailabilityError('')
         }
 
         if (!whatsappLink) {
@@ -105,16 +113,31 @@ const RoomCreateScreen = () => {
         } else {
             setRentError('')
         }
+        if (!floor) {
+            setFloorError('Please provide your floor')
+            hasError = true;
+        } else {
+            setFloorError('')
+        }
+        if (!roomName) {
+            setRoomTypeError('Please select your room type');
+            hasError = true;
+        } else {
+            setRoomTypeError('');
+        }
+    
         if (!hasError) {
             const formData = {
                 roomName,
-                description,
-                capacity,
+                details,
+                availability,
                 amenities,
                 address,
                 location,
                 roomImages,
                 rent,
+                floor,
+                roomType,
                 whatsappLink,
                 telegramLink,
                 preferences,
@@ -124,12 +147,12 @@ const RoomCreateScreen = () => {
             // navigation.navigate() // Uncomment and implement navigation if needed
         }
     };
-    
-    
-    
-    
 
-const requestLocationPermission = async () => {
+
+
+
+
+    const requestLocationPermission = async () => {
         try {
             const result = await request(
                 Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
@@ -230,24 +253,24 @@ const requestLocationPermission = async () => {
                     value={roomName}
                     onChangeText={setRoomName}
                     placeholder='Enter room name'
-                    onSubmitEditing={() => descriptionRef.current.focus()}
+                    onSubmitEditing={() => detailsRef.current.focus()}
                 />
                 <TeamXErrorText errorText={roomNameError} />
 
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Description</Text>
+                <Text style={styles.label}>Details</Text>
                 <TextInput
-                    ref={descriptionRef}
+                    ref={detailsRef}
                     style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
-                    value={description}
-                    onChangeText={setDescription}
+                    value={details}
+                    onChangeText={setDetails}
                     multiline
-                    placeholder='Enter your description'
+                    placeholder='Enter your details'
                     onSubmitEditing={() => rentRef.current.focus()}
                 />
-                <TeamXErrorText errorText={descriptionError} />
+                <TeamXErrorText errorText={detailsError} />
 
             </View>
 
@@ -260,18 +283,60 @@ const requestLocationPermission = async () => {
                     onChangeText={setRent}
                     keyboardType="numeric"
                     placeholder='Enter your room rent'
-                    onSubmitEditing={() => whatsappLinkRef.current.focus()}
+                    onSubmitEditing={() => floorRef.current.focus()}
 
                 />
                 <TeamXErrorText errorText={rentError} />
 
             </View>
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Floor</Text>
+                <TextInput
+                    ref={floorRef}
+                    style={[styles.input]}
+                    value={floor}
+                    onChangeText={setFloor}
+                    keyboardType="numeric"
+                    placeholder='Enter your room floor'
+                    onSubmitEditing={() => whatsappLinkRef.current.focus()}
+                />
+                <TeamXErrorText errorText={floorError} />
+            </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Capacity</Text>
+                <Text style={styles.label}>Room Type</Text>
+                <DropDownPicker
+                    open={roomTypeOpen}
+                    value={roomType}
+                    items={[
+                        { label: 'Room', value: 'Room' },
+                        { label: 'Apartment', value: 'Apartment' },
+                    ]}
+                    setOpen={setRoomTypeOpen}
+                    setValue={setRoomType}
+                    containerStyle={{ height: 40,marginBottom:10 }}
+                    style={[styles.input]}
+                    placeholder='Select your room type'
+                    placeholderStyle={{ color: '#B3B3B3' }}
+                    textStyle={{ fontSize: 18 }}
+                />
+                <TeamXErrorText errorText={roomTypeError} />
+
+            </View>
+
+
+
+
+
+
+
+
+
+            <View style={styles.inputGroup}>
+                <Text style={styles.label}>Availability</Text>
                 <Slider
-                    value={capacity}
-                    onValueChange={setCapacity}
+                    value={availability}
+                    onValueChange={setAvailability}
                     minimumValue={0}
                     maximumValue={20}
                     step={1}
@@ -279,8 +344,8 @@ const requestLocationPermission = async () => {
                     maximumTrackTintColor="#d3d3d3"
                     thumbTintColor='#814ABF'
                 />
-                <Text style={{ color: '#814ABF' }}>Selected Capacity: {capacity}</Text>
-                <TeamXErrorText errorText={capacityError} />
+                <Text style={{ color: '#814ABF' }}>Selected availability: {availability}</Text>
+                <TeamXErrorText errorText={availabilityError} />
 
             </View>
 
@@ -291,7 +356,7 @@ const requestLocationPermission = async () => {
                     <Image source={require('../Images/ic_whatsApp.png')} tintColor={'white'} style={{ marginRight: 10, tintColor: '#1B8755' }} />
                     <TextInput
                         ref={whatsappLinkRef}
-                        style={[styles.linkText, { flex: 1,}]}
+                        style={[styles.linkText, { flex: 1, }]}
                         placeholder='Enter WhatsApp link'
                         value={whatsappLink}
                         onChangeText={setWhatsappLink}
@@ -310,7 +375,7 @@ const requestLocationPermission = async () => {
                     <Image source={require('../Images/ic_telegram.png')} tintColor={'white'} style={{ marginRight: 10, tintColor: '#3DA7DC' }} />
                     <TextInput
                         ref={telegramLinkRef}
-                        style={[styles.linkText, { flex: 1,  }]}
+                        style={[styles.linkText, { flex: 1, }]}
                         placeholder='Enter Telegram link'
                         value={telegramLink}
                         onChangeText={setTelegramLink}
@@ -343,7 +408,7 @@ const requestLocationPermission = async () => {
                 <Text style={styles.label}>Address</Text>
                 <TextInput
                     ref={addressRef}
-                    style={[styles.input, errors.address && styles.inputError]}
+                    style={[styles.input]}
                     value={address}
                     onChangeText={setAddress}
                     placeholder='Enter your address'
@@ -356,7 +421,7 @@ const requestLocationPermission = async () => {
                 <Text style={styles.label}>Location</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
-                        style={[styles.input, { flex: 1 }, errors.location && styles.inputError]}
+                        style={[styles.input]}
                         value={location}
                         onChangeText={setLocation}
                         placeholder='Select your location'
@@ -426,6 +491,14 @@ const styles = StyleSheet.create({
     slider: {
         width: '100%',
         height: 40,
+    },
+    picker: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        padding: 8,
+        fontSize: 16,
+        color: '#000',
     },
     sliderValue: {
         fontSize: 16,
