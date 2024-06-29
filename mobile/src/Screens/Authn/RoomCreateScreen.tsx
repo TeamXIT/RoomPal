@@ -6,7 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Geolocation from 'react-native-geolocation-service';
 import { request, PERMISSIONS } from 'react-native-permissions';
 import ProfileComponent from '../molecule/ProfileComponent';
-import { primaryColor } from '../Styles/Styles'; // Ensure this is correctly imported
+import { primaryColor,styles } from '../Styles/Styles'; // Ensure this is correctly imported
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import TeamXErrorText from '../molecule/TeamXErrorText';
 const RoomCreateScreen = () => {
@@ -125,7 +125,7 @@ const RoomCreateScreen = () => {
         } else {
             setRoomTypeError('');
         }
-    
+
         if (!hasError) {
             const formData = {
                 roomName,
@@ -240,11 +240,11 @@ const RoomCreateScreen = () => {
         );
     };
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.createcontainer}>
             <View style={{ alignSelf: 'center' }}>
                 <TeamXLogoImage />
             </View>
-            <Text style={styles.title}>Create Room</Text>
+            <Text style={styles.createtitle}>Create Room</Text>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Room Name</Text>
@@ -314,7 +314,7 @@ const RoomCreateScreen = () => {
                     ]}
                     setOpen={setRoomTypeOpen}
                     setValue={setRoomType}
-                    containerStyle={{ height: 40,marginBottom:10 }}
+                    containerStyle={{ height: 40, marginBottom: 10 }}
                     style={[styles.input]}
                     placeholder='Select your room type'
                     placeholderStyle={{ color: '#B3B3B3' }}
@@ -323,15 +323,6 @@ const RoomCreateScreen = () => {
                 <TeamXErrorText errorText={roomTypeError} />
 
             </View>
-
-
-
-
-
-
-
-
-
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Availability</Text>
                 <Slider
@@ -395,7 +386,7 @@ const RoomCreateScreen = () => {
                             <CheckBox
                                 value={amenity.checked}
                                 onValueChange={() => handleAmenityChange(index)}
-                                style={styles.checkbox}
+                                style={styles.createcheckbox}
                             />
                             <Image source={amenity.image} style={{ width: 24, height: 24, marginRight: 10 }} />
                             <Text>{amenity.name}</Text>
@@ -450,7 +441,7 @@ const RoomCreateScreen = () => {
                         <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                             <CheckBox
                                 value={preference.checked}
-                                style={styles.checkbox}
+                                style={styles.createcheckbox}
                                 onValueChange={() => handlePreferenceChange(index)}
                             />
                             <Text>{preference.name}</Text>
@@ -460,145 +451,10 @@ const RoomCreateScreen = () => {
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmitData}>
-                <Text style={styles.buttonText}>Create</Text>
+                <Text style={styles.createbuttonText}>Create</Text>
             </TouchableOpacity>
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#FFFFFF'
-    },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        alignSelf: 'center',
-        color: primaryColor,
-    },
-    inputGroup: {
-        marginBottom: 15,
-    },
-    label: {
-        color: primaryColor,
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
-    slider: {
-        width: '100%',
-        height: 40,
-    },
-    picker: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 4,
-        padding: 8,
-        fontSize: 16,
-        color: '#000',
-    },
-    sliderValue: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 10,
-        color: '#333',
-    },
-    input: {
-        height: 50,
-        borderColor: '#000',
-        borderWidth: 1,
-        paddingHorizontal: 10,
-        borderRadius: 10,
-        fontSize: 18,
-        color: '#000',
-    },
-    inputError: {
-        borderColor: 'red',
-    },
-    linkText: {
-        fontSize: 18,
-        color: '#000',
-    },
-    capacityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    capacityInput: {
-        flex: 1,
-        textAlign: 'center',
-    },
-    capacityButton: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 40,
-        height: 40,
-        borderRadius: 5,
-        marginHorizontal: 5,
-        borderColor: primaryColor,
-        borderWidth: 2,
-    },
-    checkboxGroup: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-    },
-    checkbox: {
-        marginRight: 10,
-    },
-    button: {
-        backgroundColor: primaryColor,
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginBottom: 40,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-    imageContainer: {
-        borderColor: 'black',
-        borderWidth: 2,
-        borderRadius: 10,
-        paddingBottom: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingTop: 10,
-
-
-    },
-    imageRow: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginBottom: 10,
-    },
-    roomImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 5,
-        marginRight: 10,
-    },
-    roomImageWrapper: {
-        marginRight: 10,
-        position: 'relative',
-    },
-
-
-    removeButton: {
-        position: 'absolute',
-        top: 5,
-        right: -6,
-
-
-
-    },
-    deleteIcon: {
-        width: 30,
-        height: 30,
-        tintColor: primaryColor, // Color of delete icon
-    },
-});
 
 export default RoomCreateScreen;
