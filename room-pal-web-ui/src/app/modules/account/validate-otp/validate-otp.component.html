@@ -4,15 +4,29 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="otpForm">
     <div class="form-group">
       <h2>OTP</h2>
-      <input formControlName="otp" placeholder="Enter OTP" />
-      <div *ngIf="otpForm.get('otp').invalid && (otpForm.get('otp').dirty || otpForm.get('otp').touched)">
-        <div *ngIf="otpForm.get('otp').errors.required">OTP is required</div>
-        <div *ngIf="otpForm.get('otp').errors.minlength">OTP must be exactly 6 characters long</div>
-        <div *ngIf="otpForm.get('otp').errors.maxlength">OTP must be exactly 6 characters long</div>
-        <div *ngIf="otpForm.get('otp').errors.pattern">Invalid OTP format (should contain only numbers)</div>
-      </div>
+      <input formControlName="otp" placeholder="Enter OTP" class="input-field"
+      [ngClass]="otpForm.controls['otp'].errors &&
+         otpForm.controls['otp'].touched? 'is-invalid' : ''   "/>
+
+        @if (
+          otpForm.controls["otp"].errors &&
+          otpForm.controls["otp"].touched
+            ){
+  
+              @if (otpForm.controls["otp"].errors["required"]) {
+                <div class="invalid-feedback">otp  is required</div>
+              }
+  
+              @if (otpForm.controls["otp"].errors["minlength"]) {
+                <div class="invalid-feedback">Minimum 6 digits required</div>
+              }
+              @if (otpForm.controls["otp"].errors["maxlength"]) {
+                <div class="invalid-feedback">Maximum 6 digits allowed</div>
+              }
+            }
+      
     </div>
-    <button type="submit" [disabled]="!otpForm.valid">Verify OTP &#10004;</button>
+    <button type="submit" >Verify OTP &#10004;</button>
   </form>
   <p>
     Didn't receive OTP? 

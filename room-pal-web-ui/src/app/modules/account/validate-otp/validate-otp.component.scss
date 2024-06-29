@@ -38,6 +38,10 @@ input {
   border-radius: 5px;
   font-size: 18px;
 }
+.input-field .is-invalid {
+  border: 1px solid red;
+}
+
 
 button {
   width: 106%;

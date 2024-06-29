@@ -1,4 +1,4 @@
-<form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+<!-- <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
     <div class="card">
       <img src="images/logo.jpg" alt="Logo" class="logo"/>
     
@@ -31,10 +31,10 @@
       
       <div>
         <h2>WhatsApp Link</h2>
-        <input id="whatsappLink" formControlName="whatsappLink" placeholder="WhatsApp Link">
-        <div *ngIf="roomForm.get('whatsappLink').invalid && (roomForm.get('whatsappLink').dirty || roomForm.get('whatsappLink').touched)">
-          <div *ngIf="roomForm.get('whatsappLink').errors.required">WhatsApp link is required</div>
-          <div *ngIf="roomForm.get('whatsappLink').errors.pattern">Invalid URL format</div>
+        <input id="telegramLink" formControlName="telegramLink" placeholder="WhatsApp Link">
+        <div *ngIf="roomForm.get('telegramLink').invalid && (roomForm.get('telegramLink').dirty || roomForm.get('telegramLink').touched)">
+          <div *ngIf="roomForm.get('telegramLink').errors.required">WhatsApp link is required</div>
+          <div *ngIf="roomForm.get('telegramLink').errors.pattern">Invalid URL format</div>
         </div>
       </div>
       
@@ -83,13 +83,7 @@
         </div>
       </div>
       
-      <!-- <div>
-        <h2>Room Images</h2>
-        <input id="roomImages" type="file" (change)="onFileChange($event)" multiple>
-        <div *ngIf="roomForm.get('roomImages').invalid && (roomForm.get('roomImages').dirty || roomForm.get('roomImages').touched)">
-          <div *ngIf="roomForm.get('roomImages').errors.required">Room images are required</div>
-        </div>
-      </div> -->
+      
   
       <div>
         <h2>Room Images</h2>
@@ -111,6 +105,236 @@
           <div *ngIf="roomForm.get('rent').errors.required">Rent is required</div>
           <div *ngIf="roomForm.get('rent').errors.min">Rent cannot be negative</div>
         </div>
+      </div>
+      
+      <div>
+        <h2>Preferences</h2>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" formControlName="preference1" class="veg">Veg
+          </label>
+          <label>
+            <input type="checkbox" formControlName="preference2">Nonveg
+          </label>
+          <label>
+            <input type="checkbox" formControlName="preference3">Smoking
+          </label>
+          <label>
+            <input type="checkbox" formControlName="preference4">Drinking
+          </label>
+        </div>
+      </div>
+      
+      <button type="submit">Create Room</button>
+    </div>
+  </form> -->
+
+
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+    <div class="card">
+      <img src="images/logo.jpg" alt="Logo" class="logo"/>
+    
+      <div>
+        <h2>Room Name</h2>
+        <input id="roomName" 
+        formControlName="roomName" 
+        placeholder="Enter Room Name"
+        [ngClass]="roomForm.controls['roomName'].errors &&
+        roomForm.controls['roomName'].touched? 'is-invalid' : '' "/>
+
+        @if (
+          roomForm.controls['roomName'].errors &&
+          roomForm.controls['roomName'].touched
+        ){
+
+          @if (roomForm.controls['roomName'].errors["required"]) {
+            <div class="invalid-feedback">RoomName is required</div>
+          }
+        }
+      </div>
+      
+      <div>
+        <h2>Description</h2>
+        <textarea id="description" formControlName="description" placeholder="Room Description"
+        [ngClass]="roomForm.controls['description'].errors &&
+        roomForm.controls['description'].touched? 'is-invalid' : '' "></textarea>
+
+        @if (
+          roomForm.controls['description'].errors &&
+          roomForm.controls['description'].touched
+        ){
+
+          @if (roomForm.controls['description'].errors["required"]) {
+            <div class="invalid-feedback">Description is required</div>
+          }
+        }
+        
+        
+      </div>
+      
+      <div>
+        <h2>Capacity</h2>
+        <input id="capacity" type="number" formControlName="capacity"
+        [ngClass]="roomForm.controls['capacity'].errors &&
+        roomForm.controls['capacity'].touched? 'is-invalid':'' "/>
+
+        @if (
+          roomForm.controls['capacity'].errors &&
+          roomForm.controls['capacity'].touched
+        ){
+          @if (roomForm.controls['capacity'].errors["required"]) {
+            <div class="invalid-feedback">Capacity is required</div>
+          }
+          @if (roomForm.controls['capacity'].errors["min"]) {
+            <div class="invalid-feedback">Capacity cannot be zero</div>
+          }
+          @if (roomForm.controls['capacity'].errors["max"]) {
+            <div class="invalid-feedback">Capacity cannot be greater than 7</div>
+          }
+        }
+       
+      </div>
+      
+      <div>
+        <h2>WhatsApp Link</h2>
+        <input id="whatsappLink" formControlName="whatsappLink" placeholder="WhatsApp Link"
+        [ngClass]="roomForm.controls['whatsappLink'].errors &&
+        roomForm.controls['whatsappLink'].touched? 'is-invalid' : '' "/>
+
+        @if (
+          roomForm.controls['whatsappLink'].errors &&
+          roomForm.controls['whatsappLink'].touched
+        ){
+
+          @if (roomForm.controls['whatsappLink'].errors["required"]) {
+            <div class="invalid-feedback">whatsappLink is required</div>
+          }
+          @if (roomForm.controls['whatsappLink'].errors["pattern"]) {
+            <div class="invalid-feedback">WhatsApp Link pattern is incorrect</div>
+          }
+        }
+  
+        
+        
+      </div>
+      
+      <div>
+        <h2>Telegram Link</h2>
+        <input id="telegramLink" formControlName="telegramLink" placeholder="Telegram Link"
+        [ngClass]="roomForm.controls['telegramLink'].errors &&
+        roomForm.controls['telegramLink'].touched? 'is-invalid' : '' "/>
+
+        @if (
+          roomForm.controls['telegramLink'].errors &&
+          roomForm.controls['telegramLink'].touched
+        ){
+
+          @if (roomForm.controls['telegramLink'].errors["required"]) {
+            <div class="invalid-feedback">TelegramLink is required</div>
+          }
+          @if (roomForm.controls['telegramLink'].errors["pattern"]) {
+            <div class="invalid-feedback">Telegram Link pattern is incorrect</div>
+          }
+        }
+  
+        
+        
+      </div>
+      
+      <div>
+        <h2>Amenities</h2>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" formControlName="amenity1"><img src="images/wifi.jpg"> Wifi
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity2"><img src="images/freezer.jpg">Kitchen
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity3"> <img src="images/airconditioner.jpg">AC
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity3"> <img src="images/bathroom.jpg">Bathroom
+          </label>
+          <label>
+            <input type="checkbox" formControlName="amenity3"> <img src="images/parkedcar.jpg">Parking
+          </label>
+        </div>
+      </div>
+      <div>
+        <h2>Address</h2>
+         <textarea  id="address" cols="30" rows="5" placeholder="Enter Your Address" formControlName="address"
+         [ngClass]="roomForm.controls['address'].errors &&
+        roomForm.controls['address'].touched? 'is-invalid' : '' "></textarea>
+
+        @if (
+          roomForm.controls['address'].errors &&
+          roomForm.controls['address'].touched
+        ){
+
+          @if (roomForm.controls['address'].errors["required"]) {
+            <div class="invalid-feedback">address is required</div>
+          }
+         
+        }
+        
+      </div>
+      
+      <div>
+        <h2>Location</h2>
+        <input id="location" formControlName="location"
+        [ngClass]="roomForm.controls['location'].errors &&
+        roomForm.controls['location'].touched? 'is-invalid' : '' "/>
+
+        @if (
+          roomForm.controls['location'].errors &&
+          roomForm.controls['location'].touched
+        ){
+
+          @if (roomForm.controls['location'].errors["required"]) {
+            <div class="invalid-feedback">Location is required</div>
+          }
+        }
+        
+      </div>
+      
+      
+  
+      <div>
+        <h2>Room Images</h2>
+        <input id="roomImages" type="file" 
+        [ngClass]="roomForm.controls['roomImages'].errors &&
+        roomForm.controls['roomImages'].touched? 'is-invalid' : '' "/>
+
+        <!-- @if (
+          roomForm.controls['roomImages'].errors &&
+          roomForm.controls['roomImages'].touched
+        ){
+
+          @if (roomForm.controls['roomImages'].errors["required"]) {
+            <div class="invalid-feedback">RoomImages is required</div>
+          }
+        } -->
+        
+       
+      </div>
+      
+      <div>
+        <h2>Rent</h2>
+        <input id="rent" type="number" formControlName="rent"
+        [ngClass]="roomForm.controls['rent'].errors &&
+        roomForm.controls['rent'].touched? 'is-invalid' : '' "/>
+
+        @if (
+          roomForm.controls['rent'].errors &&
+          roomForm.controls['rent'].touched
+        ){
+
+          @if (roomForm.controls['rent'].errors["required"]) {
+            <div class="invalid-feedback">Rent is required</div>
+          }
+        }
+        
       </div>
       
       <div>
