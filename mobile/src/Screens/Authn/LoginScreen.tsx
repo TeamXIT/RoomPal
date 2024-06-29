@@ -41,7 +41,7 @@ const LoginScreen = ({ navigation }) => {
       dispatch(signIn(mobileNumber, password)).then((result) => {
         if (result.success) {
           console.log('Login successful, navigating to RoomDetails');
-          navigation.navigate('RoomDetails');
+          navigation.navigate('RoomCreateScreen');
         } else {
           setMobileNumber('login failed');
         }
@@ -60,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     if (success) {
       console.log('Navigation effect triggered, navigating to RoomDetails');
-      navigation.navigate('RoomDetails');
+      navigation.navigate('RoomCreateScreen');
     }
   }, [success, navigation]);
 
