@@ -2,3 +2,19 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+.is-invalid {
+    border: 1px solid red;
+  }
+  
+  .invalid-feedback {
+    font-size: 16px;
+    text-align: left;
+    color: red;
+  }
+  input[type="checkbox"]:checked {
+    accent-color: #6a23d4bf;
+  }
+  input[type="radio"]:checked {
+    accent-color: #6a23d4bf;
+  }
+

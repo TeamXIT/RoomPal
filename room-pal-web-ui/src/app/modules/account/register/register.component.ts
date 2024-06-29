@@ -17,6 +17,10 @@ import {  AbstractControl,
 export class RegisterComponent implements OnInit {
   registrationForm: FormGroup<{
     mobileNumber:FormControl;
+    preference1: FormControl;
+    preference2: FormControl;
+    preference3: FormControl;
+    preference4: FormControl;
     password:FormControl;
     confirmPassword:FormControl;
   }>= new FormGroup({
@@ -24,14 +28,19 @@ export class RegisterComponent implements OnInit {
       Validators.required,
       this.mobileNumberValidator,
     ]),
-      password: new FormControl('',[Validators.required, 
+    preference1: new FormControl(false),
+    preference2: new FormControl(true),
+    preference3: new FormControl(true),
+    preference4: new FormControl(false),
+    password: new FormControl('',[Validators.required, 
      Validators.minLength(6), 
      Validators.maxLength(16)
     ]),
     confirmPassword: new FormControl ('',[ Validators.required,
       Validators.minLength(6), 
       Validators.maxLength(16)
-    ])
+    ]),
+
   });
 
 

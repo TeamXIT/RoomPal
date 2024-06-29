@@ -3,7 +3,6 @@
   <div class="card">
     <img src="images/logo.jpg" alt="Logo" class="logo" />
     <h1>Registration Form</h1>
-
     <div>
       <h3>Mobile Number</h3>
       <input type="text"
@@ -34,20 +33,17 @@
     <div>
       <h3>Date of Birth</h3>
       <input id="dateOfBirth" type="date"
-        class="input-field" />
+        class="input-field"  
+        />
     </div>
 
     <div>
       <h3>Gender</h3>
       <div>
         <label class="text">
-          <input type="radio" value="Male"
-            class="gender" /> Male
-        </label>
+          <input type="radio" value="Male" class="gender" name="gender"/> Male</label>
         <label class="text">
-          <input type="radio"  value="Female"
-            class="gender" /> Female
-        </label>
+          <input type="radio" value="Female" class="gender" name="gender"/> Female</label>
       </div>
     </div>
 
@@ -56,11 +52,11 @@
         <h3>Looking for Roommate?</h3>
         <div class="button-group">
           <input type="radio" name="roommateToggle" id="button1"
-            class="input-hidden" >
+            class="input-hidden" />
           <label for="button1" class="btn">Yes</label>
 
           <input type="radio" name="roommateToggle" id="button2"
-            class="input-hidden" >
+            class="input-hidden"  />
           <label for="button2" class="btn">No</label>
         </div>
       </div>
@@ -83,16 +79,16 @@
       <h3>Preferences</h3>
       <div class="checkbox">
         <label>
-          <input type="checkbox"  /> Clean
+          <input type="checkbox"  formControlName="preferences1"/> Clean
         </label>
         <label>
-          <input type="checkbox" /> Pets Allowed
+          <input type="checkbox" formControlName="preferences2"/> Pets Allowed
         </label>
         <label>
-          <input type="checkbox"  /> Smoking Allowed
+          <input type="checkbox"  formControlName="preferences3"/> Smoking Allowed
         </label>
         <label>
-          <input type="checkbox"  /> Drinking Allowed
+          <input type="checkbox"  formControlName="preferences4"/> Drinking Allowed
         </label>
       </div>
     </div>
@@ -155,7 +151,7 @@
               ){
 
             @if (registrationForm.controls["confirmPassword"].errors["required"]) {
-              <div class="invalid-feedback">Password is required</div>
+              <div class="invalid-feedback">Confirm Password is required</div>
              }
 
             @if (registrationForm.controls["confirmPassword"].errors["minlength"]) {

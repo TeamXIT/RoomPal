@@ -51,11 +51,9 @@ export class LoginComponent implements OnInit {
     if (value.length > 16) return { maxlength: true };
     return null;
   }
-  
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
-
   onLoginClick() {
     this.loginFormGroup.markAllAsTouched();
     // console.log(this.loginFormGroup.value);

@@ -17,8 +17,9 @@
     margin-left: 15%;
 
   }
+
   
-    
+
     h2 {
       color: #6b23d4;
       font-size: 23px;
@@ -33,20 +34,23 @@
       border: 1px solid #000000;
       border-radius: 4px;
       box-sizing: border-box;
-     font-size: 17px;
+      font-size: 17px;
     }
   
     .checkbox [type="checkbox"] {
       margin: 10% 10px 11% 0;
-      transform: scale(1.5); 
-     
+      transform: scale(1.5);
+
   }
+
   
      .checkbox{
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
+      
+
      }
   
     .checkbox img {
@@ -59,6 +63,7 @@
       display: flex;
       align-items: center;
       padding-top: 10px;
+
   }
   
   ::placeholder{
@@ -76,6 +81,6 @@
       margin-top: 10%;
     }
     button:hover {
-      background-color: #b98aff;
-      color: #000;
+      background-color: #5808d0;
+      color: #ffffff;
     }
