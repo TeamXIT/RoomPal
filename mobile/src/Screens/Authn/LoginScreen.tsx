@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
+import PhoneInput from 'react-native-phone-number-input';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { error, isBusy, success } = useSelector(state => state.auth.screen);
+  const authToken = useSelector(state => state.auth.data.authToken);
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -14,8 +17,6 @@ const LoginScreen = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState('');
 
   const validateMobileNumber = (mobile) => {
-    // Implement your validation logic for mobile number
-    // Example: Check if it's a valid mobile number format
     return mobile.trim().length === 10 && /^\d+$/.test(mobile);
   };
 
@@ -37,9 +38,14 @@ const LoginScreen = ({ navigation }) => {
     }
 
     if (valid) {
-      // Proceed with login
-      dispatch(signIn(mobileNumber, password));
-      console.log('Logging in...');
+      dispatch(signIn(mobileNumber, password)).then((result) => {
+        if (result.success) {
+          console.log('Login successful, navigating to RoomDetails');
+          navigation.navigate('RoomCreateScreen');
+        } else {
+          setMobileNumber('login failed');
+        }
+      });
     }
   };
 
@@ -51,18 +57,44 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('ForgotPassword');
   };
 
+  useEffect(() => {
+    if (success) {
+      console.log('Navigation effect triggered, navigating to RoomDetails');
+      navigation.navigate('RoomCreateScreen');
+    }
+  }, [success, navigation]);
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <TeamXLogoImage />
         <Text style={styles.label}>Mobile Number</Text>
-        <TextInput
-          style={styles.input}
+        <PhoneInput
+          defaultValue={mobileNumber}
+          defaultCode="IN"
+          layout="first"
+          onChangeText={setMobileNumber} // Use the custom change handler
+          containerStyle={[styles.input, { width: '100%' },]}
+          textContainerStyle={{
+            paddingVertical: 10,
+            backgroundColor: 'white',
+          }}
+          textInputStyle={{
+            paddingVertical: 0,
+            fontSize: 16,
+            color: 'black'
+          }}
+          countryPickerButtonStyle={{ paddingVertical: 0 }}
+          renderDropdownImage={<Text >▼</Text>}
           placeholder="Enter mobile number"
-          keyboardType="numeric"
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
+          keyboardType="number-pad"
         />
+
+
+
+
+
+
         {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
         <Text style={styles.label}>Password</Text>
         <TextInput

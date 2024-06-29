@@ -1,164 +1,221 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, PermissionsAndroid, Platform, Linking } from 'react-native';
-import CheckBox from '../molecule/TeamxCheckBox';
+import CheckBox from '@react-native-community/checkbox';
+import Slider from 'react-native-slider';
 import Geolocation from 'react-native-geolocation-service';
-import MapView, { Marker } from 'react-native-maps';
+import { request, PERMISSIONS } from 'react-native-permissions';
 import ProfileComponent from '../molecule/ProfileComponent';
 import { primaryColor } from '../Styles/Styles'; // Ensure this is correctly imported
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
-
+import TeamXErrorText from '../molecule/TeamXErrorText';
 const RoomCreateScreen = () => {
-  const [roomName, setRoomName] = useState('');
-  const [description, setDescription] = useState('');
-  const [capacity, setCapacity] = useState(0);
-  const [amenities, setAmenities] = useState([
-    { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false },
-    { name: 'Kitchen', image: require('../Images/ic_kitchen.png'), checked: false },
-    { name: 'Air Conditioning', image: require('../Images/ic_airconditioner.png'), checked: false },
-    { name: 'Bathroom', image: require('../Images/ic_bathRoom.png'), checked: false },
-    { name: 'Parking', image: require('../Images/ic_parking.png'), checked: false },
-  ]);
-  const [address, setAddress] = useState('');
-  const [location, setLocation] = useState(null);
-  const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
-  const [rent, setRent] = useState('');
-  const [preferences, setPreferences] = useState([
-    { name: 'Vegetarian', checked: false },
-    { name: 'Non-Vegetarian', checked: false },
-    { name: 'Smoking', checked: false },
-    { name: 'Drinking', checked: false },
-  ]);
-  const [error, setError] = useState(null);
+    const [roomName, setRoomName] = useState('');
+    const [description, setDescription] = useState('');
+    const [capacity, setCapacity] = useState(0);
+    const [amenities, setAmenities] = useState([
+        { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false },
+        { name: 'Kitchen', image: require('../Images/ic_kitchen.png'), checked: false },
+        { name: 'Air Conditioning', image: require('../Images/ic_airconditioner.png'), checked: false },
+        { name: 'Bathroom', image: require('../Images/ic_bathRoom.png'), checked: false },
+        { name: 'Parking', image: require('../Images/ic_parking.png'), checked: false },
+    ]);
+    const [address, setAddress] = useState('');
+    const [location, setLocation] = useState(null);
+    const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
+    const [rent, setRent] = useState('');
+    const [whatsappLink, setWhatsappLink] = useState('')
+    const [telegramLink, setTelegramLink] = useState('')
+    const [preferences, setPreferences] = useState([
+        { name: 'Vegetarian', checked: false },
+        { name: 'Non-Vegetarian', checked: false },
+        { name: 'Smoking', checked: false },
+        { name: 'Drinking', checked: false },
+    ]);
+    const [errors, setErrors] = useState({}); // State for errors
+    const [formState, setFormState] = useState<Record<string, any>>({});
 
-  const getLocation = async () => {
-    const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-    if (granted) {
-      Geolocation.getCurrentPosition(
-        position => {
-          console.log(position);
-          setLocation(position);
-        },
-        error => {
-          // See error code charts below.
-          console.log(error.code, error.message);
-          setLocation(false);
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-      );
-    } else {
-      const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-      if (permission === PermissionsAndroid.RESULTS.GRANTED) {
+    const [roomNameError, setRoomNameError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
+    const [capacityError, setCapacityError] = useState('');
+    const [locationError, setLocationError] = useState('');
+    const [addressError, setAddressError] = useState('');
+    const [rentError, setRentError] = useState('');
+    const [whatsappLinkError, setWhatsappLinkError] = useState('')
+    const [telegramLinkError, setTelegramLinkError] = useState('')
+    const [showMap, setShowMap] = useState(false); // State to control map visibility
+
+
+
+    const descriptionRef = useRef(null);
+    const rentRef = useRef(null);
+    const whatsappLinkRef = useRef(null)
+    const telegramLinkRef = useRef(null)
+    const addressRef = useRef(null);
+
+
+    const handleSubmitData = () => {
+        let hasError = false;
+        if (!roomName) {
+            setRoomNameError('Please provide your room name')
+            hasError = true;
+        } else {
+            setRoomNameError('')
+        }
+
+        if (!description) {
+            setDescriptionError('Please provide your description ')
+            hasError = true;
+        } else {
+            setDescriptionError('')
+        }
+        if (capacity === 0) {
+            setCapacityError('Please select a capacity of at least 1')
+            hasError = true;
+        } else {
+            setCapacityError('')
+        }
+
+        if (!whatsappLink) {
+            setWhatsappLinkError('Please provide your whatsapp link')
+            hasError = true;
+        } else {
+            setWhatsappLinkError('')
+        }
+        if (!telegramLink) {
+            setTelegramLinkError('Please provide your telegram link')
+            hasError = true;
+        } else {
+            setTelegramLinkError('')
+        }
+        if (!address) {
+            setAddressError('Please provide your address')
+            hasError = true;
+        } else {
+            setAddressError('')
+        }
+        if (!location) {
+            setLocationError('Please provide your location')
+            hasError = true;
+        } else {
+            setLocationError('')
+        }
+        if (!rent) {
+            setRentError('Please provide your rent')
+            hasError = true;
+        } else {
+            setRentError('')
+        }
+        if (!hasError) {
+            const formData = {
+                roomName,
+                description,
+                capacity,
+                amenities,
+                address,
+                location,
+                roomImages,
+                rent,
+                whatsappLink,
+                telegramLink,
+                preferences,
+            };
+            console.log('Form Data:', formData);
+            Alert.alert('Success', 'Room created successfully');
+            // navigation.navigate() // Uncomment and implement navigation if needed
+        }
+    };
+    
+    
+    
+    
+
+const requestLocationPermission = async () => {
+        try {
+            const result = await request(
+                Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+            );
+            return result === 'granted';
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    };
+
+    const captureLocation = async () => {
+        const hasPermission = await requestLocationPermission();
+        if (!hasPermission) {
+            Alert.alert('Permission Denied', 'Location permission is required to capture your location.');
+            return;
+        }
+
         Geolocation.getCurrentPosition(
-          position => {
-            console.log(position);
-            setLocation(position);
-          },
-          error => {
-            // See error code charts below.
-            console.log(error.code, error.message);
-            setLocation(false);
-          },
-          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-        );
-      } else if (permission === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-        Alert.alert(
-          'Location Permission',
-          'You need to enable location permission in the device settings to use this feature.',
-          [
-            {
-              text: 'OK',
-              onPress: () => Linking.openSettings(),
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const locationString = `${latitude}, ${longitude}`;
+                console.log('Location fetched:', locationString); // Log the fetched location
+                setLocation(locationString);
+
             },
-          ],
-          { cancelable: false },
+            (error) => {
+                Alert.alert('Error', 'Unable to retrieve your location.');
+                console.error(error);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         );
-      } else {
-        console.log('Location permission not granted');
-      }
-    }
-  };
+    };
+    const handleAmenityChange = (index) => {
+        const updatedAmenities = [...amenities];
+        updatedAmenities[index].checked = !updatedAmenities[index].checked;
+        setAmenities(updatedAmenities);
+    };
 
-  const handleAmenityChange = (index) => {
-    const updatedAmenities = [...amenities];
-    updatedAmenities[index].checked = !updatedAmenities[index].checked;
-    setAmenities(updatedAmenities);
-  };
+    const handlePreferenceChange = (index) => {
+        const updatedPreference = [...preferences];
+        updatedPreference[index].checked = !updatedPreference[index].checked;
+        setPreferences(updatedPreference);
+    };
 
-  const handlePreferenceChange = (index) => {
-    const updatedPreference = [...preferences];
-    updatedPreference[index].checked = !updatedPreference[index].checked;
-    setPreferences(updatedPreference);
-  };
+    const handleAddRoomImage = (imageUri) => {
+        setRoomImages([...roomImages, imageUri]);
+    };
 
-  const handleSubmitData = () => {
-    console.log('Form submitted:', {
-      roomName,
-      description,
-      capacity,
-      amenities,
-      address,
-      location,
-      roomImages,
-      rent,
-      preferences,
-    });
-  };
+    const handleRemoveRoomImage = (index) => {
+        if (index >= 0 && index < roomImages.length) {
+            const updatedImages = [...roomImages];
+            updatedImages.splice(index, 1);
+            setRoomImages(updatedImages);
+        }
+    };
 
-  const increaseCapacity = () => {
-    setCapacity(capacity + 1);
-  };
+    const renderRoomImages = () => {
+        return (
+            <ScrollView style={styles.imageContainer}>
+                <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
+                    <ProfileComponent setImageUri={handleAddRoomImage} />
+                </View>
+                {roomImages.map((imageObj, index) => (
+                    <View style={{ height: 70, width: 280, backgroundColor: '#e6daf1', paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10, marginTop: 10 }}>
+                        <View key={index} style={styles.roomImageWrapper}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={{ uri: imageObj }} style={styles.roomImage} />
+                                <Text style={{ color: '#000', fontSize: 14, marginRight: 80 }}>
+                                    {imageObj.length > 50 ? `${imageObj.substring(0, 50)}...` : imageObj}
 
-  const decreaseCapacity = () => {
-    if (capacity > 0) {
-      setCapacity(capacity - 1);
-    }
-  };
+                                </Text>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.removeButton}
+                                onPress={() => handleRemoveRoomImage(index)}
+                            >
+                                <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                ))}
 
-  const handleAddRoomImage = (imageUri) => {
-    setRoomImages([...roomImages, imageUri]);
-  };
-
-  const handleRemoveRoomImage = (index) => {
-    if (index >= 0 && index < roomImages.length) {
-      const updatedImages = [...roomImages];
-      updatedImages.splice(index, 1);
-      setRoomImages(updatedImages);
-    }
-  };
-
-  const renderRoomImages = () => {
-    const rows = [];
-    for (let i = 0; i < roomImages.length; i += 3) {
-      const rowImages = roomImages.slice(i, i + 3);
-      rows.push(
-        <View key={i} style={styles.imageRow}>
-          {rowImages.map((imageUri, index) => (
-            <View key={index} style={styles.imageWrapper}>
-              <Image source={{ uri: imageUri }} style={styles.roomImage} />
-              <TouchableOpacity
-                style={styles.removeButton}
-                onPress={() => handleRemoveRoomImage(i + index)}
-              >
-                <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
-              </TouchableOpacity>
-            </View>
-          ))}
-          {rowImages.length < 3 && (
-            <ProfileComponent setImageUri={handleAddRoomImage} />
-          )}
-        </View>
-      );
-    }
-    if (roomImages.length % 3 === 0) {
-      rows.push(
-        <View key={roomImages.length} style={styles.imageRow}>
-          <ProfileComponent setImageUri={handleAddRoomImage} />
-        </View>
-      );
-    }
-    return rows;
-  };
-
+            </ScrollView>
+        );
+    };
     return (
         <ScrollView style={styles.container}>
             <View style={{ alignSelf: 'center' }}>
@@ -169,75 +226,102 @@ const RoomCreateScreen = () => {
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Room Name</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input]}
                     value={roomName}
                     onChangeText={setRoomName}
                     placeholder='Enter room name'
+                    onSubmitEditing={() => descriptionRef.current.focus()}
                 />
+                <TeamXErrorText errorText={roomNameError} />
+
             </View>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Description</Text>
                 <TextInput
+                    ref={descriptionRef}
                     style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
                     value={description}
                     onChangeText={setDescription}
                     multiline
                     placeholder='Enter your description'
+                    onSubmitEditing={() => rentRef.current.focus()}
                 />
+                <TeamXErrorText errorText={descriptionError} />
+
             </View>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Rent</Text>
                 <TextInput
-                    style={styles.input}
+                    ref={rentRef}
+                    style={[styles.input]}
                     value={rent}
                     onChangeText={setRent}
                     keyboardType="numeric"
                     placeholder='Enter your room rent'
+                    onSubmitEditing={() => whatsappLinkRef.current.focus()}
+
                 />
+                <TeamXErrorText errorText={rentError} />
+
             </View>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Capacity</Text>
-                <View style={styles.capacityContainer}>
-                    <TextInput
-                        style={[styles.input, styles.capacityInput, { marginRight: 20 }]}
-                        value={capacity.toString()}
-                        editable={false}
-                    />
-                    <View style={{ alignItems: 'center' }}>
-                        <TouchableOpacity onPress={increaseCapacity}>
-                            <Image source={require('../Images/ic_plus.png')} style={{ height: 20, width: 20 }} tintColor={primaryColor} />
-                        </TouchableOpacity>
-                        <View style={[styles.capacityButton, { alignItems: 'center' }]}>
-                            <Image source={require('../Images/ic_capacity.png')} tintColor={primaryColor} />
-                        </View>
-                        <TouchableOpacity onPress={decreaseCapacity}>
-                            <Image source={require('../Images/ic_minus.png')} style={{ height: 20, width: 20 }} tintColor={primaryColor} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <Slider
+                    value={capacity}
+                    onValueChange={setCapacity}
+                    minimumValue={0}
+                    maximumValue={20}
+                    step={1}
+                    minimumTrackTintColor='#814ABF'
+                    maximumTrackTintColor="#d3d3d3"
+                    thumbTintColor='#814ABF'
+                />
+                <Text style={{ color: '#814ABF' }}>Selected Capacity: {capacity}</Text>
+                <TeamXErrorText errorText={capacityError} />
+
             </View>
+
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Whatsapp Link</Text>
-                <TouchableOpacity
-                    style={[styles.input, { flexDirection: 'row', alignItems: 'center', gap: 20, backgroundColor: '#1B8755' }]}>
-                    <Image source={require('../Images/ic_whatsApp.png')} tintColor={'white'} />
-                    <Text style={styles.linkText}>WhatsApp Link</Text>
-                </TouchableOpacity>
+                <View style={[styles.input, { flexDirection: 'row', alignItems: 'center', }]}>
+                    <Image source={require('../Images/ic_whatsApp.png')} tintColor={'white'} style={{ marginRight: 10, tintColor: '#1B8755' }} />
+                    <TextInput
+                        ref={whatsappLinkRef}
+                        style={[styles.linkText, { flex: 1,}]}
+                        placeholder='Enter WhatsApp link'
+                        value={whatsappLink}
+                        onChangeText={setWhatsappLink}
+                        onSubmitEditing={() => telegramLinkRef.current.focus()}
+
+                    />
+
+                </View>
+                <TeamXErrorText errorText={whatsappLinkError} />
+
             </View>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Telegram Link</Text>
-                <TouchableOpacity
-                    style={[styles.input, { flexDirection: 'row', alignItems: 'center', gap: 20, backgroundColor: '#3DA7DC' }]}>
-                    <Image source={require('../Images/ic_telegram.png')} tintColor={'white'} />
-                    <Text style={styles.linkText}>Telegram Link</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={[styles.input, { flexDirection: 'row', alignItems: 'center', }]}>
+                    <Image source={require('../Images/ic_telegram.png')} tintColor={'white'} style={{ marginRight: 10, tintColor: '#3DA7DC' }} />
+                    <TextInput
+                        ref={telegramLinkRef}
+                        style={[styles.linkText, { flex: 1,  }]}
+                        placeholder='Enter Telegram link'
+                        value={telegramLink}
+                        onChangeText={setTelegramLink}
+                        onSubmitEditing={() => addressRef.current.focus()}
 
+                    />
+
+                </View>
+                <TeamXErrorText errorText={telegramLinkError} />
+
+            </View>
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Amenities</Text>
                 <View style={styles.checkboxGroup}>
@@ -258,33 +342,38 @@ const RoomCreateScreen = () => {
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Address</Text>
                 <TextInput
-                    style={styles.input}
+                    ref={addressRef}
+                    style={[styles.input, errors.address && styles.inputError]}
                     value={address}
                     onChangeText={setAddress}
                     placeholder='Enter your address'
                 />
+                <TeamXErrorText errorText={addressError} />
+
             </View>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Location</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
-                        style={[styles.input, { flex: 1 }]}
+                        style={[styles.input, { flex: 1 }, errors.location && styles.inputError]}
                         value={location}
                         onChangeText={setLocation}
                         placeholder='Select your location'
                     />
                     <View>
-                        <TouchableOpacity onPress={getLocation} >
-                            <Image source={require('../Images/ic_location.png')} style={{ width: 24, height: 24, marginLeft: 10 }} />
+                        <TouchableOpacity onPress={captureLocation} >
+                            <Image source={require('../Images/ic_location.png')} style={{ width: 30, height: 34, marginLeft: 10, tintColor: primaryColor }} />
                         </TouchableOpacity>
                     </View>
                 </View>
+                <TeamXErrorText errorText={locationError} />
+
             </View>
 
             <View style={styles.inputGroup}>
                 <Text style={styles.label}>Room Images</Text>
-                <View style={styles.imageContainer}>
+                <View  >
                     {renderRoomImages()}
                 </View>
             </View>
@@ -334,6 +423,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 5,
     },
+    slider: {
+        width: '100%',
+        height: 40,
+    },
+    sliderValue: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 10,
+        color: '#333',
+    },
     input: {
         height: 50,
         borderColor: '#000',
@@ -343,9 +442,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#000',
     },
+    inputError: {
+        borderColor: 'red',
+    },
     linkText: {
         fontSize: 18,
-        color: '#fff',
+        color: '#000',
     },
     capacityContainer: {
         flexDirection: 'row',
@@ -387,7 +489,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 2,
         borderRadius: 10,
-
+        paddingBottom: 20,
         paddingLeft: 30,
         paddingRight: 30,
         paddingTop: 10,
@@ -400,26 +502,29 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     roomImage: {
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         borderRadius: 5,
         marginRight: 10,
     },
-    imageWrapper: {
+    roomImageWrapper: {
+        marginRight: 10,
         position: 'relative',
     },
+
+
     removeButton: {
         position: 'absolute',
-        top: -3,
-        right: 2,
+        top: 5,
+        right: -6,
 
 
 
     },
     deleteIcon: {
-        width: 20,
-        height: 20,
-        tintColor: '#fff', // Color of delete icon
+        width: 30,
+        height: 30,
+        tintColor: primaryColor, // Color of delete icon
     },
 });
 

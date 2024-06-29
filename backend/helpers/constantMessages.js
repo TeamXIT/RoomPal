@@ -9,6 +9,7 @@ const BASE_RESPONSE_MESSAGES = {
         REFUND_CREATED: 'Refund created successfully',
         REFUND_FETCHED: 'Refund fetched successfully',
         PAYMENT_CREATED: 'Payment created successfully'
+        PASSWORD_RESET_SUCCESS:"Password updated successfully"
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',

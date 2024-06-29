@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const { baseResponses } = require('../helpers/baseResponses');
+const {generateOTP,verifyOTP}= require('../helpers/otpGeneration');
 const Register = async (req,res)=>{
     try{
        let {
@@ -72,5 +73,79 @@ const SignIn = async (req, res) => {
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
+const OTPverification = async (req, res) => {
+    try {
+        const { mobileNumber, otp } = req.body;
 
-module.exports = { Register, SignIn };
+        if (!mobileNumber || !otp) {
+            return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+        }
+
+        // Verify OTP
+        const { success, message } = verifyOTP(mobileNumber, otp);
+        if (!success) {
+            return res.status(400).json({ message });
+        }
+
+        return res.status(200).json(baseResponses.constantMessages.OTP_VERIFIED());
+    } catch (error) {
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
+const resetPassword = async (req, res) => {
+  try {
+    const { mobileNumber, newPassword, confirmPassword } = req.body;
+
+    if (!newPassword || !confirmPassword || !mobileNumber) {
+      return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
+    }
+
+    // Find the user
+    let user = await User.findOne({ mobileNumber });
+    if (!user) {
+      return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+    await user.save();
+
+    // Return success response
+    return res.status(200).json(baseResponses.constantMessages.PASSWORD_RESET_SUCCESS());
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    return res.status(500).json(baseResponses.error(error.message));
+  }
+};
+
+  
+  const forgotPassword = async (req, res) => {
+    try {
+      const { mobileNumber } = req.body;
+  
+      if (!mobileNumber) {
+        return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+      }
+  
+      const user = await User.findOne({ mobileNumber: mobileNumber});
+      if (!user) {
+        return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+  
+      // Generate and send OTP
+      const { otp, expirationTimestamp } = generateOTP(mobileNumber, 6, 300);
+      console.log(otp) // 6-digit OTP, valid for 5 minutes
+  
+      // Here you should send the OTP to the user's mobile number via SMS
+      // For now, we'll return it in the response for simplicity
+      return res.status(200).json({ otp, expirationTimestamp });
+    } catch (error) {
+      return res.status(500).json(baseResponses.error(error.message));
+    }
+  };
+  
+  module.exports = { Register, SignIn, forgotPassword, resetPassword, OTPverification };

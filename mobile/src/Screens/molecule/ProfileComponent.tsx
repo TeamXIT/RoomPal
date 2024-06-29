@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, Alert,Text } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker'; // Import image picker library
 
 const ProfileComponent = ({ setImageUri }) => {
@@ -33,21 +33,25 @@ const ProfileComponent = ({ setImageUri }) => {
     };
 
     return (
+       
         <TouchableOpacity onPress={handleSelectGallery} style={styles.smallbtn}>
-            <Image style={{ height: 35, width: 35 }} source={require('../Images/ic_imageUpload.png')} tintColor={'white'} />
+            {/* <Image style={{ height: 35, width: 35 }} source={require('../Images/ic_imageUpload.png')} tintColor={'white'} /> */}
+            <Text style={{color:'#FFFFFF',fontSize:16}}>Browse Image</Text>
         </TouchableOpacity>
+        
     );
 };
 
 const styles = StyleSheet.create({
     smallbtn: {
-        height: 60,
-        width: 60,
+        height: 40,
+        width: 200,
         backgroundColor: '#814ABF',
         borderRadius: 5,
         borderWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        
     },
 });
 
