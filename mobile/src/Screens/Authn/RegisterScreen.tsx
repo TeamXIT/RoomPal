@@ -18,8 +18,8 @@ const RegisterScreen = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
-  const [lookingForRoom, setLookingForRoom] = useState('');
-  const [lookingForRoommate, setLookingForRoommate] = useState('');
+  const [lookingForRoom, setLookingForRoom] = useState(false);
+  const [lookingForRoommate, setLookingForRoommate] = useState(false);
   const [preferences, setPreferences] = useState({
     clean: false,
     pets: false,
@@ -58,7 +58,7 @@ const RegisterScreen = ({ navigation }) => {
     navigation.navigate('LoginScreen'); // Navigate to LoginScreen
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     let hasError = false;
 
     // Validate fields
@@ -152,8 +152,8 @@ const RegisterScreen = ({ navigation }) => {
         mobileNumber, 
         dateOfBirth,
         gender,
-        lookingForRoom: lookingForRoom === 'yes',
-        lookingForRoommate: lookingForRoommate === 'yes',
+        lookingForRoom: lookingForRoom === true,
+        lookingForRoommate: lookingForRoommate === true,
         preferences,
         makeMobilePrivate,
         password,
@@ -164,18 +164,18 @@ const RegisterScreen = ({ navigation }) => {
       // navigation.navigate() // Uncomment and implement navigation if needed
 
     };
-    dispatch(register(
+    await dispatch(register(
       fullName, 
       email, 
       mobileNumber, 
       dateOfBirth, 
       gender, 
-      lookingForRoom === 'yes', 
-      lookingForRoommate === 'yes', 
+      lookingForRoom === true, 
+      lookingForRoommate === true, 
       preferences, 
       makeMobilePrivate, 
       password,
-      confirmPassword
+      confirmPassword,
     ));
 
     // Reset state values
@@ -184,8 +184,8 @@ const RegisterScreen = ({ navigation }) => {
     setMobileNumber('');
     setDateOfBirth('');
     setGender('');
-    setLookingForRoom('');
-    setLookingForRoommate('');
+    setLookingForRoom(false);
+    setLookingForRoommate(false);
     setPreferences({
       clean: false,
       pets: false,
@@ -321,16 +321,16 @@ const RegisterScreen = ({ navigation }) => {
         <Text style={styles.label}>Looking for Room?</Text>
         <View style={styles.buttonGroup} ref={roomRef}>
           <TouchableOpacity
-            style={[styles.buttonYes, lookingForRoom === 'yes' && styles.buttonActive]}
-            onPress={() => setLookingForRoom('yes')}
+            style={[styles.buttonYes, lookingForRoom === true && styles.buttonActive]}
+            onPress={() => setLookingForRoom(true)}
           >
-            <Text style={[styles.buttonText, lookingForRoom === 'yes' && styles.buttonTextActive]}>Yes</Text>
+            <Text style={[styles.buttonText, lookingForRoom === true && styles.buttonTextActive]}>Yes</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.buttonNo, lookingForRoom === 'no' && styles.buttonActive]}
-            onPress={() => setLookingForRoom('no')}
+            style={[styles.buttonNo, lookingForRoom === false && styles.buttonActive]}
+            onPress={() => setLookingForRoom(false)}
           >
-            <Text style={[styles.buttonText, lookingForRoom === 'no' && styles.buttonTextActive]}>No</Text>
+            <Text style={[styles.buttonText, lookingForRoom === false && styles.buttonTextActive]}>No</Text>
           </TouchableOpacity>
         </View>
         <TeamXErrorText errorText={lookingForRoomError} />
@@ -338,16 +338,16 @@ const RegisterScreen = ({ navigation }) => {
         <Text style={styles.label}>Looking for Roommate?</Text>
         <View style={styles.buttonGroup} ref={roommateRef}>
           <TouchableOpacity
-            style={[styles.buttonYes, lookingForRoommate === 'yes' && styles.buttonActive]}
-            onPress={() => setLookingForRoommate('yes')}
+            style={[styles.buttonYes, lookingForRoommate === true && styles.buttonActive]}
+            onPress={() => setLookingForRoommate(true)}
           >
-            <Text style={[styles.buttonText, lookingForRoommate === 'yes' && styles.buttonTextActive]}>Yes</Text>
+            <Text style={[styles.buttonText, lookingForRoommate === true && styles.buttonTextActive]}>Yes</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.buttonNo, lookingForRoommate === 'no' && styles.buttonActive]}
-            onPress={() => setLookingForRoommate('no')}
+            style={[styles.buttonNo, lookingForRoommate === false && styles.buttonActive]}
+            onPress={() => setLookingForRoommate(false)}
           >
-            <Text style={[styles.buttonText, lookingForRoommate === 'no' && styles.buttonTextActive]}>No</Text>
+            <Text style={[styles.buttonText, lookingForRoommate === false && styles.buttonTextActive]}>No</Text>
           </TouchableOpacity>
         </View>
         <TeamXErrorText errorText={lookingForRoommateError} />
