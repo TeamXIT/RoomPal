@@ -113,6 +113,7 @@ export const register = (
     dispatch(setSuccess('User registered successfully.'));
     dispatch(signIn(mobileNumber, password));
   } catch (error) {
+    console.log(error.message);
     dispatch(setError(error.response?.data?.message || error.message || 'Registration failed'));
   } finally {
     dispatch(setBusy(false));
