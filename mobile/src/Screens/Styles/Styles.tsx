@@ -341,8 +341,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
   },
-
-
   createcontainer: {
     flex: 1,
     padding: 20,
