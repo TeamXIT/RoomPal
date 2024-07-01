@@ -141,7 +141,7 @@ const RoomDetails = ({ navigation }) => {
                       <Text  >per week </Text>
                     </View>
                       <TouchableOpacity style={styles.bookButton} onPress={bookAlert} >
-                          <Text style={styles.bookButtonText}>Book Now</Text>
+                          <Text style={styles.bookButtonText}>Create</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.bookChat} onPress={chatAlert}>
                         <Image source={require('../Images/ic_chat.png')} style={{height:20,width:20}} tintColor={'#814ABF'}/>

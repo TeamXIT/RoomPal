@@ -18,6 +18,7 @@ const baseResponses = {
         REFUND_CREATED:(data=null)=> baseResponses.success('Refund created successfully',data),
         REFUND_FETCHED:(data=null)=> baseResponses.success('Refund fetched successfully',data),
         PAYMENT_CREATED:(data=null)=> baseResponses.success('Payment created successfully',data),
+        PASSWORD_RESET_SUCCESS:(data=null)=> baseResponses.success('Password updated successfully',data)
     }
 };
 module.exports = {baseResponses};

@@ -1,11 +1,14 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Alert, TextInput, Image } from 'react-native';
+import TeamXLogoImage from '../molecule/TeamXLogoImage'; // Adjust the path as per your project structure
+import Checkbox from '../molecule/TeamxCheckBox'; // Import your Checkbox component
+import DateTimePickerModal from 'react-native-modal-datetime-picker'; // Import the Date Picker
+import { primaryColor, styles } from '../Styles/Styles'
+import PhoneInput from "react-native-phone-number-input";
+import TeamXErrorText from '../molecule/TeamXErrorText';
 import { register } from '../../reducers/auth/authSlice';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { styles } from '../Styles/Styles';
-import Checkbox from '../molecule/TeamxCheckBox';
-import TeamXLogoImage from '../molecule/TeamXLogoImage';
+import { useDispatch } from 'react-redux';
+
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -27,12 +30,24 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [fullNameError, setFullNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [mobileNumberError, setMobileNumberError] = useState('');
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
+  const [genderError, setGenderError] = useState('');
+  const [lookingForRoomError, setLookingForRoomError] = useState('');
+  const [lookingForRoommateError, setLookingForRoommateError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [isDobSelected, setDobSelected] = useState(false); // State to manage if DOB is selected
+
+  const [errors, setErrors] = useState({}); // State for errors
 
   // Refs for focusing next input
   const emailRef = useRef(null);
-  const mobileRef = useRef(null);
+  const mobileNumberRef = useRef(null);
   const genderRef = useRef(null);
   const roomRef = useRef(null);
   const roommateRef = useRef(null);
@@ -40,68 +55,101 @@ const RegisterScreen = ({ navigation }) => {
   const confirmPasswordRef = useRef(null);
 
   const navigateToLogin = () => {
-    navigation.navigate('LoginScreen');
+    navigation.navigate('LoginScreen'); // Navigate to LoginScreen
   };
 
   const handleSignUp = () => {
-    let errors = {};
+    let hasError = false;
 
     // Validate fields
     if (!fullName) {
-      errors.fullName = "Please provide your full name.";
+      setFullNameError("Please provide your full name.")
+      hasError = true;
     } else if (fullName.length < 3) {
-      errors.fullName = "Full Name must be at least 3 characters.";
+      setFullNameError("Full Name must be at least 3 characters.")
+      hasError = true;
+    } else {
+      setFullNameError('')
     }
 
     if (!email) {
-      errors.email = "Please provide your email.";
+      setEmailError("Please provide your email.")
+      hasError = true;
     } else if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
-      errors.email = "Please enter a valid email address.";
+      setEmailError("Please enter a valid email address.")
+      hasError = true;
     } else if (email.length < 8) {
-      errors.email = "Email must be at least 8 characters.";
+      setEmailError("Email must be at least 8 characters.")
+      hasError = true;
+    } else {
+      setEmailError('')
     }
 
     if (!mobileNumber) {
-      errors.mobileNumber = "Please provide your mobile number.";
+      setMobileNumberError("Please provide your mobile number.")
+      hasError = true;
     } else if (!/^\d{10}$/.test(mobileNumber)) {
-      errors.mobileNumber = "Mobile number must be 10 digits.";
+      setMobileNumberError("Mobile number must be 10 digits.")
+      hasError = true;
+    } else {
+      setMobileNumberError('')
     }
 
     if (!dateOfBirth) {
-      errors.dateOfBirth = "Please select your date of birth.";
+      setDateOfBirthError("Please select your date of birth.")
+      hasError = true;
+    } else {
+      setDateOfBirthError('')
     }
 
     if (!gender) {
-      errors.gender = "Please select your gender.";
+      setGenderError("Please select your gender.")
+      hasError = true;
+    } else {
+      setGenderError('')
     }
 
     if (!lookingForRoom) {
-      errors.lookingForRoom = "Please select if you are looking for a room.";
+      setLookingForRoomError("Please select if you are looking for a room.")
+      hasError = true;
+    } else {
+      setLookingForRoomError('')
     }
 
     if (!lookingForRoommate) {
-      errors.lookingForRoommate = "Please select if you are looking for a roommate.";
+      setLookingForRoommateError("Please select if you are looking for a roommate.")
+      hasError = true;
+    } else {
+      setLookingForRoommateError('')
     }
 
     if (!password) {
-      errors.password = "Please provide your password.";
+      setPasswordError("Please provide your password.")
+      hasError = true;
     } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
-      errors.password = "Password must have minimum 8 characters, at least one lowercase letter, one uppercase letter, and one numeric character.";
+      setPasswordError("Password must have minimum 8 characters, at least one lowercase letter, one uppercase letter, and one numeric character.")
+      hasError = true;
+    } else {
+      setPasswordError('')
     }
 
     if (!confirmPassword) {
-      errors.confirmPassword = "Please provide your confirm password.";
+      setConfirmPasswordError("Please provide your confirm password.")
+      hasError = true;
     } else if (password !== confirmPassword) {
-      errors.confirmPassword = "Passwords do not match.";
+      setConfirmPasswordError("Passwords do not match.")
+      hasError = true;
+    } else {
+      setConfirmPasswordError('')
     }
 
-    setErrors(errors);
 
-    if (Object.keys(errors).length === 0) {
-      console.log({
+
+    if (!hasError) {
+      const formData = {
         fullName,
         email,
-        mobileNumber,
+        mobileNumber, 
         dateOfBirth,
         gender,
         lookingForRoom: lookingForRoom === 'yes',
@@ -109,259 +157,279 @@ const RegisterScreen = ({ navigation }) => {
         preferences,
         makeMobilePrivate,
         password,
-        confirmPassword
-      });
-
+        confirmPassword,
+      }
+      console.log('Form Data:', formData);
       Alert.alert("Success", "Registration successful!");
+      // navigation.navigate() // Uncomment and implement navigation if needed
 
-      dispatch(register(
-        fullName, 
-        email, 
-        mobileNumber, 
-        dateOfBirth, 
-        gender, 
-        lookingForRoom === 'yes', 
-        lookingForRoommate === 'yes', 
-        preferences, 
-        makeMobilePrivate, 
-        password,
-        confirmPassword
-      ));
+    };
+    dispatch(register(
+      fullName, 
+      email, 
+      mobileNumber, 
+      dateOfBirth, 
+      gender, 
+      lookingForRoom === 'yes', 
+      lookingForRoommate === 'yes', 
+      preferences, 
+      makeMobilePrivate, 
+      password,
+      confirmPassword
+    ));
 
-      // Reset state values
-      setFullName('');
-      setEmail('');
-      setMobileNumber('');
-      setDateOfBirth('');
-      setGender('');
-      setLookingForRoom('');
-      setLookingForRoommate('');
-      setPreferences({
-        clean: false,
-        pets: false,
-        smoking: false,
-        drinking: false,
-      });
-      setMakeMobilePrivate(false);
-      setPassword('');
-      setConfirmPassword('');
-      setDatePickerVisibility(false); // Ensure date picker is hidden after submission
-    }
-  };
+    // Reset state values
+    setFullName('');
+    setEmail('');
+    setMobileNumber('');
+    setDateOfBirth('');
+    setGender('');
+    setLookingForRoom('');
+    setLookingForRoommate('');
+    setPreferences({
+      clean: false,
+      pets: false,
+      smoking: false,
+      drinking: false,
+    });
+    setMakeMobilePrivate(false);
+    setPassword('');
+    setConfirmPassword('');
+    setDatePickerVisibility(false); // Ensure date picker is hidden after submission
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
+  }
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
 
-  const handleConfirm = (date) => {
-    setDateOfBirth(date.toLocaleDateString('en-GB'));
-    hideDatePicker();
-  };
-  return (
-    <ScrollView contentContainerStyle={styles.registercontainer}>
-      <View style={{ alignSelf: 'center' }}>
-        <TeamXLogoImage />
-      </View>
-      <Text style={styles.title}>Registration</Text>
+    const handleConfirm = (dateOfBirth) => {
+      setDateOfBirth(dateOfBirth.toLocaleDateString('en-GB')); // Format the date as "dd-mm-yyyy"
+      setDobSelected(true); // Mark DOB as selected
+      hideDatePicker();
+    };
 
-      <View style={{ gap: 10 }}>
-        <Text style={styles.label}>Full Name</Text>
-        <TextInput
-          style={[styles.input, errors.fullName && { borderColor: 'red' }]}
-          placeholder="Enter your full name"
-          value={fullName}
-          onChangeText={setFullName}
-          onSubmitEditing={() => emailRef.current.focus()}
-          blurOnSubmit={false}
-        />
-        {errors.fullName && <Text style={styles.errorText}>{errors.fullName}</Text>}
-      </View>
+    return (
+      <ScrollView contentContainerStyle={styles.registercontainer}>
+        <View style={{ alignSelf: 'center' }}>
+          <TeamXLogoImage />
+        </View>
+        <Text style={styles.title}>Registration</Text>
 
-      <View style={{ gap: 10 }}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          ref={emailRef}
-          style={[styles.input, errors.email && { borderColor: 'red' }]}
-          placeholder="Enter your email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          onSubmitEditing={() => mobileRef.current.focus()}
-          blurOnSubmit={false}
-        />
-        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-      </View>
-
-      <View style={{ gap: 10 }}>
-        <Text style={styles.label}>Mobile Number</Text>
-        <TextInput
-          ref={mobileRef}
-          style={[styles.input, errors.mobileNumber && { borderColor: 'red' }]}
-          placeholder="Enter your mobile number"
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
-          keyboardType="phone-pad"
-          onSubmitEditing={() => genderRef.current.focus()}
-          blurOnSubmit={false}
-        />
-        {errors.mobileNumber && <Text style={styles.errorText}>{errors.mobileNumber}</Text>}
-      </View>
-
-      <View style={{ gap: 10 }}>
-        <Text style={styles.label}>Date of Birth</Text>
-        <TouchableOpacity onPress={showDatePicker}>
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Full Name</Text>
           <TextInput
-            style={[styles.input, dateOfBirth && { color: '#000' }, errors.dateOfBirth && { borderColor: 'red' }]} // Change text color if DOB is selected
-            placeholder="dd-mm-yyyy"
-            value={dateOfBirth}
-            onTouchStart={showDatePicker}
-            editable={false} // Disable direct text input
+            style={[styles.input]}
+            placeholder="Enter your full name"
+            value={fullName}
+            onChangeText={setFullName}
+            onSubmitEditing={() => emailRef.current.focus()}
+            blurOnSubmit={false}
           />
-        </TouchableOpacity>
-        {errors.dateOfBirth && <Text style={styles.errorText}>{errors.dateOfBirth}</Text>}
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-        />
-      </View>
+          <TeamXErrorText errorText={fullNameError} />
+        </View>
 
-      <Text style={styles.label}>Gender</Text>
-      <View style={styles.radioContainer} ref={genderRef}>
-        <TouchableOpacity
-          style={styles.radioButton}
-          onPress={() => setGender('male')}
-        >
-          <View style={styles.radioCircle}>
-            {gender === 'male' && <View style={styles.selectedDot} />}
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.radioLabel}>Male</Text>
-        <TouchableOpacity
-          style={styles.radioButton}
-          onPress={() => setGender('female')}
-        >
-          <View style={styles.radioCircle}>
-            {gender === 'female' && <View style={styles.selectedDot} />}
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.radioLabel}>Female</Text>
-      </View>
-      {errors.gender && <Text style={styles.errorText}>{errors.gender}</Text>}
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            ref={emailRef}
+            style={[styles.input]}
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            onSubmitEditing={() => passwordRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TeamXErrorText errorText={emailError} />
+        </View>
 
-      <Text style={styles.label}>Looking for Room?</Text>
-      <View style={styles.buttonGroup} ref={roomRef}>
-        <TouchableOpacity
-          style={[styles.buttonYes, lookingForRoom === 'yes' && styles.buttonActive]}
-          onPress={() => setLookingForRoom('yes')}
-        >
-          <Text style={[styles.buttonText, lookingForRoom === 'yes' && styles.buttonTextActive]}>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.buttonNo, lookingForRoom === 'no' && styles.buttonActive]}
-          onPress={() => setLookingForRoom('no')}
-        >
-          <Text style={[styles.buttonText, lookingForRoom === 'no' && styles.buttonTextActive]}>No</Text>
-        </TouchableOpacity>
-      </View>
-      {errors.lookingForRoom && <Text style={styles.errorText}>{errors.lookingForRoom}</Text>}
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Mobile Number</Text>
 
-      <Text style={styles.label}>Looking for Roommate?</Text>
-      <View style={styles.buttonGroup} ref={roommateRef}>
-        <TouchableOpacity
-          style={[styles.buttonYes, lookingForRoommate === 'yes' && styles.buttonActive]}
-          onPress={() => setLookingForRoommate('yes')}
-        >
-          <Text style={[styles.buttonText, lookingForRoommate === 'yes' && styles.buttonTextActive]}>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.buttonNo, lookingForRoommate === 'no' && styles.buttonActive]}
-          onPress={() => setLookingForRoommate('no')}
-        >
-          <Text style={[styles.buttonText, lookingForRoommate === 'no' && styles.buttonTextActive]}>No</Text>
-        </TouchableOpacity>
-      </View>
-      {errors.lookingForRoommate && <Text style={styles.errorText}>{errors.lookingForRoommate}</Text>}
+          <PhoneInput
+            defaultValue={mobileNumber}
+            defaultCode="IN"
+            layout="first"
+            onChangeText={setMobileNumber} // Use the custom change handler
+            containerStyle={[styles.input, { width: '100%' }, ]}
+            textContainerStyle={{
+              paddingVertical: 10,
+              backgroundColor: 'white',
+            }}
+            textInputStyle={{
+              paddingVertical: 0,
+              fontSize: 16,
+              color: 'black'
+            }}
+            countryPickerButtonStyle={{ paddingVertical: 0 }}
+            renderDropdownImage={<Text >▼</Text>}
+            placeholder="Enter mobile number"
+            keyboardType="number-pad"
 
-      <Text style={styles.label}>Preferences:</Text>
-      <Checkbox
-        label="Clean"
-        isChecked={preferences.clean}
-        onChange={() => setPreferences({ ...preferences, clean: !preferences.clean })}
-      />
-      <Checkbox
-        label="Pets Allowed"
-        isChecked={preferences.pets}
-        onChange={() => setPreferences({ ...preferences, pets: !preferences.pets })}
-      />
-      <Checkbox
-        label="Smoking Allowed"
-        isChecked={preferences.smoking}
-        onChange={() => setPreferences({ ...preferences, smoking: !preferences.smoking })}
-      />
-      <Checkbox
-        label="Drinking Allowed"
-        isChecked={preferences.drinking}
-        onChange={() => setPreferences({ ...preferences, drinking: !preferences.drinking })}
-      />
+          />
+          <TeamXErrorText errorText={mobileNumberError} />
+        </View>
 
-      <Text style={styles.label}>Mobile Number Public?</Text>
-      <View style={styles.checkboxContainer}>
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Date of Birth</Text>
+          <TouchableOpacity onPress={showDatePicker}>
+            <TextInput
+              style={[styles.input, ]} // Change text color if DOB is selected
+              placeholder="dd-mm-yyyy"
+              value={dateOfBirth}
+              onTouchStart={showDatePicker}
+              editable={false} // Disable direct text input
+            />
+          </TouchableOpacity>
+          <TeamXErrorText errorText={dateOfBirthError} />
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+        </View>
+
+        <Text style={styles.label}>Gender</Text>
+        <View style={styles.radioContainer}>
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => setGender('male')}
+          >
+            <View style={styles.radioCircle}>
+              {gender === 'male' && <View style={styles.selectedDot} />}
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.radioLabel}>Male</Text>
+          <TouchableOpacity
+            style={styles.radioButton}
+            onPress={() => setGender('female')}
+          >
+            <View style={styles.radioCircle}>
+              {gender === 'female' && <View style={styles.selectedDot} />}
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.radioLabel}>Female</Text>
+        </View>
+        <TeamXErrorText errorText={genderError} />
+
+        <Text style={styles.label}>Looking for Room?</Text>
+        <View style={styles.buttonGroup} ref={roomRef}>
+          <TouchableOpacity
+            style={[styles.buttonYes, lookingForRoom === 'yes' && styles.buttonActive]}
+            onPress={() => setLookingForRoom('yes')}
+          >
+            <Text style={[styles.buttonText, lookingForRoom === 'yes' && styles.buttonTextActive]}>Yes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.buttonNo, lookingForRoom === 'no' && styles.buttonActive]}
+            onPress={() => setLookingForRoom('no')}
+          >
+            <Text style={[styles.buttonText, lookingForRoom === 'no' && styles.buttonTextActive]}>No</Text>
+          </TouchableOpacity>
+        </View>
+        <TeamXErrorText errorText={lookingForRoomError} />
+
+        <Text style={styles.label}>Looking for Roommate?</Text>
+        <View style={styles.buttonGroup} ref={roommateRef}>
+          <TouchableOpacity
+            style={[styles.buttonYes, lookingForRoommate === 'yes' && styles.buttonActive]}
+            onPress={() => setLookingForRoommate('yes')}
+          >
+            <Text style={[styles.buttonText, lookingForRoommate === 'yes' && styles.buttonTextActive]}>Yes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.buttonNo, lookingForRoommate === 'no' && styles.buttonActive]}
+            onPress={() => setLookingForRoommate('no')}
+          >
+            <Text style={[styles.buttonText, lookingForRoommate === 'no' && styles.buttonTextActive]}>No</Text>
+          </TouchableOpacity>
+        </View>
+        <TeamXErrorText errorText={lookingForRoommateError} />
+
+        <Text style={styles.label}>Preferences:</Text>
         <Checkbox
-          label="Yes, make it public"
-          isChecked={makeMobilePrivate}
-          onChange={() => setMakeMobilePrivate(!makeMobilePrivate)}
+          label="Clean"
+          isChecked={preferences.clean}
+          onChange={() => setPreferences({ ...preferences, clean: !preferences.clean })}
         />
-      </View>
-
-      <View style={{ gap: 10 }}>
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          ref={passwordRef}
-          style={[styles.input, errors.password && { borderColor: 'red' }]}
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          onSubmitEditing={() => confirmPasswordRef.current.focus()}
-          blurOnSubmit={false}
+        <Checkbox
+          label="Pets Allowed"
+          isChecked={preferences.pets}
+          onChange={() => setPreferences({ ...preferences, pets: !preferences.pets })}
         />
-        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-      </View>
-
-      <View style={{ gap: 10 }}>
-        <Text style={styles.label}>Confirm Password</Text>
-        <TextInput
-          ref={confirmPasswordRef}
-          style={[styles.input, errors.confirmPassword && { borderColor: 'red' }]}
-          placeholder="Enter your confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
+        <Checkbox
+          label="Smoking Allowed"
+          isChecked={preferences.smoking}
+          onChange={() => setPreferences({ ...preferences, smoking: !preferences.smoking })}
         />
-        {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
-      </View>
+        <Checkbox
+          label="Drinking Allowed"
+          isChecked={preferences.drinking}
+          onChange={() => setPreferences({ ...preferences, drinking: !preferences.drinking })}
+        />
 
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
-          <Text style={styles.submitButtonText}>Register</Text>
-          <Image source={require('../Images/ic_rightArrow.png')} tintColor={'#FFFFFF'} style={{ paddingLeft: 5 }} />
-        </TouchableOpacity>
-      </View>
+        <Text style={styles.label}>Mobile Number Public?</Text>
+        <View style={styles.checkboxContainer}>
+          <Checkbox
+            label="Yes, make it public"
+            isChecked={makeMobilePrivate}
+            onChange={() => setMakeMobilePrivate(!makeMobilePrivate)}
+          />
+        </View>
 
-      <View style={styles.loginRedirectContainer}>
-        <Text style={styles.loginRedirectText}>Already have an account?</Text>
-        <TouchableOpacity onPress={navigateToLogin}>
-          <Text style={styles.loginRedirectLink}>Login</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  );
-};
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            ref={passwordRef}
+            style={[styles.input]}
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            onSubmitEditing={() => confirmPasswordRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TeamXErrorText errorText={passwordError} />
+        </View>
 
-export default RegisterScreen;
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Confirm Password</Text>
+          <TextInput
+            ref={confirmPasswordRef}
+            style={[styles.input]}
+            placeholder="Enter your confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+          />
+          <TeamXErrorText errorText={confirmPasswordError} />
+        </View>
+
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
+            <Text style={styles.submitButtonText}>Register</Text>
+            <Image source={require('../Images/ic_rightArrow.png')} tintColor={'#FFFFFF'} style={{ paddingLeft: 5 }} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.loginRedirectContainer}>
+          <Text style={styles.loginRedirectText}>Already have an account?</Text>
+          <TouchableOpacity onPress={navigateToLogin}>
+            <Text style={styles.loginRedirectLink}>Login</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  
+}
+
+
+
+
+  export default RegisterScreen
