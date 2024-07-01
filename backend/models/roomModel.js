@@ -10,9 +10,9 @@ const  roomSchema= new mongoose.Schema({
         default: []
       },
       availability: {
-        type: Boolean,
+        type: Number,
         required: true,
-        default: true
+        default: 0
       },
       roomType: {
         type: String,
@@ -31,11 +31,11 @@ const  roomSchema= new mongoose.Schema({
       location: {
         lat: {
           type: Number,
-          required: true
+          required: false
         },
         lon: {
           type: Number,
-          required: true
+          required: false
         }
       },
       amenities: {

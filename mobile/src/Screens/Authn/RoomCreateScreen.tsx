@@ -171,17 +171,6 @@ const RoomCreateScreen = () => {
         telegramLink,
         preferences,
       };
-      const Room = {
-        roomName,
-        details,
-        availability,
-        roomType,
-        floor,
-        rent,
-        location,
-        amenities,
-        gender
-      };
       await dispatch(createRoom( 
       roomName,
       details,
@@ -262,6 +251,236 @@ const RoomCreateScreen = () => {
   };
 
   const renderRoomImages = () => {
+=======
+    const [roomName, setRoomName] = useState('');
+    const [details, setDetails] = useState('');
+    const [availability, setAvailability] = useState(0);
+    const [amenities, setAmenities] = useState([
+        { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false },
+        { name: 'Kitchen', image: require('../Images/ic_kitchen.png'), checked: false },
+        { name: 'Air Conditioning', image: require('../Images/ic_airconditioner.png'), checked: false },
+        { name: 'Bathroom', image: require('../Images/ic_bathRoom.png'), checked: false },
+        { name: 'Parking', image: require('../Images/ic_parking.png'), checked: false },
+    ]);
+    const [address, setAddress] = useState('');
+    const [location, setLocation] = useState(null);
+    const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
+    const [rent, setRent] = useState('');
+    const [floor, setFloor] = useState('');
+    const [roomType, setRoomType] = useState(''); // State for room type
+    const [roomTypeOpen, setRoomTypeOpen] = useState(false);
+    const [whatsappLink, setWhatsappLink] = useState('')
+    const [telegramLink, setTelegramLink] = useState('')
+    const [preferences, setPreferences] = useState([
+        { name: 'Vegetarian', checked: false },
+        { name: 'Non-Vegetarian', checked: false },
+        { name: 'Smoking', checked: false },
+        { name: 'Drinking', checked: false },
+    ]);
+    const [errors, setErrors] = useState({}); // State for errors
+    const [formState, setFormState] = useState<Record<string, any>>({});
+
+    const [roomNameError, setRoomNameError] = useState('');
+    const [detailsError, setDetailsError] = useState('');
+    const [availabilityError, setAvailabilityError] = useState('');
+    const [locationError, setLocationError] = useState('');
+    const [addressError, setAddressError] = useState('');
+    const [rentError, setRentError] = useState('');
+    const [floorError, setFloorError] = useState('');
+    const [roomTypeError, setRoomTypeError] = useState(''); // State for room type
+    const [whatsappLinkError, setWhatsappLinkError] = useState('')
+    const [telegramLinkError, setTelegramLinkError] = useState('')
+
+    const [showMap, setShowMap] = useState(false); // State to control map visibility
+
+
+
+    const detailsRef = useRef(null);
+    const rentRef = useRef(null);
+    const floorRef = useRef(null);
+    const whatsappLinkRef = useRef(null)
+    const telegramLinkRef = useRef(null)
+    const addressRef = useRef(null);
+
+
+    const handleSubmitData = () => {
+        let hasError = false;
+        if (!roomName) {
+            setRoomNameError('Please provide your room name')
+            hasError = true;
+        } else {
+            setRoomNameError('')
+        }
+
+        if (!details) {
+            setDetailsError('Please provide your details ')
+            hasError = true;
+        } else {
+            setDetailsError('')
+        }
+        if (availability === 0) {
+            setAvailabilityError('Please select a capacity of at least 1')
+            hasError = true;
+        } else {
+            setAvailabilityError('')
+        }
+
+        if (!whatsappLink) {
+            setWhatsappLinkError('Please provide your whatsapp link')
+            hasError = true;
+        } else {
+            setWhatsappLinkError('')
+        }
+        if (!telegramLink) {
+            setTelegramLinkError('Please provide your telegram link')
+            hasError = true;
+        } else {
+            setTelegramLinkError('')
+        }
+        if (!address) {
+            setAddressError('Please provide your address')
+            hasError = true;
+        } else {
+            setAddressError('')
+        }
+        // if (!location) {
+        //     setLocationError('Please provide your location')
+        //     hasError = true;
+        // } else {
+        //     setLocationError('')
+        // }
+        if (!rent) {
+            setRentError('Please provide your rent')
+            hasError = true;
+        } else {
+            setRentError('')
+        }
+        if (!floor) {
+            setFloorError('Please provide your floor')
+            hasError = true;
+        } else {
+            setFloorError('')
+        }
+        if (!roomName) {
+            setRoomTypeError('Please select your room type');
+            hasError = true;
+        } else {
+            setRoomTypeError('');
+        }
+
+        if (!hasError) {
+            const formData = {
+                roomName,
+                details,
+                availability,
+                amenities,
+                address,
+                location,
+                roomImages,
+                rent,
+                floor,
+                roomType,
+                whatsappLink,
+                telegramLink,
+                preferences,
+            };
+            console.log('Form Data:', formData);
+            Alert.alert('Success', 'Room created successfully');
+            // navigation.navigate() // Uncomment and implement navigation if needed
+        }
+    };
+
+
+
+
+
+    const requestLocationPermission = async () => {
+        try {
+            const result = await request(
+                Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+            );
+            return result === 'granted';
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    };
+
+    const captureLocation = async () => {
+        const hasPermission = await requestLocationPermission();
+        if (!hasPermission) {
+            Alert.alert('Permission Denied', 'Location permission is required to capture your location.');
+            return;
+        }
+
+        Geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const locationString = `${latitude}, ${longitude}`;
+                console.log('Location fetched:', locationString); // Log the fetched location
+                setLocation(locationString);
+
+            },
+            (error) => {
+                Alert.alert('Error', 'Unable to retrieve your location.');
+                console.error(error);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+    };
+    const handleAmenityChange = (index) => {
+        const updatedAmenities = [...amenities];
+        updatedAmenities[index].checked = !updatedAmenities[index].checked;
+        setAmenities(updatedAmenities);
+    };
+
+    const handlePreferenceChange = (index) => {
+        const updatedPreference = [...preferences];
+        updatedPreference[index].checked = !updatedPreference[index].checked;
+        setPreferences(updatedPreference);
+    };
+
+    const handleAddRoomImage = (imageUri) => {
+        setRoomImages([...roomImages, imageUri]);
+    };
+
+    const handleRemoveRoomImage = (index) => {
+        if (index >= 0 && index < roomImages.length) {
+            const updatedImages = [...roomImages];
+            updatedImages.splice(index, 1);
+            setRoomImages(updatedImages);
+        }
+    };
+
+    const renderRoomImages = () => {
+        return (
+            <ScrollView style={styles.imageContainer}>
+                <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
+                    <ProfileComponent setImageUri={handleAddRoomImage} />
+                </View>
+                {roomImages.map((imageObj, index) => (
+                    <View style={{ height: 70, width: 280, backgroundColor: '#e6daf1', paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10, marginTop: 10 }}>
+                        <View key={index} style={styles.roomImageWrapper}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={{ uri: imageObj }} style={styles.roomImage} />
+                                <Text style={{ color: '#000', fontSize: 14, marginRight: 80 }}>
+                                    {imageObj.length > 50 ? `${imageObj.substring(0, 50)}...` : imageObj}
+
+                                </Text>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.removeButton}
+                                onPress={() => handleRemoveRoomImage(index)}
+                            >
+                                <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                ))}
+
+            </ScrollView>
+        );
+    };
     return (
       <ScrollView style={styles.imageContainer}>
         <View style={{justifyContent: 'center', alignSelf: 'center'}}>

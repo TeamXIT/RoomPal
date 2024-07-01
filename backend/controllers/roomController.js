@@ -1,7 +1,7 @@
 const { baseResponses } = require("../helpers/baseResponses")
 const {Room} = require("../models/roomModel")
 
-const roomCreation = (req, res) => {
+const roomCreation = async (req, res) => {
   try {
     const {
       roomName,
@@ -14,7 +14,7 @@ const roomCreation = (req, res) => {
       amenities,
       gender
     } = req.body
-    if (!roomName || !details || availability === undefined || !roomType || !floor || !rent || !location || !amenities || gender === undefined) { 
+    if (!roomName || !details || availability === undefined || !roomType || !floor || !rent || !amenities || gender === undefined) { 
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
     const newRoom = new Room({
@@ -28,9 +28,12 @@ const roomCreation = (req, res) => {
       amenities,
       gender
     });
-    newRoom.save();
+
+
+    await newRoom.save();
     res.status(200).json(baseResponses.constantMessages.ROOM_CREATED_SUCCESSFULLY());
   } catch (error) {
+    console.log(error)
     return res.status(500).json(baseResponses.error(error.message));
   }
 };
