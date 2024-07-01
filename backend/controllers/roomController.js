@@ -29,6 +29,7 @@ const roomCreation = async (req, res) => {
       gender
     });
 
+
     await newRoom.save();
     res.status(200).json(baseResponses.constantMessages.ROOM_CREATED_SUCCESSFULLY());
   } catch (error) {
