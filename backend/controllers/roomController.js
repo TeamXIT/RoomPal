@@ -14,7 +14,7 @@ const roomCreation = (req, res) => {
       amenities,
       gender
     } = req.body
-    if (!roomName || !details || availability === undefined || !roomType || !floor || !rent || !location || !amenities || gender === undefined) { 
+    if (!roomName || !details || availability === undefined || !roomType || !floor || !rent || !amenities || gender === undefined) { 
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
     const newRoom = new Room({

@@ -101,12 +101,12 @@ const RoomCreateScreen = () => {
         } else {
             setAddressError('')
         }
-        if (!location) {
-            setLocationError('Please provide your location')
-            hasError = true;
-        } else {
-            setLocationError('')
-        }
+        // if (!location) {
+        //     setLocationError('Please provide your location')
+        //     hasError = true;
+        // } else {
+        //     setLocationError('')
+        // }
         if (!rent) {
             setRentError('Please provide your rent')
             hasError = true;
