@@ -53,6 +53,8 @@ const RoomCreateScreen = () => {
   ]);
   const [address, setAddress] = useState('dummy');
   const [location, setLocation] = useState(null);
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
   const [rent, setRent] = useState(15000);
   const [floor, setFloor] = useState(1);
@@ -65,6 +67,7 @@ const RoomCreateScreen = () => {
     {name: 'Non-Vegetarian', checked: true},
     {name: 'Smoking', checked: false},
     {name: 'Drinking', checked: false},
+    
   ]);
   const [errors, setErrors] = useState({}); // State for errors
   const [formState, setFormState] = useState<Record<string, any>>({});
@@ -79,6 +82,10 @@ const RoomCreateScreen = () => {
   const [roomTypeError, setRoomTypeError] = useState(''); // State for room type
   const [whatsappLinkError, setWhatsappLinkError] = useState('');
   const [telegramLinkError, setTelegramLinkError] = useState('');
+  const [lookingForMale, setLookingForMale] = useState(false);
+const [lookingForFemale, setLookingForFemale] = useState(false);
+const [lookingForFamily, setLookingForFamily] = useState(false);
+  
 
   const [showMap, setShowMap] = useState(false); // State to control map visibility
 
@@ -250,6 +257,22 @@ const RoomCreateScreen = () => {
     }
   };
 
+  const getLatitudeDirection = lat => (lat >= 0 ? 'N' : 'S');
+  const getLongitudeDirection = lon => (lon >= 0 ? 'E' : 'W');
+
+  const handleLookingForMaleChange = () => {
+    setLookingForMale(!lookingForMale);
+  };
+  
+  const handleLookingForFemaleChange = () => {
+    setLookingForFemale(!lookingForFemale);
+  };
+  
+  const handleLookingForFamilyChange = () => {
+    setLookingForFamily(!lookingForFamily);
+  };
+  
+
   const renderRoomImages = () => {
     const [roomName, setRoomName] = useState('');
     const [details, setDetails] = useState('');
@@ -275,6 +298,7 @@ const RoomCreateScreen = () => {
         { name: 'Non-Vegetarian', checked: false },
         { name: 'Smoking', checked: false },
         { name: 'Drinking', checked: false },
+        
     ]);
     const [errors, setErrors] = useState({}); // State for errors
     const [formState, setFormState] = useState<Record<string, any>>({});
@@ -445,6 +469,7 @@ const RoomCreateScreen = () => {
         }
     };
 
+    
     // const renderRoomImages = () => {
     //     return (
     //         <ScrollView style={styles.imageContainer}>
@@ -575,6 +600,32 @@ const RoomCreateScreen = () => {
       </View>
 
       <View style={styles.inputGroup}>
+        <Text style={styles.label}>Looking for</Text>
+        <View style={styles.checkboxContainer}>
+    <CheckBox
+      value={lookingForMale}
+      onValueChange={handleLookingForMaleChange}
+    />
+    <Text style={styles.checkboxLabel}>Male</Text>
+  </View>
+  <View style={styles.checkboxContainer}>
+    <CheckBox
+      value={lookingForFemale}
+      onValueChange={handleLookingForFemaleChange}
+    />
+    <Text style={styles.checkboxLabel}>Female</Text>
+  </View>
+  <View style={styles.checkboxContainer}>
+    <CheckBox
+      value={lookingForFamily}
+      onValueChange={handleLookingForFamilyChange}
+    />
+    <Text style={styles.checkboxLabel}>Family</Text>
+  </View>
+
+      </View>
+
+      <View style={styles.inputGroup}>
         <Text style={styles.label}>Room Type</Text>
         <DropDownPicker
           open={roomTypeOpen}
@@ -692,29 +743,49 @@ const RoomCreateScreen = () => {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Location</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TextInput
-            style={[styles.input]}
-            value={location}
-            onChangeText={setLocation}
-            placeholder="Select your location"
-          />
-          <View>
-            <TouchableOpacity onPress={captureLocation}>
-              <Image
-                source={require('../Images/ic_location.png')}
-                style={{
-                  width: 30,
-                  height: 34,
-                  marginLeft: 10,
-                  tintColor: primaryColor,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TouchableOpacity
+  style={[styles.button, { marginBottom: 10, width:150,height:40 }]}
+  onPress={captureLocation}
+>
+  <Text style={[styles.buttonText, { fontSize: 14 }]}>Capture Location</Text>
+</TouchableOpacity>
+
+        <Text style={{ color: '#814ABF' }}>{location ? location : 'No location selected'}</Text>
         <TeamXErrorText errorText={locationError} />
       </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Latitude</Text>
+        <View style={styles.coordinatesContainer}>
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={latitude}
+            onChangeText={setLatitude}
+            keyboardType="numeric"
+            placeholder="Enter latitude"
+          />
+          <Text style={styles.coordinateDirection}>
+            {latitude ? getLatitudeDirection(parseFloat(latitude)) : 'N/S'}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Longitude</Text>
+        <View style={styles.coordinatesContainer}>
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            value={longitude}
+            onChangeText={setLongitude}
+            keyboardType="numeric"
+            placeholder="Enter longitude"
+          />
+          <Text style={styles.coordinateDirection}>
+            {longitude ? getLongitudeDirection(parseFloat(longitude)) : 'E/W'}
+          </Text>
+        </View>
+      </View>
+
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Room Images</Text>

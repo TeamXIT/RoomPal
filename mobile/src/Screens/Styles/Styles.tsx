@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
   },
+  createCheckbox: {
+    marginRight: 10,
+  },
 
 
 
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: primaryColor,
+    color: 'white',
   },
   buttonTextActive: {
     color: '#fff',
@@ -379,10 +382,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: primaryColor,
-    padding: 15,
+    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 30,
   },
   createbuttonText: {
     color: '#fff',
@@ -422,85 +425,15 @@ const styles = StyleSheet.create({
     height: 30,
     tintColor: primaryColor, // Color of delete icon
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  coordinatesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  coordinateDirection: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#814ABF',
+  },
 
 
 
