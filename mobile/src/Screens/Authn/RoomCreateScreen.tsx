@@ -89,7 +89,7 @@ const RoomCreateScreen = () => {
   const telegramLinkRef = useRef(null);
   const addressRef = useRef(null);
 
-  const handleSubmitData = () => {
+  const handleSubmitData = async () => {
     let hasError = false;
     if (!roomName) {
       setRoomNameError('Please provide your room name');
@@ -179,9 +179,9 @@ const RoomCreateScreen = () => {
         rent,
         location,
         amenities,
-        gender
+        gender:'Male'
       };
-      dispatch(createRoom(Room));
+      await dispatch(createRoom(Room));
       console.log('Form Data:', formData);
       Alert.alert('Success', 'Room created successfully');
       // navigation.navigate() // Uncomment and implement navigation if needed

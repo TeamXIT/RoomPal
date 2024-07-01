@@ -75,11 +75,13 @@ export const createRoom = (roomData: Room): AppThunk => async (dispatch) => {
   dispatch(setSuccess(''));
   try {
     const response = await axios.post(`${API_BASE_URL}/room/create`, roomData);
+    console.log(response.data)
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));
   } catch (error) {
-    dispatch(setError(error.response?.data?.message || error.message || 'Room creation failed'));
     console.error(error);
+    dispatch(setError(error.response?.data?.message || error.message || 'Room creation failed'));
+   
   } finally {
     dispatch(setBusy(false));
   }
