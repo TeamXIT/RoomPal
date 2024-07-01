@@ -1,15 +1,26 @@
 const {baseResponses} = require('../helpers/baseResponses');
+const User = require('../models/userModel');
+const {Room} = require('../models/roomModel');
 const {Feedback} = require('../models/feedbackModel');
 const giveFeedback = async (req, res) => {
     try {
       const { user_id, comment, room_id } = req.body;
-      const newFeedback = new Feedback({
-        comment,
-        user_id,
-        room_id
-      });
-      newFeedback.save();
-      return res.status(200).json(baseResponses.constantMessages.FEEDBACK());
+      if(!user_id ||!comment ||!room_id){
+        return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+      }
+      const user = await User.findOne({_id: user_id});
+      const  room = await Room.findOne({_id: room_id});
+      if(user && room){
+        const newFeedback = new Feedback({
+          comment,
+          user_id,
+          room_id
+        });
+        newFeedback.save();
+        return res.status(200).json(baseResponses.constantMessages.FEEDBACK());
+      }
+      return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      
     } catch (error) {
       return res.status(500).json(baseResponses.error(error.message));
     }

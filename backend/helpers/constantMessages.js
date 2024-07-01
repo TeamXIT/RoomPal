@@ -20,7 +20,8 @@ const BASE_RESPONSE_MESSAGES = {
         INVALID_PASSWORD: 'Invalid password', 
         FEEDBACK_NOT_FOUND: 'Feedbacks are not given till now',
         ORDER_NOT_FOUND: 'Order not found',
-        ROOM_NOT_FOUND: 'Room not found'
+        ROOM_NOT_FOUND: 'Room not found',
+        USER_OR_ROOM_NOT_FOUND:'User or room not found'
     }
 };
 module.exports = {BASE_RESPONSE_MESSAGES};

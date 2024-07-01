@@ -1,11 +1,16 @@
 const {baseResponses} = require('../helpers/baseResponses');
 const {Rating} = require('../models/ratingModel');
+const User = require('../models/userModel');
+const {Room} = require('../models/roomModel');
 const giveRatings = async(req,res)=>{
     try{
         const{user_id,room_id,rating}=req.body;
         if(!user_id ||!room_id ||!rating){
             return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
         }
+        const user = await User.findOne({_id: user_id});
+        const  room = await Room.findOne({_id: room_id});
+        if(user && room){
         const newRating = new Rating({
             user_id,
             room_id,
@@ -13,6 +18,9 @@ const giveRatings = async(req,res)=>{
         });
         await newRating.save();
         return res.status(200).json(baseResponses.constantMessages.RATING_GIVEN());
+    }
+    return res.status(404).json(baseResponses.constantMessages.USER_OR_ROOM_NOT_FOUND());
+
     }catch(error){
         return res.status(500).json(baseResponses.error(error.message));
     }
