@@ -403,13 +403,14 @@ const styles = StyleSheet.create({
   imageRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginBottom: 10,
+    marginBottom: 20,
+    
   },
   roomImage: {
     width: 50,
     height: 50,
     borderRadius: 5,
-    marginRight: 10,
+    marginRight: 20,
   },
   roomImageWrapper: {
     marginRight: 10,
@@ -417,13 +418,13 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     position: 'absolute',
-    top: 5,
-    right: -6,
+    top: -3,
+    right: 15,
   },
   deleteIcon: {
-    width: 30,
-    height: 30,
-    tintColor: primaryColor, // Color of delete icon
+    width: 20,
+    height: 20,
+    tintColor: '#FFFFFFF', // Color of delete icon
   },
   coordinatesContainer: {
     flexDirection: 'row',
