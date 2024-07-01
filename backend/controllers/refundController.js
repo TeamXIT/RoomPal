@@ -1,4 +1,5 @@
 const { baseResponses } = require('../helpers/baseResponses');
+const Refund = require('../models/refundModel')
 const { Cashfree } = require('cashfree-pg');
 require('dotenv').config();
 Cashfree.XClientId = process.env.X_CLIENT_ID;
@@ -16,6 +17,9 @@ const createRefund = async (req, res) => {
             refund_amount: refund_amount
         };
         const response = await Cashfree.PGOrderCreateRefund("2022-09-01", order_id, request);
+        console.log(response.data);
+        const newRefund = new Refund(response.data);
+        await newRefund.save();
         return res.status(200).json(baseResponses.constantMessages.REFUND_CREATED());
     } catch (error) {
         console.log(error);
