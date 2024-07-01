@@ -251,7 +251,6 @@ const RoomCreateScreen = () => {
   };
 
   const renderRoomImages = () => {
-=======
     const [roomName, setRoomName] = useState('');
     const [details, setDetails] = useState('');
     const [availability, setAvailability] = useState(0);
@@ -389,11 +388,6 @@ const RoomCreateScreen = () => {
             // navigation.navigate() // Uncomment and implement navigation if needed
         }
     };
-
-
-
-
-
     const requestLocationPermission = async () => {
         try {
             const result = await request(
@@ -405,7 +399,6 @@ const RoomCreateScreen = () => {
             return false;
         }
     };
-
     const captureLocation = async () => {
         const hasPermission = await requestLocationPermission();
         if (!hasPermission) {
@@ -452,35 +445,35 @@ const RoomCreateScreen = () => {
         }
     };
 
-    const renderRoomImages = () => {
-        return (
-            <ScrollView style={styles.imageContainer}>
-                <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
-                    <ProfileComponent setImageUri={handleAddRoomImage} />
-                </View>
-                {roomImages.map((imageObj, index) => (
-                    <View style={{ height: 70, width: 280, backgroundColor: '#e6daf1', paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10, marginTop: 10 }}>
-                        <View key={index} style={styles.roomImageWrapper}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image source={{ uri: imageObj }} style={styles.roomImage} />
-                                <Text style={{ color: '#000', fontSize: 14, marginRight: 80 }}>
-                                    {imageObj.length > 50 ? `${imageObj.substring(0, 50)}...` : imageObj}
+    // const renderRoomImages = () => {
+    //     return (
+    //         <ScrollView style={styles.imageContainer}>
+    //             <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
+    //                 <ProfileComponent setImageUri={handleAddRoomImage} />
+    //             </View>
+    //             {roomImages.map((imageObj, index) => (
+    //                 <View style={{ height: 70, width: 280, backgroundColor: '#e6daf1', paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10, marginTop: 10 }}>
+    //                     <View key={index} style={styles.roomImageWrapper}>
+    //                         <View style={{ flexDirection: 'row' }}>
+    //                             <Image source={{ uri: imageObj }} style={styles.roomImage} />
+    //                             <Text style={{ color: '#000', fontSize: 14, marginRight: 80 }}>
+    //                                 {imageObj.length > 50 ? `${imageObj.substring(0, 50)}...` : imageObj}
 
-                                </Text>
-                            </View>
-                            <TouchableOpacity
-                                style={styles.removeButton}
-                                onPress={() => handleRemoveRoomImage(index)}
-                            >
-                                <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                ))}
+    //                             </Text>
+    //                         </View>
+    //                         <TouchableOpacity
+    //                             style={styles.removeButton}
+    //                             onPress={() => handleRemoveRoomImage(index)}
+    //                         >
+    //                             <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
+    //                         </TouchableOpacity>
+    //                     </View>
+    //                 </View>
+    //             ))}
 
-            </ScrollView>
-        );
-    };
+    //         </ScrollView>
+    //     );
+    // };
     return (
       <ScrollView style={styles.imageContainer}>
         <View style={{justifyContent: 'center', alignSelf: 'center'}}>
