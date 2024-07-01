@@ -31,11 +31,11 @@ const  roomSchema= new mongoose.Schema({
       location: {
         lat: {
           type: Number,
-          required: true
+          required: false
         },
         lon: {
           type: Number,
-          required: true
+          required: false
         }
       },
       amenities: {
