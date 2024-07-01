@@ -20,7 +20,7 @@ const Register = async (req,res)=>{
         if (!fullName || !email || !mobileNumber || !dateOfBirth || !gender || 
             lookingForRoom === undefined || lookingForRoommate === undefined || 
             !password || !confirmPassword) {
-          return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED);
+          return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
         }
         if(password!==confirmPassword){
             return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
