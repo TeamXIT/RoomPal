@@ -26,16 +26,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    fontSize: 18,
-    color: '#000',
-  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   submitButton: {
     backgroundColor: primaryColor,
     paddingVertical: 14,
@@ -226,6 +234,276 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
+  roomlistcontainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 10,
+  },
+  searchInput: {
+    height: 50,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 10,
+    borderColor: '#666',
+    borderWidth: 1,
+    paddingLeft: 20,
+    marginBottom: 10,
+    fontSize: 16,
+    color: '#000',
+  },
+  dropdownPicker: {
+    backgroundColor: '#f1f1f1',
+    borderRadius: 5,
+    width: 100,
+  },
+  dropdownContainer: {
+    marginBottom: 10,
+  },
+  dropdown: {
+    backgroundColor: '#f1f1f1',
+    borderRadius: 5,
+    marginTop: 10,
+    width: 100,
+  },
+  applyButton: {
+    backgroundColor: primaryColor,
+    padding: 10,
+    borderRadius: 5,
+    width: 100,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  applyButtonText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginBottom: 20,
+    elevation: 2,
+    borderColor: '#000',
+    borderWidth: 3,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    margin: 10,
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  info: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 10,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  location: {
+    fontSize: 16,
+    color: '#666',
+  },
+  rent: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  lookingFor: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  match: {
+    fontSize: 16,
+    color: '#666',
+    top: 5,
+  },
+  distance: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  detailsButton: {
+    marginTop: 10,
+    height: 35,
+    width: 120,
+    justifyContent: 'center',
+    backgroundColor: primaryColor,
+    borderRadius: 8,
+    top: -10,
+  },
+  detailsButtonText: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+  createcontainer: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#FFFFFF'
+  },
+  createtitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    alignSelf: 'center',
+    color: primaryColor,
+  },
+  inputGroup: {
+    marginBottom: 15,
+  },
+  input: {
+    height: 50,
+    borderColor: '#000',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    fontSize: 18,
+    color: '#000',
+  },
+  linkText: {
+    fontSize: 18,
+    color: '#000',
+  },
+
+  checkboxGroup: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  createcheckbox: {
+    marginRight: 10,
+  },
+  button: {
+    backgroundColor: primaryColor,
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  createbuttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  imageContainer: {
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingBottom: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+  },
+  imageRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginBottom: 10,
+  },
+  roomImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  roomImageWrapper: {
+    marginRight: 10,
+    position: 'relative',
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 5,
+    right: -6,
+  },
+  deleteIcon: {
+    width: 30,
+    height: 30,
+    tintColor: primaryColor, // Color of delete icon
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
