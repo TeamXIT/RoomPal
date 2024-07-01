@@ -25,7 +25,7 @@ import {useDispatch} from 'react-redux';
 import {createRoom} from '../../reducers/room/roomSlice';
 const RoomCreateScreen = () => {
   const dispatch = useDispatch();
-  const [roomName, setRoomName] = useState('Individual');
+  const [roomName, setRoomName] = useState('individual');
   const [details, setDetails] = useState('good');
   const [availability, setAvailability] = useState(6);
   const [amenities, setAmenities] = useState([
@@ -56,7 +56,7 @@ const RoomCreateScreen = () => {
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
   const [rent, setRent] = useState(15000);
   const [floor, setFloor] = useState(1);
-  const [roomType, setRoomType] = useState('Room'); // State for room type
+  const [roomType, setRoomType] = useState('individual'); // State for room type
   const [roomTypeOpen, setRoomTypeOpen] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
@@ -368,8 +368,8 @@ const RoomCreateScreen = () => {
           open={roomTypeOpen}
           value={roomType}
           items={[
-            {label: 'Room', value: 'Room'},
-            {label: 'Apartment', value: 'Apartment'},
+            {label: 'Individual', value: 'individual'},
+            {label: 'Apartment', value: 'apartment'},
           ]}
           setOpen={setRoomTypeOpen}
           setValue={setRoomType}
