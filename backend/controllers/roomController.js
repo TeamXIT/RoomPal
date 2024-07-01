@@ -1,7 +1,7 @@
 const { baseResponses } = require("../helpers/baseResponses")
 const {Room} = require("../models/roomModel")
 
-const roomCreation = (req, res) => {
+const roomCreation = async (req, res) => {
   try {
     const {
       roomName,
@@ -29,9 +29,10 @@ const roomCreation = (req, res) => {
       gender
     });
 
-    newRoom.save();
+    await newRoom.save();
     res.status(200).json(baseResponses.constantMessages.ROOM_CREATED_SUCCESSFULLY());
   } catch (error) {
+    console.log(error)
     return res.status(500).json(baseResponses.error(error.message));
   }
 };
