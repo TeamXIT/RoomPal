@@ -69,12 +69,32 @@ export const roomSlice = createSlice({
 
 export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom } = roomSlice.actions;
 
-export const createRoom = (roomData: Room): AppThunk => async (dispatch) => {
+export const createRoom = (roomName: string,
+  details: string,
+  availability: boolean,
+  roomType: string,
+  floor: number,
+  rent: number,
+  location: string,
+  amenities: string[],
+  gender: string,
+): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.post(`${API_BASE_URL}/room/create`, roomData);
+    // console.log(`data: ${roomData}`);
+    const response = await axios.post(`${API_BASE_URL}/room/create`, { 
+      roomName,
+      details,
+      availability,
+      roomType,
+      floor,
+      rent,
+      location,
+      amenities,
+      gender
+    });
     console.log(response.data)
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));

@@ -28,7 +28,6 @@ const roomCreation = (req, res) => {
       amenities,
       gender
     });
-
     newRoom.save();
     res.status(200).json(baseResponses.constantMessages.ROOM_CREATED_SUCCESSFULLY());
   } catch (error) {

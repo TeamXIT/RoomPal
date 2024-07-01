@@ -25,15 +25,15 @@ import {useDispatch} from 'react-redux';
 import {createRoom} from '../../reducers/room/roomSlice';
 const RoomCreateScreen = () => {
   const dispatch = useDispatch();
-  const [roomName, setRoomName] = useState('');
-  const [details, setDetails] = useState('');
-  const [availability, setAvailability] = useState(0);
+  const [roomName, setRoomName] = useState('Individual');
+  const [details, setDetails] = useState('good');
+  const [availability, setAvailability] = useState(6);
   const [amenities, setAmenities] = useState([
-    {name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: false},
+    {name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: true},
     {
       name: 'Kitchen',
       image: require('../Images/ic_kitchen.png'),
-      checked: false,
+      checked: true,
     },
     {
       name: 'Air Conditioning',
@@ -51,18 +51,18 @@ const RoomCreateScreen = () => {
       checked: false,
     },
   ]);
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState('dummy');
   const [location, setLocation] = useState(null);
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
-  const [rent, setRent] = useState('');
-  const [floor, setFloor] = useState('');
-  const [roomType, setRoomType] = useState(''); // State for room type
+  const [rent, setRent] = useState(15000);
+  const [floor, setFloor] = useState(1);
+  const [roomType, setRoomType] = useState('Room'); // State for room type
   const [roomTypeOpen, setRoomTypeOpen] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
   const [preferences, setPreferences] = useState([
-    {name: 'Vegetarian', checked: false},
-    {name: 'Non-Vegetarian', checked: false},
+    {name: 'Vegetarian', checked: true},
+    {name: 'Non-Vegetarian', checked: true},
     {name: 'Smoking', checked: false},
     {name: 'Drinking', checked: false},
   ]);
@@ -129,12 +129,12 @@ const RoomCreateScreen = () => {
     } else {
       setAddressError('');
     }
-    if (!location) {
-      setLocationError('Please provide your location');
-      hasError = true;
-    } else {
-      setLocationError('');
-    }
+    // if (!location) {
+    //   setLocationError('Please provide your location');
+    //   hasError = true;
+    // } else {
+    //   setLocationError('');
+    // }
     if (!rent) {
       setRentError('Please provide your rent');
       hasError = true;
@@ -155,6 +155,7 @@ const RoomCreateScreen = () => {
     }
 
     if (!hasError) {
+      const  gender='male';
       const formData = {
         roomName,
         details,
@@ -179,9 +180,19 @@ const RoomCreateScreen = () => {
         rent,
         location,
         amenities,
-        gender:'Male'
+        gender
       };
-      await dispatch(createRoom(Room));
+      await dispatch(createRoom( 
+      roomName,
+      details,
+      availability,
+      roomType,
+      floor,
+      rent,
+      location,
+      amenities,
+      gender
+      ));
       console.log('Form Data:', formData);
       Alert.alert('Success', 'Room created successfully');
       // navigation.navigate() // Uncomment and implement navigation if needed
