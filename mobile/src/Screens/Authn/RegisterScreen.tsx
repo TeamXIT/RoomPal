@@ -7,12 +7,12 @@ import { primaryColor, styles } from '../Styles/Styles'
 import PhoneInput from "react-native-phone-number-input";
 import TeamXErrorText from '../molecule/TeamXErrorText';
 import { register } from '../../reducers/auth/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-
+  const signupError = useSelector(state => state.auth.screen.error);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -161,40 +161,43 @@ const RegisterScreen = ({ navigation }) => {
       }
       console.log('Form Data:', formData);
       // navigation.navigate() // Uncomment and implement navigation if needed
-
+       dispatch(register(
+        fullName, 
+        email, 
+        mobileNumber, 
+        dateOfBirth, 
+        gender, 
+        lookingForRoom , 
+        lookingForRoommate, 
+        preferences, 
+        makeMobilePrivate, 
+        password,
+        confirmPassword,
+      ));
+      if(signupError) {
+        setMobileNumberError("Mobile Number already exists ")
+      }
     };
-    await dispatch(register(
-      fullName, 
-      email, 
-      mobileNumber, 
-      dateOfBirth, 
-      gender, 
-      lookingForRoom , 
-      lookingForRoommate, 
-      preferences, 
-      makeMobilePrivate, 
-      password,
-      confirmPassword,
-    ));
+   
 
     // Reset state values
-    setFullName('');
-    setEmail('');
-    setMobileNumber('');
-    setDateOfBirth('');
-    setGender('');
-    setLookingForRoom(false);
-    setLookingForRoommate(false);
-    setPreferences({
-      clean: false,
-      pets: false,
-      smoking: false,
-      drinking: false,
-    });
-    setMakeMobilePrivate(false);
-    setPassword('');
-    setConfirmPassword('');
-    setDatePickerVisibility(false); // Ensure date picker is hidden after submission
+    // setFullName('');
+    // setEmail('');
+    // setMobileNumber('');
+    // setDateOfBirth('');
+    // setGender('');
+    // setLookingForRoom(false);
+    // setLookingForRoommate(false);
+    // setPreferences({
+    //   clean: false,
+    //   pets: false,
+    //   smoking: false,
+    //   drinking: false,
+    // });
+    // setMakeMobilePrivate(false);
+    // setPassword('');
+    // setConfirmPassword('');
+    // setDatePickerVisibility(false); // Ensure date picker is hidden after submission
 
   }
     const showDatePicker = () => {

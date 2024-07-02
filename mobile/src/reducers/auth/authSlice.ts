@@ -115,8 +115,8 @@ export const register = (
     await dispatch(setSuccess('User registered successfully.'));
     await dispatch(signIn(mobileNumber, password));
   } catch (error) {
-    console.log(error.message);
-    dispatch(setError(error.response?.data?.message || error.message || 'Registration failed'));
+    console.log(error);
+    dispatch(setError(error.response?.data?.message || 'Registration failed'));
   } finally {
     dispatch(setBusy(false));
   }

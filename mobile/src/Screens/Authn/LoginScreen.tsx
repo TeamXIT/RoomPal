@@ -41,7 +41,7 @@ const LoginScreen = ({ navigation }) => {
     if (valid) {
       await dispatch(signIn(mobileNumber, password))
        if(!authToken){
-        setMobileNumberError(signinError);
+        setMobileNumberError('Mobile Number already exists');
        }
       ;
     }
