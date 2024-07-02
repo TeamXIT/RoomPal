@@ -25,6 +25,15 @@ const Register = async (req,res)=>{
         if(password!==confirmPassword){
             return res.status(400).json(baseResponses.constantMessages.PASSWORD_MISMATCH());
         }
+        const emailId = await User.findOne({email: email})
+        if(emailId) {
+          return res.status(400).json(baseResponses.constantMessages.EMAIL_ALREADY_EXISTS());
+        }
+        const user = await User.findOne({ mobileNumber: mobileNumber});
+        if(user ) {
+            return res.status(400).json(baseResponses.constantMessages.MOBILE_NUMBER_ALREADY_EXISTS());
+        }
+        
         gender=gender.toLowerCase();
         const newuser = new User({
             fullName,
