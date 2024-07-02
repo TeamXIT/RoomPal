@@ -191,7 +191,11 @@ const RoomCreateScreen = () => {
         longitude,
         amenities,
         gender,
-        images
+        images,
+        whatsappLink,
+        telegramLink,
+        
+
       ));
       console.log('Form Data:', formData);
       Alert.alert('Success', 'Room created successfully');

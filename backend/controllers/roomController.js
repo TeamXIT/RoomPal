@@ -13,7 +13,9 @@ const roomCreation = async (req, res) => {
       location,
       amenities,
       gender,
-      images
+      images,
+      whatsappLink,
+      telegramLink
     } = req.body
     if (!roomName || !details || availability === undefined || !roomType || !floor || !rent || !amenities || gender === undefined) { 
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
@@ -28,7 +30,9 @@ const roomCreation = async (req, res) => {
       location,
       amenities,
       gender,
-      images
+      images,
+      whatsappLink,
+      telegramLink
     });
 
 
@@ -101,6 +105,9 @@ const updateRoomDetails = async (req, res) => {
       "rent",
       "location",
       "amenities",
+      "images",
+      "whatsappLink",
+      "telegramLink"
     ];
 
     const updates = {};

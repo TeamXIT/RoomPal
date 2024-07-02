@@ -13,6 +13,8 @@ type Room = {
   location: string;
   amenities: string[];
   gender: string;
+  whatsappLink: string;
+  telegramLink: string;
 };
 
 type RoomState = {
@@ -80,6 +82,9 @@ export const createRoom = (roomName: string,
   amenities: string[],
   gender: string,
   images:string[],
+  whatsappLink: string,
+  telegramLink: string,
+
 ): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
@@ -96,7 +101,9 @@ export const createRoom = (roomName: string,
       location:{lat:latitude,lon:longitude},
       amenities,
       gender,
-      images
+      images,
+      whatsappLink,
+      telegramLink
     });
     console.log(response.data)
     dispatch(addRoom(response.data.data));

@@ -90,6 +90,14 @@ const  roomSchema= new mongoose.Schema({
       images: {
         type: [String],
         required: false
+      },
+      whatsappLink: {
+        type: String,
+        required: false
+      },
+      telegramLink: {
+        type: String,
+        required: false
       }
 }, { timestamps: true,versionKey:false });
 
