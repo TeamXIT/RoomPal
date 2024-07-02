@@ -21,7 +21,10 @@ const BASE_RESPONSE_MESSAGES = {
         FEEDBACK_NOT_FOUND: 'Feedbacks are not given till now',
         ORDER_NOT_FOUND: 'Order not found',
         ROOM_NOT_FOUND: 'Room not found',
-        USER_OR_ROOM_NOT_FOUND:'User or room not found'
+        USER_OR_ROOM_NOT_FOUND:'User or room not found',
+        MOBILE_NUMBER_ALREADY_EXISTS:'Mobile number already exists',
+        EMAIL_ALREADY_EXISTS:'Email already exists'
+
     }
 };
 module.exports = {BASE_RESPONSE_MESSAGES};

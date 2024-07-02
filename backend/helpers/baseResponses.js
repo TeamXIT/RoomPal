@@ -22,6 +22,8 @@ const baseResponses = {
         PAYMENT_CREATED:(data=null)=> baseResponses.success('Payment created successfully',data),
         PASSWORD_RESET_SUCCESS:(data=null)=> baseResponses.success('Password updated successfully',data),
         USER_OR_ROOM_NOT_FOUND:(data=null)=> baseResponses.error('User or room not found',data),
+        MOBILE_NUMBER_ALREADY_EXISTS:(data=null) => baseResponses.error('Mobile number already exists',data),
+        EMAIL_ALREADY_EXISTS:(data=null) => baseResponses.error('Email already exists',data),
     }
 };
 module.exports = {baseResponses};
