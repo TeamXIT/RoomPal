@@ -24,7 +24,7 @@ const Authn = () => {
   return (
 
 
-    <Stack.Navigator initialRouteName="RoomCreateScreen">
+    <Stack.Navigator initialRouteName="Intro">
 
       <Stack.Screen
         name="Intro"

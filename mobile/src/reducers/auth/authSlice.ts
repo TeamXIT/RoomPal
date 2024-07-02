@@ -69,7 +69,8 @@ export const signIn = (mobileNumber: string, password: string): AppThunk => asyn
     dispatch(setMobileNumber(mobileNumber));
     dispatch(setSuccess('User logged in successfully.'));
   } catch (error) {
-    dispatch(setError(error.response?.data?.message || error.message || 'Sign in failed'));
+    
+    dispatch(setError(error.response?.data?.message ||  'Sign in failed'));
   } finally {
     dispatch(setBusy(false));
   }
@@ -110,8 +111,9 @@ export const register = (
       password,
       confirmPassword,
     });
-    dispatch(setSuccess('User registered successfully.'));
-    dispatch(signIn(mobileNumber, password));
+    console.log(response)
+    await dispatch(setSuccess('User registered successfully.'));
+    await dispatch(signIn(mobileNumber, password));
   } catch (error) {
     console.log(error.message);
     dispatch(setError(error.response?.data?.message || error.message || 'Registration failed'));
