@@ -23,6 +23,7 @@ import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import TeamXErrorText from '../molecule/TeamXErrorText';
 import { useDispatch } from 'react-redux';
 import { createRoom } from '../../reducers/room/roomSlice';
+import { RadioButton } from 'react-native-paper';
 const RoomCreateScreen = () => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('individual');
@@ -52,9 +53,9 @@ const RoomCreateScreen = () => {
     },
   ]);
   const [address, setAddress] = useState('dummy');
-  const [location, setLocation] = useState(null);
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
+  let [location, setLocation] = useState([]);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
   const [rent, setRent] = useState(15000);
   const [floor, setFloor] = useState(1);
@@ -71,7 +72,6 @@ const RoomCreateScreen = () => {
   ]);
   const [errors, setErrors] = useState({}); // State for errors
   const [formState, setFormState] = useState<Record<string, any>>({});
-
   const [roomNameError, setRoomNameError] = useState('');
   const [detailsError, setDetailsError] = useState('');
   const [availabilityError, setAvailabilityError] = useState('');
@@ -82,9 +82,9 @@ const RoomCreateScreen = () => {
   const [roomTypeError, setRoomTypeError] = useState(''); // State for room type
   const [whatsappLinkError, setWhatsappLinkError] = useState('');
   const [telegramLinkError, setTelegramLinkError] = useState('');
-  const [lookingForMale, setLookingForMale] = useState(false);
-  const [lookingForFemale, setLookingForFemale] = useState(false);
-  const [lookingForFamily, setLookingForFamily] = useState(false);
+  const [lookingFor, setLookingFor] = useState('');
+  // const [lookingForFemale, setLookingForFemale] = useState(false);
+  // const [lookingForFamily, setLookingForFamily] = useState(false);
 
 
   const [showMap, setShowMap] = useState(false); // State to control map visibility
@@ -160,9 +160,10 @@ const RoomCreateScreen = () => {
     } else {
       setRoomTypeError('');
     }
-
+    location ={latitude,longitude};
     if (!hasError) {
-      const gender = 'male';
+      const images=roomImages
+      const gender = lookingFor;
       const formData = {
         roomName,
         details,
@@ -177,6 +178,7 @@ const RoomCreateScreen = () => {
         whatsappLink,
         telegramLink,
         preferences,
+        images
       };
       await dispatch(createRoom(
         roomName,
@@ -185,9 +187,11 @@ const RoomCreateScreen = () => {
         roomType,
         floor,
         rent,
-        location,
+        latitude,
+        longitude,
         amenities,
-        gender
+        gender,
+        images
       ));
       console.log('Form Data:', formData);
       Alert.alert('Success', 'Room created successfully');
@@ -260,16 +264,16 @@ const RoomCreateScreen = () => {
   const getLatitudeDirection = lat => (lat >= 0 ? 'N' : 'S');
   const getLongitudeDirection = lon => (lon >= 0 ? 'E' : 'W');
 
-  const handleLookingForMaleChange = () => {
-    setLookingForMale(!lookingForMale);
-  };
+  // const handleLookingForMaleChange = () => {
+  //   setLookingForMale(!lookingForMale);
+  // };
 
-  const handleLookingForFemaleChange = () => {
-    setLookingForFemale(!lookingForFemale);
-  };
+  // const handleLookingForFemaleChange = () => {
+  //   setLookingForFemale(!lookingForFemale);
+  // };
 
-  const handleLookingForFamilyChange = () => {
-    setLookingForFamily(!lookingForFamily);
+  const handleLookingFor = () => {
+    setLookingFor(!lookingFor);
   };
 
 
@@ -397,28 +401,14 @@ const RoomCreateScreen = () => {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Looking for</Text>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={lookingForMale}
-            onValueChange={handleLookingForMaleChange}
-          />
-          <Text style={styles.checkboxLabel}>Male</Text>
-        </View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={lookingForFemale}
-            onValueChange={handleLookingForFemaleChange}
-          />
-          <Text style={styles.checkboxLabel}>Female</Text>
-        </View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={lookingForFamily}
-            onValueChange={handleLookingForFamilyChange}
-          />
-          <Text style={styles.checkboxLabel}>Family</Text>
-        </View>
-
+        <RadioButton.Group
+        onValueChange={newValue => setLookingFor(newValue)}
+        value={lookingFor}
+      >
+        <RadioButton.Item label="Male" value="male" />
+        <RadioButton.Item label="Female" value="female" />
+        <RadioButton.Item label="Both" value="family" />
+      </RadioButton.Group>
       </View>
 
       <View style={styles.inputGroup}>

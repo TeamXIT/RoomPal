@@ -75,9 +75,11 @@ export const createRoom = (roomName: string,
   roomType: string,
   floor: number,
   rent: number,
-  location: string,
+  latitude: number,
+  longitude: number,
   amenities: string[],
   gender: string,
+  images:string[],
 ): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
@@ -91,9 +93,10 @@ export const createRoom = (roomName: string,
       roomType,
       floor,
       rent,
-      location,
+      location:{lat:latitude,lon:longitude},
       amenities,
-      gender
+      gender,
+      images
     });
     console.log(response.data)
     dispatch(addRoom(response.data.data));

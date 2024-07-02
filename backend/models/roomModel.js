@@ -86,6 +86,10 @@ const  roomSchema= new mongoose.Schema({
         type: String,
         enum: ['male', 'female','family'],
         required: true 
+      },
+      images: {
+        type: [String],
+        required: false
       }
 }, { timestamps: true,versionKey:false });
 
