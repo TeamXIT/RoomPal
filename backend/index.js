@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const ratingRoutes = require('./routes/ratingRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const orderRoutes = require('./routes/orderRoutes')
 const paymentRoutes = require('./routes/paymentRoutes');
 const refundRoutes = require('./routes/refundRoutes');
 const app = express();
@@ -16,6 +17,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/room', roomRoutes);
 app.use('/api/rating', ratingRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/order', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/refund',refundRoutes);
 app.get('/',(req,res)=>{
