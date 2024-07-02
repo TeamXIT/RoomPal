@@ -10,6 +10,7 @@ const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error, isBusy, success } = useSelector(state => state.auth.screen);
   const authToken = useSelector(state => state.auth.data.authToken);
+  const signinError = useSelector(state => state.auth.screen.error);
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -20,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
     return mobile.trim().length === 10 && /^\d+$/.test(mobile);
   };
 
-  const handleLoginPress = () => {
+  const handleLoginPress = async () => {
     let valid = true;
 
     if (!validateMobileNumber(mobileNumber)) {
@@ -38,14 +39,11 @@ const LoginScreen = ({ navigation }) => {
     }
 
     if (valid) {
-      dispatch(signIn(mobileNumber, password)).then((result) => {
-        if (result.success) {
-          console.log('Login successful, navigating to RoomDetails');
-          navigation.navigate('RoomCreateScreen');
-        } else {
-          setMobileNumber('login failed');
-        }
-      });
+      await dispatch(signIn(mobileNumber, password))
+       if(!authToken){
+        setMobileNumberError(signinError);
+       }
+      ;
     }
   };
 

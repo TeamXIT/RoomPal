@@ -109,19 +109,19 @@ const RegisterScreen = ({ navigation }) => {
       setGenderError('')
     }
 
-    if (!lookingForRoom) {
-      setLookingForRoomError("Please select if you are looking for a room.")
-      hasError = true;
-    } else {
-      setLookingForRoomError('')
-    }
+    // if (!lookingForRoom) {
+    //   setLookingForRoomError("Please select if you are looking for a room.")
+    //   hasError = true;
+    // } else {
+    //   setLookingForRoomError('')
+    // }
 
-    if (!lookingForRoommate) {
-      setLookingForRoommateError("Please select if you are looking for a roommate.")
-      hasError = true;
-    } else {
-      setLookingForRoommateError('')
-    }
+    // if (!lookingForRoommate) {
+    //   setLookingForRoommateError("Please select if you are looking for a roommate.")
+    //   hasError = true;
+    // } else {
+    //   setLookingForRoommateError('')
+    // }
 
     if (!password) {
       setPasswordError("Please provide your password.")
@@ -152,15 +152,14 @@ const RegisterScreen = ({ navigation }) => {
         mobileNumber, 
         dateOfBirth,
         gender,
-        lookingForRoom: lookingForRoom === true,
-        lookingForRoommate: lookingForRoommate === true,
+        lookingForRoom: lookingForRoom ,
+        lookingForRoommate: lookingForRoommate,
         preferences,
         makeMobilePrivate,
         password,
         confirmPassword,
       }
       console.log('Form Data:', formData);
-      Alert.alert("Success", "Registration successful!");
       // navigation.navigate() // Uncomment and implement navigation if needed
 
     };
@@ -170,8 +169,8 @@ const RegisterScreen = ({ navigation }) => {
       mobileNumber, 
       dateOfBirth, 
       gender, 
-      lookingForRoom === true, 
-      lookingForRoommate === true, 
+      lookingForRoom , 
+      lookingForRoommate, 
       preferences, 
       makeMobilePrivate, 
       password,
