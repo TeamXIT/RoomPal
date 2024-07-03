@@ -15,6 +15,7 @@ import RoomCreateScreen from './src/Screens/Authn/RoomCreateScreen';
 import { store } from './src/reducers/store';
 import { Provider } from 'react-redux';
 import ListOfRooms from './src/Screens/Authn/ListOfRooms';
+import FilterScreen from './src/Screens/Authn/FilterScreen';
 
 
 const Stack = createStackNavigator();
@@ -24,7 +25,7 @@ const Authn = () => {
   return (
 
 
-    <Stack.Navigator initialRouteName="Intro">
+    <Stack.Navigator initialRouteName="ListOfRooms">
 
       <Stack.Screen
         name="Intro"
@@ -71,7 +72,12 @@ const Authn = () => {
         name="ListOfRooms"
         component={ListOfRooms}
         options={{ headerShown: false }} />
+        <Stack.Screen
+        name="FilterScreen"
+        component={FilterScreen}
+        options={{ headerShown: false }} />
     </Stack.Navigator>
+    
   );
 };
 

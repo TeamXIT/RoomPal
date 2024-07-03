@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { primaryColor,styles } from '../Styles/Styles';
-
+import { primaryColor, styles } from '../Styles/Styles';
 
 const data = [
   {
@@ -68,14 +66,13 @@ const data = [
   // Add more data here
 ];
 
-const ListOfRooms = () => {
-  const [openGender, setOpenGender] = useState(false);
-  const [filterGender, setFilterGender] = useState('Both');
-  const [openLocation, setOpenLocation] = useState(false);
-  const [filterLocation, setFilterLocation] = useState('All Delhi');
+
+const ListOfRooms = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   
-  
+  const handleFilterPress = () => {
+    navigation.navigate('FilterScreen');
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -110,30 +107,8 @@ const ListOfRooms = () => {
     </View>
   );
 
-  const genderItems = [
-    { label: 'Both', value: 'Both' },
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
-  ];
-
-  const locationItems = [
-    { label: 'All Delhi', value: 'All Delhi' },
-    { label: 'Mumbai', value: 'Mumbai' },
-    { label: 'Nearby', value: 'Nellore' },
-    { label: 'Panjam', value: 'Panjam' },
-    { label: 'Nearby', value: 'Nearby' },
-  ];
-
   const applyFilters = () => {
     let filteredData = data;
-
-    if (filterGender !== 'Both') {
-      filteredData = filteredData.filter(item => item.lookingFor === filterGender);
-    }
-
-    if (filterLocation !== 'All Delhi') {
-      filteredData = filteredData.filter(item => item.location === filterLocation);
-    }
 
     if (searchQuery.trim() !== '') {
       filteredData = filteredData.filter(item =>
@@ -142,32 +117,22 @@ const ListOfRooms = () => {
       );
     }
 
-   return filteredData;
+    return filteredData;
   };
 
   return (
     <View style={styles.roomlistcontainer}>
-      <Text style={{ fontSize: 30, color: '#000', fontWeight: 'bold' }}>Listed Rooms</Text>
-      <TextInput
-        placeholder='Search by name or location...'
-        placeholderTextColor='#666'
-        style={styles.searchInput}
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10,gap:-100 }}>
-        <DropDownPicker
-          open={openGender}
-          value={filterGender}
-          items={genderItems}
-          setOpen={setOpenGender}
-          setValue={setFilterGender}
-          style={styles.dropdownPicker}
-          containerStyle={styles.dropdownContainer}
-          dropDownContainerStyle={styles.dropdown}
+      <View style={styles.searchBarContainer}>
+        <Image source={require('../Images/ic_search.png')} style={styles.searchIcon} />
+        <TextInput
+          placeholder='Search by name or location...'
+          placeholderTextColor='#666'
+          style={styles.searchinput}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
-        <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
-          <Text style={styles.applyButtonText}>Apply Filters</Text>
+        <TouchableOpacity onPress={handleFilterPress}>
+        <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
       <FlatList
@@ -178,115 +143,4 @@ const ListOfRooms = () => {
     </View>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default ListOfRooms;
