@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-
-
-import DropDownPicker from 'react-native-dropdown-picker';
-import { primaryColor,styles } from '../Styles/Styles';
-import {fetchRooms} from '../../reducers/room/roomSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../reducers/store';
-
-
+import { primaryColor, styles } from '../Styles/Styles';
 
 const data = [
   {
@@ -75,23 +67,22 @@ const data = [
 ];
 
 
-
 const ListOfRooms = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   
   const handleFilterPress = () => {
     navigation.navigate('FilterScreen');
-
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-        {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+        <Image source={{ uri: item.image }} style={styles.image} />
         <View style={styles.info}>
           <Text style={[styles.name, { paddingBottom: 10 }]}>{item.name}</Text>
           <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
             <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-            <Text style={styles.location}>{item.address}</Text>
+            <Text style={styles.location}>{item.location}</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 30 }}>
             <Text style={[{ paddingLeft: 5, fontSize: 16 }]}>Rent</Text>
@@ -99,7 +90,7 @@ const ListOfRooms = ({navigation}) => {
           </View>
           <View style={{ flexDirection: 'row', gap: 45, paddingBottom: 10 }}>
             <Text style={[styles.rent, { marginRight: 20 }]}> ₹{item.rent}</Text>
-            <Text style={[styles.lookingFor]}> {item.gender}</Text>
+            <Text style={[styles.lookingFor]}> {item.lookingFor}</Text>
           </View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
             <Text style={styles.distance}>{item.distance} Km</Text>
@@ -139,23 +130,17 @@ const ListOfRooms = ({navigation}) => {
           style={styles.searchinput}
           value={searchQuery}
           onChangeText={setSearchQuery}
-
         />
         <TouchableOpacity onPress={handleFilterPress}>
         <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
-      {screen.isBusy ? (
-        <Text>Loading...</Text>
-      ) : (
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      )}
+      <FlatList
+        data={applyFilters()}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
     </View>
   );
 };
-
 export default ListOfRooms;
