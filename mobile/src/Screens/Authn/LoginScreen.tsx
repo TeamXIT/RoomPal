@@ -58,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     if (success) {
       console.log('Navigation effect triggered, navigating to RoomDetails');
-      navigation.navigate('RoomCreateScreen');
+      navigation.navigate('ListOfRooms');
     }
   }, [success, navigation]);
 

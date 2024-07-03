@@ -122,7 +122,7 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.get(`${API_BASE_URL}/rooms`, {
+    const response = await axios.get(`${API_BASE_URL}/room/getAll`, {
       params: { limit, page, ...filters },
     });
     dispatch(setRooms({
@@ -132,7 +132,6 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
     }));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Fetching rooms failed'));
-    console.error(error);
   } finally {
     dispatch(setBusy(false));
   }
