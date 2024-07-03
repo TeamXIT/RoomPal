@@ -1,1 +1,84 @@
-<p>login works!</p>
+<div class="row d-flex justify-content-center">
+  <div class="col col-md-6 col-lg-4">
+    <div class="card shadow p-3 p-md-4 my-5 m-md-4">
+      <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+        <div class="mb-3">
+          <label for="login-mobile-numner" class="form-label">
+            Mobile Number
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="login-mobile-numner"
+            placeholder="Enter mobile number"
+            formControlName="mobileNumber"
+            [class.is-invalid]="
+              formGroup.controls.mobileNumber.errors &&
+              (formGroup.controls.mobileNumber.touched ||
+                formGroup.controls.mobileNumber.dirty)
+            "
+          />
+          @if (
+            formGroup.controls.mobileNumber.errors &&
+            (formGroup.controls.mobileNumber.touched ||
+              formGroup.controls.mobileNumber.dirty)
+          ) {
+            @if (formGroup.controls.mobileNumber.errors["required"]) {
+              <div class="invalid-feedback">Mobile number is required</div>
+            }
+            @if (formGroup.controls.mobileNumber.errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 10 digits required</div>
+            }
+            @if (formGroup.controls.mobileNumber.errors["maxlength"]) {
+              <div class="invalid-feedback">Maximum 10 digits allowed</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label for="login-mobile-numner" class="form-label"> Password </label>
+          <input
+            type="text"
+            class="form-control"
+            id="login-mobile-numner"
+            placeholder="Enter your password"
+            formControlName="password"
+            [class.is-invalid]="
+              formGroup.controls.password.errors &&
+              (formGroup.controls.password.touched ||
+                formGroup.controls.password.dirty)
+            "
+          />
+
+          @if (
+            formGroup.controls.password.errors &&
+            (formGroup.controls.password.touched ||
+              formGroup.controls.password.dirty)
+          ) {
+            @if (formGroup.controls.password.errors["required"]) {
+              <div class="invalid-feedback">Password is required</div>
+            }
+            @if (formGroup.controls.password.errors["minlength"]) {
+              <div class="invalid-feedback">Minimum characters required</div>
+            }
+          }
+        </div>
+        <div class="mb-3 d-flex justify-content-between">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="inlineCheckbox1"
+              value="option1"
+            />
+            <label class="form-check-label" for="inlineCheckbox1">Remember me</label>
+          </div>
+          <a class="text-decoration-none" [routerLink]="'../forget-password'">Forget password</a>
+        </div>
+        <button class="btn btn-primary w-100">Login</button>
+      </form>
+      <div class="ms-auto mt-3">
+        Don't have a account?, <a class="text-decoration-none" [routerLink]="'../register'">Register</a>
+      </div>
+    </div>
+  </div>
+</div>
