@@ -9,7 +9,7 @@
       "options": {
         "parser": "angular",
         "arrowParens": "avoid",
-        "bracketSameLine": false,
+        "bracketSameLine": true,
         "bracketSpacing": true,
         "jsxSingleQuote": false,
         "singleAttributePerLine": false

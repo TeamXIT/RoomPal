@@ -1,50 +1,53 @@
 import { Component } from '@angular/core'
 import {
   AbstractControl,
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  registrationForm: FormGroup<FormType>
-  constructor(private readonly _formBuilder: FormBuilder) {
-    this.registrationForm = this._formBuilder.group(
-      {
-        name: ['', [Validators.required, Validators.minLength(6)]],
-        mobileNumber: ['', [Validators.required, this.mobileNumberValidator]],
-        dateOfBirth: ['', Validators.required],
-        gender: ['', Validators.required],
-        lookingForRoom: [false],
-        lookingForRoomMate: [false],
-        preferences: this._formBuilder.group({
-          clean: [false],
-          pets: [false],
-          smoking: [false],
-          drinking: [false],
-        }),
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: [''],
-      },
-      {
-        validators: this.confirmPasswordValidator,
-      },
-    ) as FormGroup<FormType>
-  }
+  registrationForm: FormGroup<FormType> = new FormGroup(
+    {
+      name: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      mobileNumber: new FormControl('', [
+        Validators.required,
+        this.mobileNumberValidator,
+      ]),
+      dateOfBirth: new FormControl('', Validators.required),
+      gender: new FormControl('', Validators.required),
+      lookingForRoom: new FormControl(false),
+      lookingForRoomMate: new FormControl(false),
+      preferences: new FormGroup({
+        clean: new FormControl(false),
+        pets: new FormControl(false),
+        smoking: new FormControl(''),
+        drinking: new FormControl(''),
+      }),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      confirmPassword: new FormControl(''),
+    },
+    {
+      validators: this.confirmPasswordValidator as ValidatorFn,
+    },
+  ) as FormGroup
 
   confirmPasswordValidator(formGroup: FormGroup) {
     const passwordControl = formGroup.controls['password']
     const confirmPasswordControl = formGroup.controls['confirmPassword']
-
     if (passwordControl.value !== confirmPasswordControl.value)
       formGroup.controls['confirmPassword'].setErrors({
         invalid: true,

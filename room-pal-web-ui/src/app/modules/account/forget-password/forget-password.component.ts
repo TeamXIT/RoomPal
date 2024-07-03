@@ -1,48 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import {  FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-forget-password',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './forget-password.component.html',
-  styleUrl: './forget-password.component.scss'
+  styleUrl: './forget-password.component.scss',
 })
-export class ForgetPasswordComponent implements OnInit {
-
-  resetPasswordForm:FormGroup<{
-    email:FormControl;
-  }> = new FormGroup({
-    email:new FormControl('', [Validators.required, Validators.email])
-  });
-  onSubmit(){
-    if(this.resetPasswordForm.valid){
-      console.log('Form submitted', this.resetPasswordForm.value);
-    } else {
-      this.resetPasswordForm.markAllAsTouched();  
-    }
-  }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
-  // resetPasswordForm: FormGroup;
-
-  // constructor(private fb: FormBuilder) {
-  //   this.resetPasswordForm = this.fb.group({
-  //     email: ['', [Validators.required, Validators.email]]
-  //   });
-  // }
-
-  // onSubmit(): void {
-  //   if (this.resetPasswordForm.valid) {
-  //     console.log('Form submitted', this.resetPasswordForm.value);
-  //   } else {
-  //     this.resetPasswordForm.markAllAsTouched();  
-  //   }
-  // }
-
-  // get email() {
-  //   return this.resetPasswordForm.get('email');
-  // }
+export class ForgetPasswordComponent {
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ])
 }
