@@ -240,19 +240,10 @@ const styles = StyleSheet.create({
   roomlistcontainer: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 10,
+    padding: 15,
+    
   },
-  searchInput: {
-    height: 50,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 10,
-    borderColor: '#666',
-    borderWidth: 1,
-    paddingLeft: 20,
-    marginBottom: 10,
-    fontSize: 16,
-    color: '#000',
-  },
+
   dropdownPicker: {
     backgroundColor: '#f1f1f1',
     borderRadius: 5,
@@ -285,10 +276,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginBottom: 20,
+    borderColor: primaryColor,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.94,
     elevation: 2,
-    borderColor: '#000',
-    borderWidth: 3,
+    padding: 5, 
   },
+  
   image: {
     width: 100,
     height: 100,
@@ -435,7 +435,193 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#814ABF',
   },
-
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  searchIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    
+  },
+  filterIcon: {
+    width: 20,
+    height: 20,
+    marginLeft: 10,
+    
+  },
+  searchinput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+  },
+  filtercontainer: {
+    flex: 1,
+    backgroundColor: '#f8f8f8',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  filterheader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  resetButton: {
+    color: primaryColor,
+    fontSize: 16,
+  },
+  filterheaderTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  cancelButton: {
+    color: primaryColor,
+    fontSize: 16,
+  },
+  sectionContainer: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: primaryColor,
+  },
+  listingTypeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  listingTypeButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: primaryColor,
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  listingTypeText: {
+    fontSize: 14,
+    color: primaryColor,
+  },
+  selectedListingType: {
+    backgroundColor: primaryColor,
+  },
+  genderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  genderButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: primaryColor,
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  genderText: {
+    fontSize: 14,
+    color: primaryColor,
+  },
+  selectedGender: {
+    backgroundColor: primaryColor,
+  },
+  priceRangeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  priceInput: {
+    flex: 1,
+    height: 40,
+    borderColor: primaryColor,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  toText: {
+    fontSize: 16,
+    marginHorizontal: 10,
+  },
+  amenitiesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 20,
+   
+  },
+  amenityButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginHorizontal: 5,
+    marginBottom: 10,
+    borderColor: primaryColor,
+  },
+  amenityIcon: {
+    width: 30,
+    height: 30,
+    tintColor: primaryColor,
+  },
+  selectedAmenityIcon: {
+    tintColor: '#fff',
+  },
+  selectedAmenity:{
+    backgroundColor:primaryColor,
+  },
+  counterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: primaryColor,
+    borderRadius: 5,
+    paddingHorizontal: 20,
+  },
+  counterButton: {
+    padding: 10,
+  },
+  counterButtonText: {
+    fontSize: 20,
+    color: primaryColor,
+  },
+  counterText: {
+    fontSize: 18,
+  },
+  filterapplyButton: {
+    backgroundColor: primaryColor,
+    paddingVertical: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 50,
+  },
+  filterapplyButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 
 
 });
