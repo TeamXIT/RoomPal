@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { primaryColor,styles } from '../Styles/Styles';
+import {fetchRooms} from '../../reducers/room/roomSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducers/store';
 
 
 const data = [
@@ -67,25 +70,47 @@ const data = [
   },
   // Add more data here
 ];
-
 const ListOfRooms = () => {
+  const dispatch = useDispatch();
+  const { data, screen } = useSelector((state: RootState) => state.room);
+
   const [openGender, setOpenGender] = useState(false);
   const [filterGender, setFilterGender] = useState('Both');
   const [openLocation, setOpenLocation] = useState(false);
   const [filterLocation, setFilterLocation] = useState('All Delhi');
   const [searchQuery, setSearchQuery] = useState('');
-  
-  
+
+  useEffect(() => {
+    dispatch(fetchRooms());
+  }, []);
+
+  const applyFilters = () => {
+    const filters: Partial<Room> = {};
+
+    if (filterGender !== 'Both') {
+      filters.gender = filterGender;
+    }
+
+    if (filterLocation !== 'All Delhi') {
+      filters.location = filterLocation;
+    }
+
+    if (searchQuery.trim() !== '') {
+      filters.roomName = searchQuery;
+    }
+
+    dispatch(fetchRooms(10, 1, filters));
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-        <Image source={{ uri: item.image }} style={styles.image} />
+        {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
         <View style={styles.info}>
           <Text style={[styles.name, { paddingBottom: 10 }]}>{item.name}</Text>
           <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
             <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-            <Text style={styles.location}>{item.location}</Text>
+            <Text style={styles.location}>{item.address}</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 30 }}>
             <Text style={[{ paddingLeft: 5, fontSize: 16 }]}>Rent</Text>
@@ -93,7 +118,7 @@ const ListOfRooms = () => {
           </View>
           <View style={{ flexDirection: 'row', gap: 45, paddingBottom: 10 }}>
             <Text style={[styles.rent, { marginRight: 20 }]}> ₹{item.rent}</Text>
-            <Text style={[styles.lookingFor]}> {item.lookingFor}</Text>
+            <Text style={[styles.lookingFor]}> {item.gender}</Text>
           </View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
             <Text style={styles.distance}>{item.distance} Km</Text>
@@ -124,27 +149,6 @@ const ListOfRooms = () => {
     { label: 'Nearby', value: 'Nearby' },
   ];
 
-  const applyFilters = () => {
-    let filteredData = data;
-
-    if (filterGender !== 'Both') {
-      filteredData = filteredData.filter(item => item.lookingFor === filterGender);
-    }
-
-    if (filterLocation !== 'All Delhi') {
-      filteredData = filteredData.filter(item => item.location === filterLocation);
-    }
-
-    if (searchQuery.trim() !== '') {
-      filteredData = filteredData.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-   return filteredData;
-  };
-
   return (
     <View style={styles.roomlistcontainer}>
       <Text style={{ fontSize: 30, color: '#000', fontWeight: 'bold' }}>Listed Rooms</Text>
@@ -155,7 +159,7 @@ const ListOfRooms = () => {
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10,gap:-100 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, gap: -100 }}>
         <DropDownPicker
           open={openGender}
           value={filterGender}
@@ -170,123 +174,17 @@ const ListOfRooms = () => {
           <Text style={styles.applyButtonText}>Apply Filters</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={applyFilters()}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {screen.isBusy ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+      )}
     </View>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export default ListOfRooms;
