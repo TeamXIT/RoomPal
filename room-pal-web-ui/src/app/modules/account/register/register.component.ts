@@ -1,89 +1,87 @@
-import { NgClass,JsonPipe } from '@angular/common';
-import { Component ,OnInit} from '@angular/core';
-import {  AbstractControl,
+import { Component } from '@angular/core'
+import {
+  AbstractControl,
+  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
-  Validators } from '@angular/forms';
-
+  Validators,
+} from '@angular/forms'
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule,NgClass,JsonPipe],
+  imports: [ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
 })
-export class RegisterComponent implements OnInit {
-  registrationForm: FormGroup<{
-    mobileNumber:FormControl;
-    preference1: FormControl;
-    preference2: FormControl;
-    preference3: FormControl;
-    preference4: FormControl;
-    password:FormControl;
-    confirmPassword:FormControl;
-  }>= new FormGroup({
-    mobileNumber: new FormControl('', [
-      Validators.required,
-      this.mobileNumberValidator,
-    ]),
-    preference1: new FormControl(false),
-    preference2: new FormControl(true),
-    preference3: new FormControl(true),
-    preference4: new FormControl(false),
-    password: new FormControl('',[Validators.required, 
-     Validators.minLength(6), 
-     Validators.maxLength(16)
-    ]),
-    confirmPassword: new FormControl ('',[ Validators.required,
-      Validators.minLength(6), 
-      Validators.maxLength(16)
-    ]),
+export class RegisterComponent {
+  registrationForm: FormGroup<FormType>
+  constructor(private readonly _formBuilder: FormBuilder) {
+    this.registrationForm = this._formBuilder.group(
+      {
+        name: ['', [Validators.required, Validators.minLength(6)]],
+        mobileNumber: ['', [Validators.required, this.mobileNumberValidator]],
+        dateOfBirth: ['', Validators.required],
+        gender: ['', Validators.required],
+        lookingForRoom: [false],
+        lookingForRoomMate: [false],
+        preferences: this._formBuilder.group({
+          clean: [false],
+          pets: [false],
+          smoking: [false],
+          drinking: [false],
+        }),
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: [''],
+      },
+      {
+        validators: this.confirmPasswordValidator,
+      },
+    ) as FormGroup<FormType>
+  }
 
-  });
+  confirmPasswordValidator(formGroup: FormGroup) {
+    const passwordControl = formGroup.controls['password']
+    const confirmPasswordControl = formGroup.controls['confirmPassword']
 
+    if (passwordControl.value !== confirmPasswordControl.value)
+      formGroup.controls['confirmPassword'].setErrors({
+        invalid: true,
+      })
+    else formGroup.controls['confirmPassword'].setErrors(null)
+  }
 
   mobileNumberValidator(control: AbstractControl): ValidationErrors | null {
-    const value = new String(control.value).trim();
+    const value = new String(control.value).trim()
     if (!value) {
-      return null;
+      return null
     }
-    if (value.length <= 1 && value.length < 10) return { minlength: true };
-    if (value.length > 10) return { maxlength: true };
-    return null;
+    if (value.length < 10) return { minlength: true }
+    if (value.length > 10) return { maxlength: true }
+    return null
   }
-  
- passwordValidator(control: AbstractControl): ValidationErrors | null {
-    const value = new String(control.value).trim();
-    if (!value) {
-      return null;
-    }
-    if (value.length <= 1 && value.length < 6) return { minlength: true };
-    if (value.length > 16) return { maxlength: true };
-    return null;
-  }
-  
-  confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
-    const value = new String(control.value).trim();
-    if (!value) {
-      return null;
-    }
-    if (value.length <= 1 && value.length < 6) return { minlength: true };
-    if (value.length > 16) return { maxlength: true };
-    return null;
-  }
- 
-  ngOnInit(): void {
-  }
-
 
   onSubmit() {
-    this.registrationForm.markAllAsTouched();
-    console.log(this.registrationForm.value);
-    console.log(this.registrationForm.controls);
-  
+    this.registrationForm.markAllAsTouched()
   }
+}
 
- 
+type FormType = {
+  name: FormControl<string>
+  mobileNumber: FormControl
+  dateOfBirth: FormControl
+  gender: FormControl
+  lookingForRoomMate: FormControl<boolean>
+  lookingForRoom: FormControl<boolean>
+  preferences: FormGroup<PreferencesType>
+  password: FormControl
+  confirmPassword: FormControl
+}
+
+type PreferencesType = {
+  clean: FormControl<boolean>
+  pets: FormControl<boolean>
+  smoking: FormControl<boolean>
+  drinking: FormControl<boolean>
 }

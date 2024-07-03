@@ -2,11 +2,17 @@
   "printWidth": 80,
   "arrowParens": "avoid",
   "bracketSameLine": true,
+  "semi": false,
   "overrides": [
     {
       "files": "*.html",
       "options": {
-        "parser": "angular"
+        "parser": "angular",
+        "arrowParens": "avoid",
+        "bracketSameLine": false,
+        "bracketSpacing": true,
+        "jsxSingleQuote": false,
+        "singleAttributePerLine": false
       }
     },
     {

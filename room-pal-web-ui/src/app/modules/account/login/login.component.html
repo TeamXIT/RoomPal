@@ -1,73 +1,72 @@
-<form [formGroup]="loginFormGroup" (ngSubmit)="onLoginClick()">
-  <div class="login-screen">
-      <div class="card">
-        <img src="/images/logo.jpg" alt="Logo" class="logo"/>
-        <h2>Mobile Number</h2>
-        <input type="number"
-         placeholder="Enter mobile number" 
-         class="input-field"
-         formControlName="mobileNumber"
-         [ngClass]="loginFormGroup.controls['mobileNumber'].errors &&
-         loginFormGroup.controls['mobileNumber'].touched? 'is-invalid' : ''   "/>
-
-        @if (
-            loginFormGroup.controls["mobileNumber"].errors &&
-            loginFormGroup.controls["mobileNumber"].touched
-            ){
-  
-              @if (loginFormGroup.controls["mobileNumber"].errors["required"]) {
-                <div class="invalid-feedback">Mobile Number is required</div>
-              }
-  
-              @if (loginFormGroup.controls["mobileNumber"].errors["minlength"]) {
-                <div class="invalid-feedback">Minimum 10 digits required</div>
-              }
-              @if (loginFormGroup.controls["mobileNumber"].errors["maxlength"]) {
-                <div class="invalid-feedback">Maximum 10 digits allowed</div>
-              }
-      }
-        <!-- <pre>{{loginFormGroup.controls["mobileNumber"].errors | json}}</pre> -->
-         <h2>Password</h2>
-        <input type="password"
-        placeholder="Enter password" 
-        class="input-field" 
-        formControlName="password"
-        [ngClass]="
-        loginFormGroup.controls['password'].errors &&
-        loginFormGroup.controls['password'].touched
-          ? 'is-invalid'
-          : ''   "/>
-  
-       
+<div class="row d-flex justify-content-center">
+  <div class="col col-md-6 col-lg-4">
+    <div class="card shadow p-3 p-md-4 py-5 my-5 m-md-4">
+      <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+        <div class="mb-3">
+          <label for="login-mobile-numner" class="form-label">
+            Mobile Number
+          </label>
+          <input
+            type="number"
+            class="form-control"
+            id="login-mobile-numner"
+            placeholder="Enter mobile number"
+            formControlName="mobileNumber"
+            [class.is-invalid]="
+              formGroup.controls.mobileNumber.errors &&
+              (formGroup.controls.mobileNumber.touched ||
+                formGroup.controls.mobileNumber.dirty)
+            "
+          />
           @if (
-              loginFormGroup.controls["password"].errors &&
-              loginFormGroup.controls["password"].touched
-              ){
+            formGroup.controls.mobileNumber.errors &&
+            (formGroup.controls.mobileNumber.touched ||
+              formGroup.controls.mobileNumber.dirty)
+          ) {
+            @if (formGroup.controls.mobileNumber.errors["required"]) {
+              <div class="invalid-feedback">Mobile number is required</div>
+            }
+            @if (formGroup.controls.mobileNumber.errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 10 digits required</div>
+            }
+            @if (formGroup.controls.mobileNumber.errors["maxlength"]) {
+              <div class="invalid-feedback">Maximum 10 digits allowed</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label for="login-mobile-numner" class="form-label"> Password </label>
+          <input
+            type="text"
+            class="form-control"
+            id="login-mobile-numner"
+            placeholder="Enter mobile number"
+            formControlName="password"
+            [class.is-invalid]="
+              formGroup.controls.password.errors &&
+              (formGroup.controls.password.touched ||
+                formGroup.controls.password.dirty)
+            "
+          />
 
-            @if (loginFormGroup.controls["password"].errors["required"]) {
+          @if (
+            formGroup.controls.password.errors &&
+            (formGroup.controls.password.touched ||
+              formGroup.controls.password.dirty)
+          ) {
+            @if (formGroup.controls.password.errors["required"]) {
               <div class="invalid-feedback">Password is required</div>
-             }
-
-            @if (loginFormGroup.controls["password"].errors["minlength"]) {
-              <div class="invalid-feedback">Minimum 6 characters required</div>
             }
-            @if (loginFormGroup.controls["password"].errors["maxlength"]) {
-              <div class="invalid-feedback">Maximum 16 characters allowed..</div>
+            @if (formGroup.controls.password.errors["minlength"]) {
+              <div class="invalid-feedback">Minimum characters required</div>
             }
-            }
-        <!-- <pre>{{loginFormGroup.controls["password"].errors | json}}</pre> -->
-  
-      <div class="remember-me">
-          <input type="checkbox" id="remember-me"/>
-          <label for="remember-me">Remember me</label>
+          }
         </div>
-        <button type="submit" class="login-button">Login 	&#8594;</button>
-        <div class="links">
-          <a href="#">Forgot Password?</a>
-          Don't have an account?<a href="#"> Register here</a>
-         
-        </div>
+        <button class="btn btn-primary w-100">Login</button>
+      </form>
+      <div class="ms-auto mt-3">
+        Don't have a account?, <a [routerLink]="'../register'">Register</a>
       </div>
     </div>
-  </form> 
-  
+  </div>
+</div>
