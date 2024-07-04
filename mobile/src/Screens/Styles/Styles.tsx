@@ -276,17 +276,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginBottom: 20,
-    borderColor: primaryColor,
-    borderWidth: 1,
+    
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 3.94,
     elevation: 2,
-    padding: 5, 
+    padding: 15, 
   },
   
   image: {
