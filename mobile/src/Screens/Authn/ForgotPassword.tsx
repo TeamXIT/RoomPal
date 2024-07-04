@@ -108,10 +108,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: '#fff',
