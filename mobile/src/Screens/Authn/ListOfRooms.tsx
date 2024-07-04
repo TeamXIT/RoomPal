@@ -1,88 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRooms } from '../../reducers/room/roomSlice';
+import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 
-const data = [
-  {
-    id: '1',
-    name: 'Nitish Kumar',
-    location: 'Delhi',
-    rent: 1500,
-    lookingFor: 'Male',
-    match: 54,
-    image: 'https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg',
-    distance: 5,
-  },
-  {
-    id: '2',
-    name: 'John Doe',
-    location: 'Mumbai',
-    rent: 1800,
-    lookingFor: 'Female',
-    match: 62,
-    image: 'https://media.istockphoto.com/id/627892060/photo/hotel-room-suite-with-view.jpg?s=612x612&w=0&k=20&c=YBwxnGH3MkOLLpBKCvWAD8F__T-ypznRUJ_N13Zb1cU=',
-    distance: 10,
-  },
-  {
-    id: '3',
-    name: 'Rajesh',
-    location: 'Udaipur',
-    rent: 1400,
-    lookingFor: 'Female',
-    match: 62,
-    image: 'https://t3.ftcdn.net/jpg/02/71/08/28/360_F_271082810_CtbTjpnOU3vx43ngAKqpCPUBx25udBrg.jpg',
-    distance: 10,
-  },
-  {
-    id: '4',
-    name: 'Sanjay Kumar',
-    location: 'Mumbai',
-    rent: 1300,
-    lookingFor: 'Female',
-    match: 62,
-    image: 'https://media.istockphoto.com/id/627892060/photo/hotel-room-suite-with-view.jpg?s=612x612&w=0&k=20&c=YBwxnGH3MkOLLpBKCvWAD8F__T-ypznRUJ_N13Zb1cU=',
-    distance: 10,
-  },
-  {
-    id: '5',
-    name: 'John Doe',
-    location: 'Udaipur',
-    rent: 1500,
-    lookingFor: 'Female',
-    match: 62,
-    image: 'https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg',
-    distance: 10,
-  },
-  {
-    id: '6',
-    name: 'John Doe',
-    location: 'Nearby',
-    rent: 1600,
-    lookingFor: 'Female',
-    match: 62,
-    image: 'https://media.istockphoto.com/id/627892060/photo/hotel-room-suite-with-view.jpg?s=612x612&w=0&k=20&c=YBwxnGH3MkOLLpBKCvWAD8F__T-ypznRUJ_N13Zb1cU=',
-    distance: 10,
-  },
-  // Add more data here
-];
+const ListOfRooms = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { data, screen } = useSelector((state: RootState) => state.room);
 
-
-const ListOfRooms = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
-  
-  const handleFilterPress = () => {
-    navigation.navigate('FilterScreen');
+
+  useEffect(() => {
+    dispatch(fetchRooms());
+  }, []);
+
+  const handleFilterPress = (filters) => {
+    navigation.navigate('FilterScreen', {
+      filters: filters,
+    });
   };
+  const handleDetails =()=>{
+    navigation.navigate('RoomDetails');
+  }
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-        <Image source={{ uri: item.image }} style={styles.image} />
+        {/* Ensure 'item.image' is a valid URI */}
+        <Image source={{ uri: item.image }} style={styles.image} onError={() => console.log('Image failed to load')} />
         <View style={styles.info}>
-          <Text style={[styles.name, { paddingBottom: 10 }]}>{item.name}</Text>
+          <Text style={[styles.name, { paddingBottom: 10 }]}>{item.roomName}</Text>
           <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
-            <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-            <Text style={styles.location}>{item.location}</Text>
+            <Text style={styles.location}>{item.adderess}</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 30 }}>
             <Text style={[{ paddingLeft: 5, fontSize: 16 }]}>Rent</Text>
@@ -90,7 +40,7 @@ const ListOfRooms = ({navigation}) => {
           </View>
           <View style={{ flexDirection: 'row', gap: 45, paddingBottom: 10 }}>
             <Text style={[styles.rent, { marginRight: 20 }]}> ₹{item.rent}</Text>
-            <Text style={[styles.lookingFor]}> {item.lookingFor}</Text>
+            <Text style={[styles.lookingFor]}> {item.gender}</Text>
           </View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
             <Text style={styles.distance}>{item.distance} Km</Text>
@@ -98,7 +48,7 @@ const ListOfRooms = ({navigation}) => {
           </View>
           <View style={{ flexDirection: 'row', gap: 20 }}>
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
-            <TouchableOpacity style={styles.detailsButton}>
+            <TouchableOpacity style={styles.detailsButton} onPress={handleDetails}>
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
           </View>
@@ -107,40 +57,28 @@ const ListOfRooms = ({navigation}) => {
     </View>
   );
 
-  const applyFilters = () => {
-    let filteredData = data;
-
-    if (searchQuery.trim() !== '') {
-      filteredData = filteredData.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    return filteredData;
-  };
-
   return (
     <View style={styles.roomlistcontainer}>
       <View style={styles.searchBarContainer}>
         <Image source={require('../Images/ic_search.png')} style={styles.searchIcon} />
         <TextInput
-          placeholder='Search by name or location...'
-          placeholderTextColor='#666'
+          placeholder="Search by name or location..."
+          placeholderTextColor="#666"
           style={styles.searchinput}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        <TouchableOpacity onPress={handleFilterPress}>
-        <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
+        <TouchableOpacity onPress={() => handleFilterPress({})}>
+          <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={applyFilters()}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {screen.isBusy ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item._id} />
+      )}
     </View>
   );
 };
+
 export default ListOfRooms;
