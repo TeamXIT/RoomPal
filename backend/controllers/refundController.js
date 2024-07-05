@@ -1,5 +1,7 @@
 const { baseResponses } = require('../helpers/baseResponses');
-const Refund = require('../models/refundModel')
+const Refund = require('../models/refundModel');
+const Order = require('../models/orderModel');
+const Transaction = require('../models/transactionModel');
 const { Cashfree } = require('cashfree-pg');
 require('dotenv').config();
 Cashfree.XClientId = process.env.X_CLIENT_ID;
@@ -16,10 +18,23 @@ const createRefund = async (req, res) => {
             refund_id: refund_id,
             refund_amount: refund_amount
         };
+        const order = await Order.findOne({order_id: order_id});
+        if(!order){
+            return res.status(404).json(baseResponses.constantMessages.ORDER_NOT_FOUND());
+        };
         const response = await Cashfree.PGOrderCreateRefund("2022-09-01", order_id, request);
         console.log(response.data);
         const newRefund = new Refund(response.data);
         await newRefund.save();
+        if(newRefund.refund_status === 'SUCCESS'){
+            const transaction = new Transaction({
+                user_id: customer_id,
+                credit_amount: payment.payment_amount
+            });
+            console.log(transaction);
+            transaction.save();
+            console.log('Payment created');
+        }
         return res.status(200).json(baseResponses.constantMessages.REFUND_CREATED());
     } catch (error) {
         console.log(error);
