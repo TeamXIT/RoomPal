@@ -24,7 +24,7 @@ import TeamXErrorText from '../molecule/TeamXErrorText';
 import { useDispatch } from 'react-redux';
 import { createRoom } from '../../reducers/room/roomSlice';
 import { RadioButton } from 'react-native-paper';
-const RoomCreateScreen = () => {
+const RoomCreateScreen = ({setTabBarVisibility}) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
   const [details, setDetails] = useState('');
@@ -295,9 +295,9 @@ const RoomCreateScreen = () => {
     );
   };
   return (
-    <ScrollView style={styles.createcontainer}>
+    <ScrollView style={styles.createcontainer} contentContainerStyle={{ paddingBottom: 90 }} keyboardShouldPersistTaps="handled" >
       <View style={{ alignSelf: 'center' }}>
-        <TeamXLogoImage />
+        {/* <TeamXLogoImage /> */}
       </View>
       <Text style={styles.createtitle}>Create Room</Text>
 
@@ -309,6 +309,8 @@ const RoomCreateScreen = () => {
           onChangeText={setRoomName}
           placeholder="Enter room name"
           onSubmitEditing={() => detailsRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={roomNameError} />
       </View>
@@ -323,6 +325,8 @@ const RoomCreateScreen = () => {
           multiline
           placeholder="Enter your details"
           onSubmitEditing={() => rentRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={detailsError} />
       </View>
@@ -337,6 +341,8 @@ const RoomCreateScreen = () => {
           keyboardType="numeric"
           placeholder="Enter your room rent"
           onSubmitEditing={() => floorRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={rentError} />
       </View>
@@ -350,6 +356,8 @@ const RoomCreateScreen = () => {
           keyboardType="numeric"
           placeholder="Enter your room floor"
           onSubmitEditing={() => whatsappLinkRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={floorError} />
       </View>
@@ -382,6 +390,8 @@ const RoomCreateScreen = () => {
           placeholder="Select your room type"
           placeholderStyle={{ color: '#B3B3B3' }}
           textStyle={{ fontSize: 18 }}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={roomTypeError} />
       </View>
@@ -396,6 +406,8 @@ const RoomCreateScreen = () => {
           minimumTrackTintColor="#814ABF"
           maximumTrackTintColor="#d3d3d3"
           thumbTintColor="#814ABF"
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <Text style={{ color: '#814ABF' }}>
           Selected availability: {availability}
@@ -419,6 +431,9 @@ const RoomCreateScreen = () => {
             value={whatsappLink}
             onChangeText={setWhatsappLink}
             onSubmitEditing={() => telegramLinkRef.current.focus()}
+            onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
+
           />
         </View>
         <TeamXErrorText errorText={whatsappLinkError} />
@@ -440,6 +455,8 @@ const RoomCreateScreen = () => {
             value={telegramLink}
             onChangeText={setTelegramLink}
             onSubmitEditing={() => addressRef.current.focus()}
+            onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
           />
         </View>
         <TeamXErrorText errorText={telegramLinkError} />
@@ -478,6 +495,8 @@ const RoomCreateScreen = () => {
           value={address}
           onChangeText={setAddress}
           placeholder="Enter your address"
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={addressError} />
       </View>
@@ -504,6 +523,8 @@ const RoomCreateScreen = () => {
             onChangeText={setLatitude}
             keyboardType="numeric"
             placeholder="Enter latitude"
+            onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
           />
           <Text style={styles.coordinateDirection}>
             {latitude ? getLatitudeDirection(parseFloat(latitude)) : 'N/S'}
@@ -520,6 +541,8 @@ const RoomCreateScreen = () => {
             onChangeText={setLongitude}
             keyboardType="numeric"
             placeholder="Enter longitude"
+            onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
           />
           <Text style={styles.coordinateDirection}>
             {longitude ? getLongitudeDirection(parseFloat(longitude)) : 'E/W'}

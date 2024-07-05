@@ -239,10 +239,10 @@ const styles = StyleSheet.create({
   },
   roomlistcontainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 15,
-    
-  },
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingTop: 5,
+},
 
   dropdownPicker: {
     backgroundColor: '#f1f1f1',
@@ -272,21 +272,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginBottom: 20,
-    
-    shadowColor: '#000',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    marginBottom: 15,
+    shadowColor: primaryColor,
     shadowOffset: {
-      width: 0,
-      height: 2,
+        width: 2,
+        height: 10,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 3.94,
-    elevation: 2,
-    padding: 15, 
-  },
+    shadowRadius: 5,
+    elevation: 5,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#DDD', 
+},
   
   image: {
     width: 100,
@@ -298,60 +298,60 @@ const styles = StyleSheet.create({
   },
   info: {
     flex: 1,
-    justifyContent: 'center',
     padding: 10,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  location: {
-    fontSize: 16,
-    color: '#666',
-  },
-  rent: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  lookingFor: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: 'bold',
-  },
-  match: {
-    fontSize: 16,
-    color: '#666',
-    top: 5,
-  },
-  distance: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: 'bold',
-  },
-  detailsButton: {
-    marginTop: 10,
-    height: 35,
-    width: 120,
-    justifyContent: 'center',
-    backgroundColor: primaryColor,
-    borderRadius: 8,
-    top: -10,
-  },
-  detailsButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
+},
+name: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#000',
+},
+location: {
+  fontSize: 16,
+  color: '#666',
+},
+rent: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  color: '#000',
+},
+lookingFor: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  color: '#000',
+},
+match: {
+  fontSize: 16,
+  color: '#666',
+  marginTop: 5,
+},
+distance: {
+  fontSize: 16,
+  color: '#000',
+  fontWeight: 'bold',
+},
+detailsButton: {
+  height: 35,
+  width: 120,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: primaryColor,
+  borderRadius: 8,
+},
+detailsButtonText: {
+  color: '#fff',
+  fontSize: 14,
+  fontWeight: 'bold',
+},
   createcontainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
+    
   },
   createtitle: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
     alignSelf: 'center',
     color: primaryColor,
   },
@@ -449,6 +449,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+    borderWidth: 1,
+    borderColor: '#DDD', 
   },
   searchIcon: {
     width: 20,

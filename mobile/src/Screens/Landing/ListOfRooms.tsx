@@ -5,7 +5,7 @@ import { fetchRooms } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 
-const ListOfRooms = ({ navigation }) => {
+const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const dispatch = useDispatch();
   const { data, screen } = useSelector((state: RootState) => state.room);
 
@@ -20,9 +20,10 @@ const ListOfRooms = ({ navigation }) => {
       filters: filters,
     });
   };
-  const handleDetails =()=>{
+
+  const handleDetails = () => {
     navigation.navigate('RoomDetails');
-  }
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -66,6 +67,8 @@ const ListOfRooms = ({ navigation }) => {
           placeholderTextColor="#666"
           style={styles.searchinput}
           value={searchQuery}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
           onChangeText={setSearchQuery}
         />
         <TouchableOpacity onPress={() => handleFilterPress({})}>
@@ -75,7 +78,11 @@ const ListOfRooms = ({ navigation }) => {
       {screen.isBusy ? (
         <Text>Loading...</Text>
       ) : (
-        <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item._id} />
+        <FlatList data={data} 
+        renderItem={renderItem} 
+        keyExtractor={(item) => item._id}
+        contentContainerStyle={{ paddingBottom: 100 }} 
+         />
       )}
     </View>
   );
