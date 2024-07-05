@@ -136,5 +136,32 @@ const updateRoomDetails = async (req, res) => {
   }
 };
 
+const getRoomById = async(req, res) => {
+  try {
+    const {room_id} = req.body;
+    const room = await Room.findById(room_id );
+    if (!room) {
+      return res.status(404).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
+    }
+    return res.status(200).json({ success: true, data: room });
+  } catch (error) {
+    return res.status(500).json(baseResponses.error(error.message));
+  }
+};
 
-module.exports = { getAllRooms, roomCreation, updateRoomDetails}
+
+
+const getRoomByName = async (req,res) => {
+  try {
+    const {roomName} = req.body;
+    const room = await Room.findOne({ roomName : roomName });
+    if (!room) {
+      return res.status(404).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
+    }
+    return res.status(200).json({ success: true, data: room });
+  } catch (error) {
+    return res.status(500).json(baseResponses.error(error.message));
+  }
+};
+
+module.exports = { getAllRooms, roomCreation, updateRoomDetails, getRoomById, getRoomByName}
