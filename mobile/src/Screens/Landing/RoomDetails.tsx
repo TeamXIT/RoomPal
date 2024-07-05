@@ -46,7 +46,8 @@ const amenities = [
   {id: 7, src: balconyImage, label: 'Balcony'},
 ];
 
-const RoomDetails = ({navigation}) => {
+const RoomDetails = ({ route }) => {
+  const { roomName } = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 

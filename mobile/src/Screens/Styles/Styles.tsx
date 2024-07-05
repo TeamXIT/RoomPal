@@ -289,16 +289,18 @@ const styles = StyleSheet.create({
 },
   
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    margin: 10,
-    justifyContent: 'center',
+    width: 150,
+    height: 170,
+    resizeMode:'contain',
+    // margin: 10,  
+    // justifyContent: 'center',
     alignSelf: 'center',
+    left:-25
   },
   info: {
     flex: 1,
-    padding: 10,
+    padding: 5,
+    left:-15
 },
 name: {
   fontSize: 18,

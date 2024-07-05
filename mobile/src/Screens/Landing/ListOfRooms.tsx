@@ -21,16 +21,17 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
     });
   };
 
-  const handleDetails = () => {
-    navigation.navigate('RoomDetails');
+  const handleDetails = (roomName) => {
+    navigation.navigate('RoomDetails', { roomName });
   };
+  
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
         {/* Convert base64 string to a data URI */}
         <Image 
-          source={{ uri: `data:image/jpeg;base64,${item.image}` }} 
+          source={{ uri: `data:image/png;base64,${item.images[0]}` }} 
           style={styles.image} 
           onError={() => console.log('Image failed to load')} 
         />
@@ -62,6 +63,14 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
     </View>
   );
 
+  if (screen.isBusy || !data) {
+    return (
+      <View style={styles.roomlistcontainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.roomlistcontainer}>
       <View style={styles.searchBarContainer}>
@@ -79,16 +88,12 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
           <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
-      {screen.isBusy ? (
-        <Text>Loading...</Text>
-      ) : (
-        <FlatList 
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.roomName}
-          contentContainerStyle={{ paddingBottom: 100 }} 
-        />
-      )}
+      <FlatList 
+        data={data}
+        renderItem={renderItem}
+        // keyExtractor={(item) => item.roomName}
+        contentContainerStyle={{ paddingBottom:52 }} 
+      />
     </View>
   );
 };

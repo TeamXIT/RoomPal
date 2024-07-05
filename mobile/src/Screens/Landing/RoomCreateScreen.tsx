@@ -288,7 +288,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
         <View key={i} style={styles.imageRow}>
           {rowImages.map((base64Image, index) => (
             <View key={index} style={styles.roomImageWrapper}>
-              <Image source={{ uri: `data:image/jpeg;base64,${base64Image}` }}
+              <Image source={{ uri: `data:image/png;base64,${base64Image}` }}
                 style={styles.roomImage} />
               <TouchableOpacity
                 style={styles.removeButton}
