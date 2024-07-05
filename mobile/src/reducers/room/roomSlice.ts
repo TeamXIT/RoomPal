@@ -143,7 +143,9 @@ export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) 
   dispatch(setError(''));
   try {
     roomName=roomName.toString()
-    const response = await axios.post(`${API_BASE_URL}/room/getByName`, { roomName });
+    const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
+      params: { roomName:roomName },
+    });
     dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
     dispatch(setSuccess('Room fetched successfully.'));
   } catch (error) {
