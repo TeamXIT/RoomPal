@@ -15,6 +15,7 @@ type Room = {
   gender: string;
   whatsappLink: string;
   telegramLink: string;
+  images: string[];
 };
 
 type RoomState = {
@@ -146,10 +147,11 @@ export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) 
     const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
       params: { roomName:roomName },
     });
+    console.log(response.data.data)
     dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
     dispatch(setSuccess('Room fetched successfully.'));
   } catch (error) {
-    console.log(roomName)
+    
     console.error(error);
     dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {

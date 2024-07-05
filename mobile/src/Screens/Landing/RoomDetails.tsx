@@ -11,7 +11,7 @@ import {
   Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomByName } from '../../reducers/room/roomSlice';
 
 // Importing local images
@@ -38,24 +38,24 @@ const images = [
   {id: 3, src: 'https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg'},
 ];
 
-const amenities = [
-  {id: 1, src: wifiImage, label: '100 Mbps Wifi'},
-  {id: 2, src: bathroomImage, label: 'Inside Bathroom'},
-  {id: 3, src: airConditionerImage, label: 'Air Conditioner'},
-  {id: 4, src: springBedImage, label: 'Spring Bed'},
-  {id: 5, src: kitchenImage, label: 'Kitchen'},
-  {id: 6, src: parkingImage, label: 'Parking Area'},
-  {id: 7, src: balconyImage, label: 'Balcony'},
+const allAmenities = [
+  { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value:'wifi' },
+  { id: 'bathroom', src: bathroomImage, label: 'Inside Bathroom', value:'wifi' },
+  { id: 'airCondition', src: airConditionerImage, label: 'Air Conditioner',value:'airCondition' },
+  { id: 'springBed', src: springBedImage, label: 'Spring Bed',value:'wifi' },
+  { id: 'kitchen', src: kitchenImage, label: 'Kitchen',value:'kitchen' },
+  { id: 'parking', src: parkingImage, label: 'Parking Area',value:'parking' },
+  { id: 'balcony', src: balconyImage, label: 'Balcony' ,value:'wifi'},
 ];
-
 const RoomDetails = ({ route }) => {
   const dispatch = useDispatch();
+  const { data } = useSelector((state) => state.room);
   const { roomName } = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   useEffect(() => {
     
-    const room=dispatch(fetchRoomByName(roomName));
+    dispatch(fetchRoomByName(roomName));
   }, [dispatch, roomName]);
 
   useEffect(() => {
@@ -132,7 +132,12 @@ const RoomDetails = ({ route }) => {
     const url = 'whatsapp://send?text=Hello&phone=+1234567890'; // Replace with your phone number
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
-
+  const filterAmenities = () => {
+    if (data && data.amenities) {
+        return allAmenities.filter((amenity) => data.amenities[amenity.id] === true);
+    }
+    return [];
+};
   const openTelegram = () => {
     const url = 'tg://resolve?domain=your_telegram_username'; // Replace with your Telegram username
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
@@ -173,7 +178,7 @@ const RoomDetails = ({ route }) => {
         </View>
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.Roomtitle}>De' Aura - Exclusive Kost</Text>
+        <Text style={styles.Roomtitle}>{roomName}</Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.Roomrating}>⭐4.9 </Text>
           <Text style={styles.middleDot}> •</Text>
@@ -182,7 +187,7 @@ const RoomDetails = ({ route }) => {
 
         <Text style={styles.amenitiesTitle}>Amenities and facilities</Text>
         <View style={styles.amenitiesContainer}>
-          {amenities.map(item => renderAmenityItem({item}))}
+          {filterAmenities().map((item) => renderAmenityItem({ item }))}
         </View>
         <View style={styles.contactContainer}>
           <TouchableOpacity style={styles.contactButton} onPress={openWhatsApp}>
