@@ -11,7 +11,8 @@ const BASE_RESPONSE_MESSAGES = {
         REFUND_FETCHED: 'Refund fetched successfully',
         PAYMENT_CREATED: 'Payment created successfully',
         PASSWORD_RESET_SUCCESS:'Password updated successfully',
-        FEEDBACK:'Feedback updated successfully'
+        FEEDBACK:'Feedback updated successfully',
+        ROOM_FETCHED:'Fetched Successfully'
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',

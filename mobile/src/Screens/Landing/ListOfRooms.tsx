@@ -24,7 +24,6 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const handleDetails = (roomName) => {
     navigation.navigate('RoomDetails', { roomName });
   };
-  
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -54,7 +53,10 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
           </View>
           <View style={{ flexDirection: 'row', gap: 20 }}>
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
-            <TouchableOpacity style={styles.detailsButton} onPress={handleDetails}>
+            <TouchableOpacity 
+              style={styles.detailsButton} 
+              onPress={() => handleDetails(item.roomName)} // Pass roomName to handleDetails
+            >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
           </View>

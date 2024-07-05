@@ -11,6 +11,8 @@ import {
   Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import { useDispatch } from 'react-redux';
+import { fetchRoomByName } from '../../reducers/room/roomSlice';
 
 // Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
@@ -47,9 +49,14 @@ const amenities = [
 ];
 
 const RoomDetails = ({ route }) => {
+  const dispatch = useDispatch();
   const { roomName } = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  useEffect(() => {
+    
+    const room=dispatch(fetchRoomByName(roomName));
+  }, [dispatch, roomName]);
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -24,6 +24,7 @@ const baseResponses = {
         USER_OR_ROOM_NOT_FOUND:(data=null)=> baseResponses.error('User or room not found',data),
         MOBILE_NUMBER_ALREADY_EXISTS:(data=null) => baseResponses.error('Mobile number already exists',data),
         EMAIL_ALREADY_EXISTS:(data=null) => baseResponses.error('Email already exists',data),
+        ROOM_FETCHED:(data=null)=> baseResponses.success('Fetched successfully',data),
     }
 };
 module.exports = {baseResponses};

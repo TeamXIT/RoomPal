@@ -138,6 +138,23 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
   }
 };
 
+export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) => {
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  try {
+    roomName=roomName.toString()
+    const response = await axios.post(`${API_BASE_URL}/room/getByName`, { roomName });
+    dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
+    dispatch(setSuccess('Room fetched successfully.'));
+  } catch (error) {
+    console.log(roomName)
+    console.error(error);
+    dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
 export const modifyRoomDetails = (roomId: string, updateData: Partial<Room>): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
