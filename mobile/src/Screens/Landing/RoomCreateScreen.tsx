@@ -243,6 +243,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
     setPreferences(updatedPreference);
   };
 
+
   // const handleAddRoomImage = imageUri => {
   // setRoomImages([...roomImages, imageUri]);
   // };
@@ -257,6 +258,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
     } catch (error) {
       console.log('Error converting image to base64:', error);
     }
+
   };
 
 
@@ -606,3 +608,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
 };
 
 export default RoomCreateScreen;
+function launchImageLibrary(options: { mediaType: string; includeBase64: boolean; maxWidth: number; maxHeight: number; }, arg1: (response: any) => void) {
+  throw new Error('Function not implemented.');
+}
+

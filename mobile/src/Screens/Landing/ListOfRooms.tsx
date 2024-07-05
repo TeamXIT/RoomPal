@@ -13,7 +13,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
 
   useEffect(() => {
     dispatch(fetchRooms());
-  }, []);
+  }, [dispatch]);
 
   const handleFilterPress = (filters) => {
     navigation.navigate('FilterScreen', {
@@ -28,12 +28,16 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-        {/* Ensure 'item.image' is a valid URI */}
-        <Image source={{ uri: item.image }} style={styles.image} onError={() => console.log('Image failed to load')} />
+        {/* Convert base64 string to a data URI */}
+        <Image 
+          source={{ uri: `data:image/jpeg;base64,${item.image}` }} 
+          style={styles.image} 
+          onError={() => console.log('Image failed to load')} 
+        />
         <View style={styles.info}>
           <Text style={[styles.name, { paddingBottom: 10 }]}>{item.roomName}</Text>
           <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
-            <Text style={styles.location}>{item.adderess}</Text>
+            <Text style={styles.location}>{item.address}</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 30 }}>
             <Text style={[{ paddingLeft: 5, fontSize: 16 }]}>Rent</Text>
@@ -78,11 +82,12 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
       {screen.isBusy ? (
         <Text>Loading...</Text>
       ) : (
-        <FlatList data={data} 
-        renderItem={renderItem} 
-        keyExtractor={(item) => item._id}
-        contentContainerStyle={{ paddingBottom: 100 }} 
-         />
+        <FlatList 
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.roomName}
+          contentContainerStyle={{ paddingBottom: 100 }} 
+        />
       )}
     </View>
   );
