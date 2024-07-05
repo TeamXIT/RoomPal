@@ -24,7 +24,10 @@ import TeamXErrorText from '../molecule/TeamXErrorText';
 import { useDispatch } from 'react-redux';
 import { createRoom } from '../../reducers/room/roomSlice';
 import { RadioButton } from 'react-native-paper';
-const RoomCreateScreen = ({setTabBarVisibility}) => {
+import RNFS from 'react-native-fs';
+
+
+const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
   const [details, setDetails] = useState('');
@@ -57,6 +60,8 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
+  const [imagePaths, setImagePaths] = useState([]); // State to hold image file paths
+
   const [rent, setRent] = useState(15000);
   const [floor, setFloor] = useState(1);
   const [roomType, setRoomType] = useState(''); // State for room type
@@ -160,11 +165,11 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
     } else {
       setRoomTypeError('');
     }
-    location ={latitude,longitude};
+    location = { latitude, longitude };
     if (!hasError) {
-      const images=roomImages
+      const images = roomImages
       const gender = lookingFor;
-      
+
       await dispatch(createRoom(
         roomName,
         details,
@@ -179,10 +184,10 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
         images,
         whatsappLink,
         telegramLink,
-        
+
 
       ));
-     
+
       Alert.alert('Success', 'Room created successfully');
       // navigation.navigate() // Uncomment and implement navigation if needed
     }
@@ -238,9 +243,22 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
     setPreferences(updatedPreference);
   };
 
-  const handleAddRoomImage = imageUri => {
-    setRoomImages([...roomImages, imageUri]);
+  // const handleAddRoomImage = imageUri => {
+  // setRoomImages([...roomImages, imageUri]);
+  // };
+
+  const handleAddRoomImage = async (imageUri) => {
+    try {
+      const base64Image = await RNFS.readFile(imageUri, 'base64');
+      console.log('Base64 Image:', base64Image); // Log base64 image data
+
+      setRoomImages([...roomImages, base64Image]);
+      setImagePaths([...imagePaths, imageUri]);
+    } catch (error) {
+      console.log('Error converting image to base64:', error);
+    }
   };
+
 
   const handleRemoveRoomImage = index => {
     if (index >= 0 && index < roomImages.length) {
@@ -260,20 +278,21 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
 
 
   const renderRoomImages = () => {
-    
+
     const rows = [];
     for (let i = 0; i < roomImages.length; i += 4) {
       const rowImages = roomImages.slice(i, i + 4);
       rows.push(
         <View key={i} style={styles.imageRow}>
-          {rowImages.map((imageObj, index) => (
+          {rowImages.map((base64Image, index) => (
             <View key={index} style={styles.roomImageWrapper}>
-              <Image source={{ uri: imageObj }} style={styles.roomImage} />
+              <Image source={{ uri: `data:image/jpeg;base64,${base64Image}` }}
+                style={styles.roomImage} />
               <TouchableOpacity
-                 style={styles.removeButton}
-                
-                
-                
+                style={styles.removeButton}
+
+
+
                 onPress={() => handleRemoveRoomImage(i + index)}>
                 <Image
                   source={require('../Images/ic_delete.png')}
@@ -282,10 +301,11 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
               </TouchableOpacity>
             </View>
           ))}
-        </View>
+        </View>,
       );
     }
-    return (
+
+  return (
       <ScrollView style={styles.imageContainer}>
         <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
           <ProfileComponent setImageUri={handleAddRoomImage} />
@@ -365,13 +385,13 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Looking for</Text>
         <RadioButton.Group
-        onValueChange={newValue => setLookingFor(newValue)}
-        value={lookingFor}
-      >
-        <RadioButton.Item label="Male" value="male" />
-        <RadioButton.Item label="Female" value="female" />
-        <RadioButton.Item label="Both" value="family" />
-      </RadioButton.Group>
+          onValueChange={newValue => setLookingFor(newValue)}
+          value={lookingFor}
+        >
+          <RadioButton.Item label="Male" value="male" />
+          <RadioButton.Item label="Female" value="female" />
+          <RadioButton.Item label="Both" value="family" />
+        </RadioButton.Group>
       </View>
 
       <View style={styles.inputGroup}>
@@ -432,7 +452,7 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
             onChangeText={setWhatsappLink}
             onSubmitEditing={() => telegramLinkRef.current.focus()}
             onFocus={() => setTabBarVisibility(false)}
-          onBlur={() => setTabBarVisibility(true)}
+            onBlur={() => setTabBarVisibility(true)}
 
           />
         </View>
@@ -456,7 +476,7 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
             onChangeText={setTelegramLink}
             onSubmitEditing={() => addressRef.current.focus()}
             onFocus={() => setTabBarVisibility(false)}
-          onBlur={() => setTabBarVisibility(true)}
+            onBlur={() => setTabBarVisibility(true)}
           />
         </View>
         <TeamXErrorText errorText={telegramLinkError} />
@@ -524,7 +544,7 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
             keyboardType="numeric"
             placeholder="Enter latitude"
             onFocus={() => setTabBarVisibility(false)}
-          onBlur={() => setTabBarVisibility(true)}
+            onBlur={() => setTabBarVisibility(true)}
           />
           <Text style={styles.coordinateDirection}>
             {latitude ? getLatitudeDirection(parseFloat(latitude)) : 'N/S'}
@@ -542,7 +562,7 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
             keyboardType="numeric"
             placeholder="Enter longitude"
             onFocus={() => setTabBarVisibility(false)}
-          onBlur={() => setTabBarVisibility(true)}
+            onBlur={() => setTabBarVisibility(true)}
           />
           <Text style={styles.coordinateDirection}>
             {longitude ? getLongitudeDirection(parseFloat(longitude)) : 'E/W'}
