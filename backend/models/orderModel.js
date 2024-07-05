@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./userModel');
 const orderSchema = new mongoose.Schema({
     order_id: { 
         type: String, 
@@ -15,7 +16,8 @@ const orderSchema = new mongoose.Schema({
     },
     customer_details: {
         customer_id: { 
-            type: String, 
+            type: mongoose.Types.ObjectId, 
+            ref: 'User',
             required: true },
         customer_phone: { type: String, required: true },
         customer_email: { type: String, required: true } 
