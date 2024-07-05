@@ -71,7 +71,8 @@ export const roomSlice = createSlice({
 
 export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom } = roomSlice.actions;
 
-export const createRoom = (roomName: string,
+export const createRoom = (
+  roomName: string,
   details: string,
   availability: boolean,
   roomType: string,

@@ -182,7 +182,7 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
         
 
       ));
-     
+     console.log(images);
       Alert.alert('Success', 'Room created successfully');
       // navigation.navigate() // Uncomment and implement navigation if needed
     }
@@ -238,8 +238,24 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
     setPreferences(updatedPreference);
   };
 
-  const handleAddRoomImage = imageUri => {
-    setRoomImages([...roomImages, imageUri]);
+  const handleAddRoomImage = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxWidth: 800,
+      maxHeight: 800,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const base64Image = `data:${response.assets[0].type};base64,${response.assets[0].base64}`;
+        setRoomImages([...roomImages, base64Image]);
+      }
+    });
   };
 
   const handleRemoveRoomImage = index => {
@@ -586,3 +602,7 @@ const RoomCreateScreen = ({setTabBarVisibility}) => {
 };
 
 export default RoomCreateScreen;
+function launchImageLibrary(options: { mediaType: string; includeBase64: boolean; maxWidth: number; maxHeight: number; }, arg1: (response: any) => void) {
+  throw new Error('Function not implemented.');
+}
+
