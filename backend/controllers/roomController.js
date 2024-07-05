@@ -153,13 +153,14 @@ const getRoomById = async(req, res) => {
 
 const getRoomByName = async (req,res) => {
   try {
-    const {roomName} = req.body;
+    const roomName = req.query;
     const room = await Room.findOne({ roomName : roomName });
     if (!room) {
       return res.status(404).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
     }
     return res.status(200).json(baseResponses.constantMessages.ROOM_FETCHED(room));
   } catch (error) {
+    console.log(error);
     return res.status(500).json(baseResponses.error(error.message));
   }
 };
