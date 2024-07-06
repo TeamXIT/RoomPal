@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomByName } from '../../reducers/room/roomSlice';
+import axios from 'axios';
+import API_BASE_URL from '../../reducers/config/apiConfig';
 
 // Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
@@ -24,7 +26,7 @@ const kitchenImage = require('../Images/ic_kitchen.png');
 const parkingImage = require('../Images/ic_parking.png');
 const balconyImage = require('../Images/ic_balcony.png');
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const images = [
   {
@@ -35,26 +37,27 @@ const images = [
     id: 2,
     src: 'https://media.istockphoto.com/id/627892060/photo/hotel-room-suite-with-view.jpg?s=612x612&w=0&k=20&c=YBwxnGH3MkOLLpBKCvWAD8F__T-ypznRUJ_N13Zb1cU=',
   },
-  {id: 3, src: 'https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg'},
+  { id: 3, src: 'https://thumbs.dreamstime.com/b/hotel-rooms-8146308.jpg' },
 ];
 
 const allAmenities = [
-  { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value:'wifi' },
-  { id: 'bathroom', src: bathroomImage, label: 'Inside Bathroom', value:'wifi' },
-  { id: 'airCondition', src: airConditionerImage, label: 'Air Conditioner',value:'airCondition' },
-  { id: 'springBed', src: springBedImage, label: 'Spring Bed',value:'wifi' },
-  { id: 'kitchen', src: kitchenImage, label: 'Kitchen',value:'kitchen' },
-  { id: 'parking', src: parkingImage, label: 'Parking Area',value:'parking' },
-  { id: 'balcony', src: balconyImage, label: 'Balcony' ,value:'wifi'},
+  { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value: 'wifi' },
+  { id: 'bathroom', src: bathroomImage, label: 'Inside Bathroom', value: 'bathroom' },
+  { id: 'airCondition', src: airConditionerImage, label: 'Air Conditioner', value: 'airCondition' },
+  { id: 'springBed', src: springBedImage, label: 'Spring Bed', value: 'springBed' },
+  { id: 'kitchen', src: kitchenImage, label: 'Kitchen', value: 'kitchen' },
+  { id: 'parking', src: parkingImage, label: 'Parking Area', value: 'parking' },
+  { id: 'balcony', src: balconyImage, label: 'Balcony', value: 'balcony' },
 ];
-const RoomDetails = ({ route }) => {
+
+const RoomDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.room);
   const { roomName } = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
   useEffect(() => {
-    
     dispatch(fetchRoomByName(roomName));
   }, [dispatch, roomName]);
 
@@ -69,15 +72,15 @@ const RoomDetails = ({ route }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const renderCarouselItem = ({item}) => {
+  const renderCarouselItem = ({ item }) => {
     return (
       <View style={styles.carouselItem}>
-        <Image source={{uri: item.src}} style={styles.carouselImage} />
+        <Image source={{ uri: item.src }} style={styles.carouselImage} />
       </View>
     );
   };
 
-  const renderAmenityItem = ({item}) => {
+  const renderAmenityItem = ({ item }) => {
     return (
       <View style={styles.amenityItem}>
         <View
@@ -96,6 +99,7 @@ const RoomDetails = ({ route }) => {
       </View>
     );
   };
+
   const bookAlert = () => {
     Alert.alert(
       'Booking Confirmation',
@@ -106,9 +110,9 @@ const RoomDetails = ({ route }) => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
@@ -122,25 +126,31 @@ const RoomDetails = ({ route }) => {
           onPress: () => console.log('No Pressed'),
           style: 'cancel',
         },
-        {text: 'Yes', onPress: () => console.log('Yes Pressed')},
+        { text: 'Yes', onPress: () => console.log('Yes Pressed') },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
   const openWhatsApp = () => {
-    const url = 'whatsapp://send?text=Hello&phone=+1234567890'; // Replace with your phone number
-    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+    if (data && data[0]) {
+      const url = `whatsapp://send?text=Hello&phone=${data[0].whatsappLink}`;
+      Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+    }
   };
+
+  const openTelegram = () => {
+    if (data && data[0]) {
+      const url = `tg://resolve?domain=${data[0].telegramLink}`;
+      Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+    }
+  };
+
   const filterAmenities = () => {
-    if (data && data.amenities) {
-        return allAmenities.filter((amenity) => data.amenities[amenity.id] === true);
+    if (data && data[0] && data[0].amenities) {
+      return allAmenities.filter((amenity) => data[0].amenities.includes(amenity.value));
     }
     return [];
-};
-  const openTelegram = () => {
-    const url = 'tg://resolve?domain=your_telegram_username'; // Replace with your Telegram username
-    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
   return (
@@ -196,8 +206,7 @@ const RoomDetails = ({ route }) => {
               style={styles.contactIcon}
               tintColor={'#1B8755'}
             />
-            <Text style={styles.contactText}>WhatsApp: +1234567890</Text>
-           
+            <Text style={styles.contactText}>WhatsApp: {data && data[0] && data[0].whatsappLink}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contactButton} onPress={openTelegram}>
             <Image
@@ -205,25 +214,16 @@ const RoomDetails = ({ route }) => {
               style={styles.contactIcon}
               tintColor={'#0088cc'}
             />
-            <Text style={styles.contactText}>
-              Telegram: @your_telegram_username
-            </Text>
+            <Text style={styles.contactText}>Telegram: {data && data[0] && data[0].telegramLink}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{marginLeft: 10, marginRight: 35}}>
-            <Text style={styles.price}>Rp1.650.000 </Text>
-            <Text>per week </Text>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ marginLeft: 10, marginRight: 35, marginTop:15 }}>
+            <Text style={styles.price}> {data[0].rent}</Text>
+    
           </View>
           <TouchableOpacity style={styles.bookButton} onPress={bookAlert}>
-            <Text style={styles.bookButtonText}>Pay</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bookChat} onPress={chatAlert}>
-            <Image
-              source={require('../Images/ic_chat.png')}
-              style={{height: 20, width: 20}}
-              tintColor={'#814ABF'}
-            />
+            <Text style={styles.bookButtonText}>Book now</Text>
           </TouchableOpacity>
         </View>
       </View>
