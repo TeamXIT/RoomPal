@@ -2,8 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 37.3em;
     background-color: #f3ebff;
+   
   }
   
   .card {
@@ -12,8 +13,9 @@
     padding: 100px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 73vh;
-    width: 50%;
+    height: 70vh;
+    width: 40%;
+    
   }
   
   .logo {
@@ -50,4 +52,88 @@
   .next-button:hover {
     background-color: #5821b7;
   }
+  
+  @media (min-width: 992px) and (max-width: 1199px){
+    .welcome-screen{
+      width:100%;
+      padding: 0 30px;
+    }
+    .card {
+      padding: 60px;
+      width: 70%;
+    }
+    .logo {
+      height: 30vh;
+      margin-top: 5px;
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 991px){
+    .welcome-screen {
+      width: 100%;
+      padding: 0 20px;
+    }
+    .card {
+      width: 60%;
+      padding: 60px;
+   }
+  
+    .logo {
+      height: 20vh;
+     margin-top: 5px;
+    }
+  
+  }
+  
+  @media (min-width: 576px) and (max-width: 767px){
+    .welcome-screen {
+      width: 100%;
+      padding: 0 30px;
+    }
+    .card {
+      padding: 80px;
+      height: auto;
+      width: 90%;
+    }
+    .logo {
+      height: 20vh;
+      margin-top: 10px;
+  }
+  h1 {
+    font-size: 18px;
+  }
+  h3 {
+    font-size: 14px;
+  }
+  .next-button {
+    padding: 5px 10px;
+  }
+  }
+  
+  @media (max-width: 575px) {
+    .welcome-screen {
+      width: 100%;
+      padding: 0 20px; 
+    }
+    .card {
+      padding: 70px;
+      height: auto;
+      width: 90%; 
+    }
+    .logo {
+      height: 20vh;
+    }
+    h1 {
+      font-size: 18px;
+    }
+    h3 {
+      font-size: 14px;
+    }
+    .next-button {
+      padding: 5px 10px;
+    }
+  }
+
+  
+  
   

@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './set-password-failure.component.scss'
 })
 export class SetPasswordFailureComponent {
+resetPasswordForm: any;
 
 }

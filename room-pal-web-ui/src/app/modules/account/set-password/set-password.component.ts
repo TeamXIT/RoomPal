@@ -50,8 +50,8 @@ export class SetPasswordComponent implements OnInit {
 
     onLoginClick() {
       this.setPassword.markAllAsTouched();
-      // console.log(this.loginFormGroup.value);
-      // console.log(this.loginFormGroup.controls);
+      console.log(this.setPassword.value);
+      console.log(this.setPassword.controls);
     
     }
 

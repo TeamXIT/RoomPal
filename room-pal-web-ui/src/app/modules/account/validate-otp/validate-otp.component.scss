@@ -1,48 +1,43 @@
 .otp-container {
-  max-width: 3000px;
+  max-width: 550px;
   margin: 8% auto;
   border: 1px solid #ddd;
   border-radius: 5px;
-  height: 70vh;
+  height: 80vh;
   background-color: white;
-  padding: 40px;
+  padding: 60px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 400px;
   font-size: 23px;
-
 }
 .logo {
-  width: 60%;
-  height: 14vh;
+  width: 80%;
+  height: 16vh;
   margin-top: -10%;
 }
-h2{
+.color{
+  color:red;
+}
+h2 {
   color: #6b23d4;
   font-size: 28px;
   text-align: left;
 }
-
 .otp-container p {
   margin-bottom: 20px;
 }
-
 .form-group {
   margin-bottom: 20px;
 }
-
 input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #8a8a8a;
+  border: 1px solid #f11c1c;
   border-radius: 5px;
   font-size: 18px;
+ 
 }
-.input-field .is-invalid {
-  border: 1px solid red;
-}
-
-
 button {
   width: 106%;
   padding: 10px;
@@ -53,19 +48,38 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-
 button:disabled {
   background-color: #ddd;
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
-
-a{
+a {
   color: #1008ff;
   text-decoration: none;
   cursor: pointer;
-  font-size: 20px;
 }
-
 a:hover {
   text-decoration: underline;
+}
+
+
+
+@media  (max-width:767px){
+ .otp-container {
+    width: 90%;
+    height: 70vh;
+ }
+
+
+
+}
+@media  (max-width:480px){
+  h2 {
+    font-size: 20px;
+  }
+ .otp-container {
+   width: 90%;
+   height:83vh;
+   margin-top: 30%;
+ }
+ 
 }

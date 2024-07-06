@@ -1,81 +1,315 @@
 .card {
-    background-color: white;
-    border-radius: 8px;
-    padding: 60px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.854);
-    width: 40%;
-    margin: auto;
-    font-size: 25px;
-  
-  }
-  
-  .logo {
-    width: 60%;
-    height: 19vh;
-    margin-top: -10%;
-    margin-left: 15%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 60px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.854);
+  width: 45%;
+  margin: auto;
+  font-size: 25px;
 
+}
+
+.logo {
+  width: 60%;
+  height: 19vh;
+  margin-top: -10%;
+  margin-left: 15%;
+
+}
+
+.is-invalid {
+  border: 1px solid red;
+}
+
+  h2 {
+    color: #6b23d4;
+    font-size: 23px;
+    text-align: left;
+    margin: 10px 0;
   }
-  
+ 
+  input, textarea, button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 17px;
+  }
+
+  .checkbox [type="checkbox"] {
+    margin: 10% 10px 11% 0;
+    transform: scale(1.5);
+
+}
+
+
+   .checkbox{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
     
-    h2 {
-      color: #6b23d4;
-      font-size: 23px;
-      text-align: left;
-      margin: 10px 0;
-    }
-   
-    input, textarea, button {
-      width: 100%;
-      padding: 15px;
-      margin-bottom: 20px;
-      border: 1px solid #000000;
-      border-radius: 4px;
-      box-sizing: border-box;
-     font-size: 17px;
-    }
-  
-    .checkbox [type="checkbox"] {
-      margin: 10% 10px 11% 0;
-      transform: scale(1.5); 
-     
-  }
-  
-     .checkbox{
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-     }
-  
-    .checkbox img {
-      margin-right: 10px; 
-      margin-top: -10px;
-      height: 4vh;
-      width: 2.5vw;
-  }
-    .checkbox label {
-      display: flex;
-      align-items: center;
-      padding-top: 10px;
-  }
-  
-  ::placeholder{
+
+   }
+
+  .checkbox img {
+    margin-right: 10px; 
+    margin-top: -10px;
+    height: 4vh;
+    width: 2.5vw;
+}
+  .checkbox label {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+
+}
+
+::placeholder{
+  font-size: 20px;
+}
+  button {
+    background-color: #6b23d4;
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
     font-size: 20px;
+    margin-top: 10%;
   }
+  button:hover {
+    background-color: #5808d0;
+    color: #ffffff;
+  }
+  .slider{
+    width: 100%;
+    height: 1vh;
+  }
+ 
+
+
+
+
+@media (min-width: 1200px) {
+.card {
+width: 40%;
+
+}
+.logo {
+width: 70%;
+height: 20vh;
+margin-top: -10%;
+
+margin-left: 15%;
+}
+input, textarea, button {
+
+font-size: 20px;
+}
+.checkbox [type="checkbox"] {
+transform: scale(1.8);
+
+}
+.checkbox img {
+height: 5vh;
+
+width: 3vw;
+
+
+}
+.checkbox label {
+font-size: 20px;
+}
+button {
+font-size: 22px;
+
+}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+.card {
+width: 45%;
+
+}
+.logo {
+width: 60%;
+
+height: 18vh;
+margin-top: -9%;
+margin-left: 14%;
+}
+input, textarea, button {
+
+font-size: 18px;
+}
+.checkbox [type="checkbox"] {
+transform: scale(1.6);
+
+}
+.checkbox img {
+height: 4.5vh;
+width: 2.8vw;
+}
+.checkbox label {
+
+font-size: 18px;
+}
+button {
+font-size: 20px;
+}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+.card {
+width: 50%;
+
+}
+.logo {
+width: 55%;
+height: 16vh;
+
+margin-top: -8%;
+margin-left: 13%;
+
+}
+input, textarea, button {
+
+font-size: 16px;
+}
+.checkbox [type="checkbox"] {
+
+transform: scale(1.4);
+}
+.checkbox img {
+height: 4vh;
+width: 2.5vw;
+
+}
+.checkbox label {
+font-size: 16px;
+}
+button {
+font-size: 18px;
+}
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+.card {
+
+width: 55%;
+}
+.logo {
+width: 50%;
+height: 14vh;
+
+margin-top: -7%;
+margin-left: 12%;
+
+}
+input, textarea, button {
+
+font-size: 14px;
+}
+
+.checkbox [type="checkbox"] {
+transform: scale(1.2);
+}
+.checkbox img {
+
+height: 3.5vh;
+width: 2.2vw;
+}
+.checkbox label {
+font-size: 14px;
+}
+button {
+
+font-size: 16px;
+}
+}
+
+
+
+@media (max-width: 575px) {
+.card {
+width: 60%;
+}
+.logo {
+width: 95%;
+
+height: 12vh;
+margin-top: -6%;
+margin-left: 9%;
+
+}
+input, textarea, button {
+font-size: 12px;
+}
+::placeholder{
+font-size: 15px;
+}
+.checkbox [type="checkbox"] {
+transform: scale(1.1);
+
+}
+.checkbox img {
+height: 3vh;
+width: 2vw;
+
+}
+.checkbox label {
+
+font-size: 12px;
+}
+
+button {
+font-size: 14px;
+
+}
+}
+@media (max-width:480px){
+  .card {
+    width: 60%;
+    }
+    .logo {
+    width: 95%;
+  
+    height: 12vh;
+    margin-top: -6%;
+    margin-left: 9%;
+  
+    }
+    input, textarea, button {
+    font-size: 12px;
+    }
+    h2{
+      font-size: 15px;
+    }
+  ::placeholder{
+    font-size: 15px;
+  }
+    .checkbox [type="checkbox"] {
+    transform: scale(1.1);
+  
+    }
+    .checkbox img {
+    height: 3vh;
+    width: 2vw;
+  
+    }
+    .checkbox label {
+  
+    font-size: 12px;
+    }
+  
     button {
-      background-color: #6b23d4;
-      color: white;
-      border: none;
-      padding: 15px;
-      cursor: pointer;
-      width: 100%;
-      border-radius: 5px;
-      font-size: 20px;
-      margin-top: 10%;
+    font-size: 14px;
+  
     }
-    button:hover {
-      background-color: #b98aff;
-      color: #000;
-    }
+}

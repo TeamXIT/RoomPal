@@ -1,53 +1,143 @@
 .welcome-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f3ebff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f3ebff;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 100px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.image {
+  width: 100%;
+  height: 35vh;
+  margin-top: -10%;
+}
+
+h1{
+  color: #6b23d4;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  color: #555;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.next-button {
+  background-color: #6b23d4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.next-button:hover {
+  background-color: #5821b7;
+}
+
+/* media queries*/
+
+
+@media (min-width: 992px) and (max-width: 1199px){
+.welcome-screen{
+  width:100%;
+}
+.card {
+  padding: 100px;
+}
+.image {
+  height: 35vh;
+}
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+.welcome-screen {
+  width: 100%;
+
+}
+.card {
+
+  padding: 80px;
+}
+
+.image {
+  height: 30vh;
+}
+
+}
+
+@media (min-width: 576px) and (max-width: 767px){
+.welcome-screen {
+  width: 100%;
+}
+.card {
+  padding: 60px;
+}
+.image {
+  height: 25vh;
+}
+}
+
+@media (max-width: 575px){
+.welcome-screen {
+  width: 100%;
+
+}
+.card {
+  padding: 70px;
+}
+.image {
+  height: 20vh;
+
+}
+.next-button {
+  padding: 5px 10px;
+}
+}
+@media (max-width:400px){
+.welcome-screen {
+  width: 100%;
+}
+.card {
+  padding: 50px;
   }
-  
-  .card {
-    background-color: white;
-    border-radius: 8px;
-    padding: 100px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 40%;
-    height: 70vh;
-  }
-  
-  .logo {
-    width: 100%;
-    height: 35vh;
-    margin-top: -20%;
-  }
-  
-  h1{
-    color: #6b23d4;
-    font-size: 24px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-  
-  h3 {
-    color: #555;
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  
-  .next-button {
-    background-color: #6b23d4;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    width: 100%;
-  }
-  
-  .next-button:hover {
-    background-color: #5821b7;
-  }
-  
+.image {
+  height: 20vh;
+
+}
+.next-button {
+  padding: 5px 10px;
+}
+}
+
+@media (max-width:320px){
+.welcome-screen {
+  width: 100%;
+
+}
+.card {
+  padding: 40px;
+
+}
+
+.image {
+  height: 20vh;
+}
+.next-button {
+  padding: 5px 10px;
+
+}
+}
