@@ -39,7 +39,7 @@ const RegisterScreen = ({ navigation }) => {
   const [lookingForRoommateError, setLookingForRoommateError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
+  const [generalError, setGeneralError] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDobSelected, setDobSelected] = useState(false); // State to manage if DOB is selected
 
@@ -175,7 +175,7 @@ const RegisterScreen = ({ navigation }) => {
         confirmPassword,
       ));
       if(signupError) {
-        setMobileNumberError("Mobile Number already exists ")
+        setGeneralError("Mobile Number or room name already exists ")
       }
     };
    
@@ -414,6 +414,7 @@ const RegisterScreen = ({ navigation }) => {
         </View>
 
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <TeamXErrorText errorText={generalError} />
           <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
             <Text style={styles.submitButtonText}>Register</Text>
             <Image source={require('../Images/ic_rightArrow.png')} tintColor={'#FFFFFF'} style={{ paddingLeft: 5 }} />
