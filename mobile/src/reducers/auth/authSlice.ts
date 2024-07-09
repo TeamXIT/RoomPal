@@ -111,11 +111,11 @@ export const register = (
       password,
       confirmPassword,
     });
-    console.log(response)
+ 
     await dispatch(setSuccess('User registered successfully.'));
     await dispatch(signIn(mobileNumber, password));
   } catch (error) {
-    console.log(error);
+    
     dispatch(setError(error.response?.data?.message || 'Registration failed'));
   } finally {
     dispatch(setBusy(false));
@@ -126,10 +126,10 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
-  console.log(mobileNumber)
+ 
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/forgotPassword`, { mobileNumber });
-    console.log(response.data)
+    
     if (response.status === 200) {
       dispatch(setOTP(response.data.otp))
       dispatch(setMobileNumber(mobileNumber));
@@ -151,7 +151,7 @@ export const verifyOTP = ( otp: string): AppThunk => async (dispatch,getState) =
   try {
    
     const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber,otp });
-    console.log(response.data);
+    
     if (response.status === 200) {
       dispatch(setOTP(otp));
       dispatch(setSuccess('OTP verified successfully.'));
@@ -167,7 +167,6 @@ export const verifyOTP = ( otp: string): AppThunk => async (dispatch,getState) =
 
 export const resetPassword = (newPassword: string, confirmPassword: string): AppThunk => async (dispatch, getState) => {
   const { mobileNumber } = getState().auth.data;
-  console.log("Resetting password for mobile number:", mobileNumber);
 
   dispatch(setBusy(true));
   dispatch(setError(''));
@@ -175,7 +174,6 @@ export const resetPassword = (newPassword: string, confirmPassword: string): App
 
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/resetPassword`, { mobileNumber, newPassword, confirmPassword });
-    console.log("Reset password response:", response.data);
 
     dispatch(clearOTP());
     dispatch(setSuccess('Password reset successfully.'));
@@ -192,10 +190,8 @@ export const resendOtp = (): AppThunk => async (dispatch, getState) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
-  console.log(mobileNumber)
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/forgotPassword`, { mobileNumber });
-    console.log(response.data)
     if (response.status === 200) {
       dispatch(setMobileNumber(mobileNumber));
       dispatch(setOTP(response.data.otp))

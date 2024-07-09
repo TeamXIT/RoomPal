@@ -44,7 +44,7 @@ const FilterScreen = ({ navigation }) => {
   };
 
   const handleApplyFilters = () => {
-    // Logic to apply filters
+    //TODO: Logic to apply filters
     console.log('Applying filters:', {
       minPrice,
       maxPrice,

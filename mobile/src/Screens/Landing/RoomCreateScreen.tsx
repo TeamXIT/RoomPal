@@ -221,7 +221,6 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
       position => {
         const { latitude, longitude } = position.coords;
         const locationString = `${latitude}, ${longitude}`;
-        console.log('Location fetched:', locationString); // Log the fetched location
         setLocation(locationString);
       },
       error => {
@@ -251,7 +250,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const handleAddRoomImage = async (imageUri) => {
     try {
       const base64Image = await RNFS.readFile(imageUri, 'base64');
-      console.log('Base64 Image:', base64Image); // Log base64 image data
+     
 
       setRoomImages([...roomImages, base64Image]);
       setImagePaths([...imagePaths, imageUri]);

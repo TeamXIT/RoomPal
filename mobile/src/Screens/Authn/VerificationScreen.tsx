@@ -17,7 +17,6 @@ const VerificationScreen = ({ navigation }) => {
       navigation.navigate('ResetPasswordScreen');
     }
     else{
-      console.log(data.otp);
       setOtpError('Invalid OTP')
     }
   };
