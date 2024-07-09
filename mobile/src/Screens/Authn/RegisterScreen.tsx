@@ -159,8 +159,6 @@ const RegisterScreen = ({ navigation }) => {
         password,
         confirmPassword,
       }
-      console.log('Form Data:', formData);
-      // navigation.navigate() // Uncomment and implement navigation if needed
        dispatch(register(
         fullName, 
         email, 

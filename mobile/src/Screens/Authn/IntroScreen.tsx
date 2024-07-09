@@ -60,10 +60,8 @@ const RoomPalIntro = ({ navigation }) => {
         if (sliderRef.current) {
             sliderRef.current.goToSlide(currentIndex + 1);
             setCurrentIndex(currentIndex + 1);
-            console.log("Navigating to next slide. Current index:", currentIndex + 1);
-        } else {
-            console.log("SliderRef is not initialized or goToSlide method is not available.");
-        }
+            
+        } 
     };
 
     const RenderItem = ({ item }) => {
