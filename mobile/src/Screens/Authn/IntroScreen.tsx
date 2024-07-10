@@ -5,10 +5,10 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import {styles} from '../Styles/Styles'
 
-const image1 = require('../Images/introImage1.png');
-const image2 = require('../Images/introImage2.png');
-const image3 = require('../Images/introImage3.png');
-const image4 = require('../Images/introImage4.png');
+const image1 = require('../Images/intro_image2.png');
+const image2 = require('../Images/intro_image2.png');
+const image3 = require('../Images/intro_image3.png');
+const image4 = require('../Images/intro_image4.png');
 
 
 
