@@ -28,7 +28,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-        {/* Convert base64 string to a data URI */}
+      
         <Image 
           source={{ uri: `data:image/png;base64,${item.images[0]}` }} 
           style={styles.image} 
