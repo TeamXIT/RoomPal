@@ -173,7 +173,7 @@ const RegisterScreen = ({ navigation }) => {
         confirmPassword,
       ));
       if(signupError) {
-        setGeneralError("Mobile Number or room name already exists ")
+        setGeneralError(signupError)
       }
     };
    
@@ -434,3 +434,4 @@ const RegisterScreen = ({ navigation }) => {
 
 
   export default RegisterScreen
+ 
