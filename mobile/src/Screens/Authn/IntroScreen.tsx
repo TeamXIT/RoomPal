@@ -6,9 +6,9 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import {styles} from '../Styles/Styles'
 
 const image1 = require('../Images/introImage1.png');
-const image2 = require('../Images/introImage2.jpg');
-const image3 = require('../Images/introImage3.jpg');
-const image4 = require('../Images/introImage4.jpg');
+const image2 = require('../Images/introImage2.png');
+const image3 = require('../Images/introImage3.png');
+const image4 = require('../Images/introImage4.png');
 
 
 

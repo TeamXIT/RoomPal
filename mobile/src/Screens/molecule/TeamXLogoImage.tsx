@@ -5,7 +5,7 @@ import {styles} from '../Styles/Styles'
 const TeamXLogoImage = () => {
   return (
     <Image
-      source={require('../Images/Room-PalLogo.jpg')}
+      source={require('../Images/Room-PalLogo.png')}
       style={styles.logoImg}
     />
   );
