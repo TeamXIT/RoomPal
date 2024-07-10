@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }) => {
       await dispatch(signIn(mobileNumber, password));
 
       if (!authToken) {
-        setGeneralError(signinError); // Display signinError from Redux state
+        setGeneralError(signinError); 
       } else {
         setGeneralError('');
       }
@@ -60,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (success) {
-      navigation.navigate('ListOfRooms');
+      navigation.navigate('Landing');
     }
   }, [success, navigation]);
 
@@ -99,7 +99,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
         {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-        {generalError ? <Text style={styles.errorText}>{generalError}</Text> : null} {/* Display generalError */}
+        {generalError ? <Text style={styles.errorText}>{generalError}</Text> : null}
         <View style={styles.checkboxContainer}>
           <CheckBox
             value={rememberMe}

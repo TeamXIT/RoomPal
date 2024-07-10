@@ -45,7 +45,7 @@ const ForgotPassword = ({ navigation }) => {
           onChangeText={setMobileNumber}
         />
         {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
-        {screen.error ? <Text style={styles.errorText}>{screen.error}</Text> : null} {/* Display API error */}
+        {screen.error ? <Text style={styles.errorText}>{screen.error}</Text> : null}
         <TouchableOpacity style={styles.button} onPress={handleRequestOTP}>
           <Text style={styles.buttonText}>Request OTP</Text>
           <Image
