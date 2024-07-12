@@ -9,8 +9,10 @@ const orderRoutes = require('./routes/orderRoutes')
 const paymentRoutes = require('./routes/paymentRoutes');
 const refundRoutes = require('./routes/refundRoutes');
 const app = express();
+const cors=require('cors');
 const port = 3001;
 app.use(express.json());
+app.use(cors())
 app.use(bodyParser.json());
 connectDB();
 app.use('/api/auth', authRoutes);
