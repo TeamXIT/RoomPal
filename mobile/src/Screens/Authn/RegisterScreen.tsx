@@ -217,7 +217,7 @@ const RegisterScreen = ({ navigation }) => {
         <View style={{ alignSelf: 'center' }}>
           <TeamXLogoImage />
         </View>
-        <Text style={styles.title}>Registration</Text>
+        {/* <Text style={styles.title}>Registration</Text> */}
 
         <View style={{ gap: 10 }}>
           <Text style={styles.label}>Full Name</Text>
