@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { grey100 } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 
 const primaryColor = '#814ABF';
@@ -176,12 +177,30 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#000',
   },
-  logoImg: {
-    width: 250,
-    height: 150,
-    resizeMode: 'contain',
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
-
+  },
+  logoImg: {
+    width: 70,
+    height: 100,
+    resizeMode: 'contain',
+    marginLeft:20
+  },
+  textContainer: {
+    marginLeft: 10,
+  },
+  logoText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color:primaryColor
+  },
+  taglineText: {
+    fontSize: 12,
+    fontWeight: 'normal',
+    marginTop: 2,
+    color:"gray"
   },
   slide: {
     flex: 1,
