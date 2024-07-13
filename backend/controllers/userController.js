@@ -6,11 +6,11 @@ module.exports = {
     if (!mobileNumber) {
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
+    console.log(mobileNumber)
     const user = await User.findOne({ mobileNumber: mobileNumber.toString() });
     if (!user) {
-      return res
-        .status(404)
-        .json(baseResponses.constantMessages.USER_NOT_FOUND());
+      console.log(user)
+      return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
     }
     console.log(user);
     return res.status(200).json(baseResponses.success(user));
