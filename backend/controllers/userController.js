@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const {baseResponses} = require("../helpers/baseResponses");
 module.exports = {
   getUserbyMobile: async (req, res) => {
-    const  mobileNumber  = req.query;
+    const {mobileNumber}  = req.query;
     if (!mobileNumber) {
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
