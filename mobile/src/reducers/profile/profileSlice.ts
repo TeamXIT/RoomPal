@@ -46,12 +46,13 @@ const profileSlice = createSlice({
 
 export const { setBusy, setError, setSuccess, setUser } = profileSlice.actions;
 
-export const fetchProfile = (mobileNumber: string): AppThunk => async (dispatch) => {
+export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispatch) => {
+    console.log(mobileNumber);
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
     try {
-        const response = await axios.get(`${API_BASE_URL}/user/getByNumber`, { params: { mobileNumber } });
+        const response = await axios.get(`${API_BASE_URL}/user/getByNumber`,  { mobileNumber: usermobileNumber } );
         dispatch(setSuccess('Profile fetched successfully.'));
         dispatch(setBusy(false));
         dispatch(setUser(response.data));

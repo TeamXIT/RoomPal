@@ -34,7 +34,8 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
   const usermobileNumber = useSelector((state: RootState) => state.auth.data.mobileNumber);
 
   useEffect(() => {
-    dispatch(fetchProfile(mobileNumber));
+    console.log('usermobileNumber', usermobileNumber);
+    dispatch(fetchProfile(usermobileNumber));
     console.log(data.user);
   }, [dispatch, mobileNumber]);
 
