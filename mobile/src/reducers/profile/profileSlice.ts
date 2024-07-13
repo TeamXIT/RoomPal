@@ -21,7 +21,7 @@ const initialState: ProfileState = {
         success: '',
     },
     data: {
-        user: {}
+        user:[]
     },
 };
 
@@ -57,7 +57,7 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
 
         dispatch(setSuccess('Profile fetched successfully.'));
         dispatch(setBusy(false));
-        dispatch(setUser(response.data));
+        dispatch(setUser(response.data.message));
     } catch (error) {
         console.log(error)
         dispatch(setError(error.response?.data?.message || error.message || 'Fetching profile failed.'));

@@ -4,7 +4,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProfile, setUser } from '../../reducers/profile/profileSlice';
+import { fetchProfile } from '../../reducers/profile/profileSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor } from '../Styles/Styles';
 
@@ -18,9 +18,9 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
   const [email, setEmail] = useState(data.user.email || 'Teamx@gmail.com');
   const [dateOfBirth, setDateOfBirth] = useState(data.user.dateOfBirth ? new Date(data.user.dateOfBirth).toLocaleDateString('en-GB') : '12/07/1024');
   const [gender, setGender] = useState(data.user.gender || 'Male');
-  const [makeMobilePrivate, setMakeMobilePrivate] = useState(data.user.makeMobilePrivate || 'False');
+  const [makeMobilePrivate, setMakeMobilePrivate] = useState(data.user.makeMobilePrivate ? 'True' : 'False');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isDobSelected, setDobSelected] = useState(false);
+  const [editableField, setEditableField] = useState(null);
   const [genderTypeOpen, setGenderTypeOpen] = useState(false);
   const [genderItems, setGenderItems] = useState([
     { label: 'Male', value: 'Male' },
@@ -34,7 +34,6 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
   const usermobileNumber = useSelector((state: RootState) => state.auth.data.mobileNumber);
 
   useEffect(() => {
-    console.log('usermobileNumber', usermobileNumber);
     dispatch(fetchProfile(usermobileNumber));
     console.log(data.user);
   }, [dispatch, mobileNumber]);
@@ -90,16 +89,23 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
   };
   const handleConfirm = (dateOfBirth) => {
     setDateOfBirth(dateOfBirth.toLocaleDateString('en-GB'));
-    setDobSelected(true);
     hideDatePicker();
   };
 
   const handleEditPress = (field) => {
-    if (field === 'fullName') setFullName('');
-    else if (field === 'email') setEmail('');
-    else if (field === 'mobileNumber') setMobileNumber('');
-    else if (field === 'dateOfBirth') setDateOfBirth('');
+    setEditableField(field);
   };
+
+  const renderEditableTextInput = (value, setValue, placeholder, field) => (
+    <TextInput
+      style={styles.textInput}
+      placeholder={placeholder}
+      value={value}
+      onChangeText={setValue}
+      editable={editableField === field}
+      blurOnSubmit={false}
+    />
+  );
 
   return (
     <ScrollView>
@@ -118,13 +124,7 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
           <Text style={styles.label}>Full Name</Text>
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_person.png')} style={styles.inputIcon} />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your full name"
-              value={fullName}
-              onChangeText={setFullName}
-              blurOnSubmit={false}
-            />
+            {renderEditableTextInput(fullName, setFullName, "Enter your full name", 'fullName')}
             <TouchableOpacity onPress={() => handleEditPress('fullName')}>
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             </TouchableOpacity>
@@ -132,14 +132,7 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
           <Text style={styles.label}>Email</Text>
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_email.png')} style={styles.inputIcon} />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your email"
-              value={email}
-              keyboardType="email-address"
-              onChangeText={setEmail}
-              blurOnSubmit={false}
-            />
+            {renderEditableTextInput(email, setEmail, "Enter your email", 'email')}
             <TouchableOpacity onPress={() => handleEditPress('email')}>
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             </TouchableOpacity>
@@ -147,16 +140,9 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
           <Text style={styles.label}>Mobile Number</Text>
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_phone.png')} style={styles.inputIcon} />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your mobile number"
-              value={mobileNumber}
-              keyboardType="number-pad"
-              onChangeText={setMobileNumber}
-              blurOnSubmit={false}
-            />
-            <TouchableOpacity onPress={() => handleEditPress('mobileNumber')}>
-              <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
+            {renderEditableTextInput(mobileNumber, setMobileNumber, "Enter your mobile number", 'mobileNumber')}
+            <TouchableOpacity >
+             
             </TouchableOpacity>
           </View>
           <Text style={styles.label}>Date of Birth</Text>
@@ -185,7 +171,7 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
           <Text style={styles.label}>Gender</Text>
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_person.png')} style={styles.inputIcon} />
-            <View style={{ position: 'relative', flex: 1 }}>
+           
               <DropDownPicker
                 open={genderTypeOpen}
                 value={gender}
@@ -194,15 +180,16 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
                 setOpen={setGenderTypeOpen}
                 setValue={setGender}
                 setItems={setGenderItems}
-                containerStyle={{ height: 40, marginBottom: 10, marginRight: 10, width: 310 }}
-                dropDownContainerStyle={{ zIndex: 1000 }}
-                placeholder="Select your gender"
-                placeholderStyle={{ color: '#B3B3B3' }}
+                containerStyle={{ height: 20, marginBottom: 30, marginRight: 10, width: 310, }}
+                dropDownContainerStyle={{ zIndex: 0 }}
+                placeholder={data.user.gender || 'Select an option'}
+                placeholderStyle={{ color: '#000' }}
                 textStyle={{ fontSize: 18 }}
+                dropDownDirection='TOP'
                 onFocus={() => setTabBarVisibility(false)}
                 onBlur={() => setTabBarVisibility(true)}
               />
-            </View>
+          
           </View>
           <Text style={styles.label}>Make Mobile Number Private</Text>
           <View style={styles.profileInput}>
@@ -216,8 +203,8 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
               setValue={setMakeMobilePrivate}
               setItems={setMakeMobilePrivateItems}
               containerStyle={{ height: 40, marginBottom: 10, marginRight: 10, width: 310 }}
-              dropDownContainerStyle={{ zIndex: 1000 }}
-              placeholder="Select your privacy preference"
+              dropDownContainerStyle={{ zIndex: 1 }}
+              placeholder="Select an option"
               placeholderStyle={{ color: '#B3B3B3' }}
               textStyle={{ fontSize: 18 }}
               onFocus={() => setTabBarVisibility(false)}
@@ -238,10 +225,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 40,
     color: primaryColor,
+    marginTop: 20,
   },
   imageContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
@@ -250,48 +238,56 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
+    borderWidth: 2,
+    borderColor: primaryColor,
   },
   editButton: {
+    backgroundColor: 'white',
     position: 'absolute',
     bottom: 0,
-    right: 10,
-    width: 30,
-    height: 30,
+    right: 130,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   editIcon: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
+    tintColor: primaryColor,
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     color: primaryColor,
     fontWeight: 'bold',
-    marginBottom: 5,
-    marginLeft: 10,
+    marginBottom: 10,
   },
   profileInput: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    borderColor: '#d3d3d3',
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingLeft: 10,
+    backgroundColor: '#FFF',
     height: 50,
-  },
-  inputIcon: {
-    width: 24,
-    height: 24,
-    marginRight: 10,
+    borderRadius: 10,
+    borderColor: primaryColor,
+    borderWidth: 2,
   },
   textInput: {
     flex: 1,
     fontSize: 18,
-    color: '#000',
+    marginLeft: 10,
+    color:"#000"
+  },
+  inputIcon: {
+    width: 25,
+    height: 25,
+    marginLeft: 10,
   },
   editInputIcon: {
-    width: 24,
-    height: 24,
+    width: 25,
+    height: 25,
+    tintColor: primaryColor,
     marginRight: 10,
   },
 });
