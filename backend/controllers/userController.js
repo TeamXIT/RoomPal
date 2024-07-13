@@ -3,13 +3,10 @@ const {baseResponses} = require("../helpers/baseResponses");
 module.exports = {
   getUserbyMobile: async (req, res) => {
     const  mobileNumber  = req.query;
-    console.log(mobileNumber);
     if (!mobileNumber) {
-      return res
-        .status(400)
-        .json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+      return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
-    const user = await User.findOne({ mobileNumber: mobileNumber });
+    const user = await User.findOne({ mobileNumber: mobileNumber.toString() });
     if (!user) {
       return res
         .status(404)
