@@ -1,14 +1,14 @@
 const User = require("../models/userModel");
 const {baseResponses} = require("../helpers/baseResponses");
 module.exports = {
-  getUserbyMobile: (req, res) => {
+  getUserbyMobile: async (req, res) => {
     const { mobileNumber } = req.body;
     if (!mobileNumber) {
       return res
         .status(400)
         .json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
-    const user = User.findOne({ mobileNumber: mobileNumber });
+    const user = await User.findOne({ mobileNumber: mobileNumber });
     if (!user) {
       return res
         .status(404)
