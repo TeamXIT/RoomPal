@@ -10,7 +10,7 @@ module.exports = {
         .json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
     console.log(mobileNumber)
-    const user = await User.findOne({ mobileNumber: mobileNumber });
+    const user =  User.findOne({ mobileNumber: mobileNumber });
     console.log(user)
     if (!user) {
       return res
