@@ -4,13 +4,14 @@ module.exports = {
   getUserbyMobile: async (req, res) => {
     const  mobileNumber  = req.query;
   try{
-    console.log(mobileNumber);
     if (!mobileNumber) {
       return res
         .status(400)
         .json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
+    console.log(mobileNumber)
     const user = await User.findOne({ mobileNumber: mobileNumber });
+    console.log(user)
     if (!user) {
       return res
         .status(404)
