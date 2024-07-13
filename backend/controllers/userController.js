@@ -3,15 +3,13 @@ const {baseResponses} = require("../helpers/baseResponses");
 module.exports = {
   getUserbyMobile: async (req, res) => {
     const  mobileNumber  = req.query;
-  try{
+    console.log(mobileNumber);
     if (!mobileNumber) {
       return res
         .status(400)
         .json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
-    console.log(mobileNumber)
-    const user =  User.findOne({ mobileNumber: mobileNumber });
-    console.log(user)
+    const user = await User.findOne({ mobileNumber: mobileNumber });
     if (!user) {
       return res
         .status(404)
@@ -19,9 +17,6 @@ module.exports = {
     }
     console.log(user);
     return res.status(200).json(baseResponses.success(user));
-  } catch(error) {
-    return res.status(500).json(baseResponses.error(error.message));
-  }
   },
   updateUser:async (req, res)=>{
     try {

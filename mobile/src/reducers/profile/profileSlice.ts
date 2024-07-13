@@ -53,6 +53,7 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
     dispatch(setSuccess(''));
     try {
         const response = await axios.get(`${API_BASE_URL}/user/getByNumber`,  { params:{mobileNumber:usermobileNumber} } );
+        console.log(response.status)
 
         dispatch(setSuccess('Profile fetched successfully.'));
         dispatch(setBusy(false));
