@@ -3,6 +3,7 @@ const {baseResponses} = require("../helpers/baseResponses");
 module.exports = {
   getUserbyMobile: async (req, res) => {
     const { mobileNumber } = req.body;
+    console.log(mobileNumber);
     if (!mobileNumber) {
       return res
         .status(400)
