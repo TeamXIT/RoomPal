@@ -14,6 +14,7 @@ module.exports = {
         .status(404)
         .json(baseResponses.constantMessages.USER_NOT_FOUND());
     }
+    console.log(user);
     return res.status(200).json(baseResponses.success(user));
   },
   updateUser:async (req, res)=>{
