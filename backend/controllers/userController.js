@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const baseResponses = require("../helpers/baseResponses");
+const {baseResponses} = require("../helpers/baseResponses");
 module.exports = {
   getUserbyMobile: (req, res) => {
     const { mobileNumber } = req.body;
