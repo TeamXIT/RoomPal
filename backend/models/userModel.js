@@ -6,9 +6,10 @@ const userSchema = new mongoose.Schema({
         required:true,
         trim:true,
     },
-    imaage:{
+    image:{
         type:String,
-        required:v,
+        required:false,
+        default:'',
     },
     email:{
         type:String,
