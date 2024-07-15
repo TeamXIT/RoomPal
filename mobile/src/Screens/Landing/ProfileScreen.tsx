@@ -92,7 +92,7 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
     hideDatePicker();
   };
 
-  const handleEditPress = (field) => {
+  const handleEditNamePress = (field) => {
     setEditableField(field);
   };
 
@@ -125,7 +125,7 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_person.png')} style={styles.inputIcon} />
             {renderEditableTextInput(fullName, setFullName, "Enter your full name", 'fullName')}
-            <TouchableOpacity onPress={() => handleEditPress('fullName')}>
+            <TouchableOpacity onPress={() => handleEditNamePress(fullName)}>
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             </TouchableOpacity>
           </View>
