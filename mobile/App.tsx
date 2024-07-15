@@ -22,6 +22,7 @@ import ListOfRooms from './src/Screens/Landing/ListOfRooms';
 import FilterScreen from './src/Screens/Landing/FilterScreen';
 import ProfileScreen from './src/Screens/Landing/ProfileScreen';
 import Dashboard from './src/Screens/Landing/Dashboard';
+import AddCardScreen from './src/Screens/Landing/AddCardScreen';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,7 @@ const Landing = () => (
     <Stack.Screen name="ListOfRooms" component={ListOfRooms} />
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+    <Stack.Screen name="AddCardScreen" component={AddCardScreen} />
   </Stack.Navigator>
 );
 
@@ -58,7 +60,7 @@ function App(): React.ReactElement {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Authn" headerMode="none">
+        <Stack.Navigator initialRouteName="Landing" headerMode="none">
           <Stack.Screen name="Authn" component={Authn} />
           <Stack.Screen name="Landing" component={Landing} />
         </Stack.Navigator>

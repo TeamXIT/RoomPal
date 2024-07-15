@@ -10,7 +10,7 @@ import { primaryColor } from '../Styles/Styles';
 import axios from 'axios';
 import API_BASE_URL from '../../reducers/config/apiConfig';
 
-const ProfileScreen = ({ setTabBarVisibility }) => {
+const ProfileScreen = ({ setTabBarVisibility , navigation}) => {
   const dispatch = useDispatch();
   const { screen, data } = useSelector((state: RootState) => state.profile);
 
@@ -108,6 +108,10 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
   // const handleEditNamePress = async  (fullName) => {
   //   const responce= await axios.put(`${API_BASE_URL}/user/update`,{fullName})
   // };
+
+  const handleSubmitData = () => {
+    navigation.navigate('AddCardScreen');
+  }
 
   const renderEditableTextInput = (value, setValue, placeholder, field) => (
     <TextInput
@@ -225,6 +229,9 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
             />
           </View>
         </View>
+        <TouchableOpacity style={styles.button} onPress={handleSubmitData}>
+        <Text style={styles.createbuttonText}>Create</Text>
+      </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -302,6 +309,18 @@ const styles = StyleSheet.create({
     height: 25,
     tintColor: primaryColor,
     marginRight: 10,
+  },
+  button: {
+    backgroundColor: primaryColor,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 100,
+
+  },
+  createbuttonText: {
+    color: '#fff',
+    fontSize: 18,
   },
 });
 
