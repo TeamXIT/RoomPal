@@ -17,7 +17,7 @@ module.exports = {
   },
   updateUser: async (req, res) => {
     try {
-      const { fullName, email, dateOfBirth, gender, makeMobilePrivate } = req.body;
+      const { fullName, email, dateOfBirth, gender, makeMobilePrivate,image } = req.body;
       const {mobileNumber} = req.query;
       const user =  await User.findOne({ mobileNumber: mobileNumber });
       if (!user) {
@@ -29,6 +29,7 @@ module.exports = {
       if (dateOfBirth) user.dateOfBirth = dateOfBirth;
       if (gender) user.gender = gender;
       if (makeMobilePrivate !== undefined) user.makeMobilePrivate = makeMobilePrivate;
+      if (image) user.image = image;
 
       await user.save();
 
