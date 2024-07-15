@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile } from '../../reducers/profile/profileSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor } from '../Styles/Styles';
+import axios from 'axios';
+import API_BASE_URL from '../../reducers/config/apiConfig';
 
 const ProfileScreen = ({ setTabBarVisibility }) => {
   const dispatch = useDispatch();
@@ -89,12 +91,23 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
   };
   const handleConfirm = (dateOfBirth) => {
     setDateOfBirth(dateOfBirth.toLocaleDateString('en-GB'));
+    handleEditDobPress(dateOfBirth);
+
     hideDatePicker();
   };
 
-  const handleEditNamePress = (field) => {
-    setEditableField(field);
+  const handleEditNamePress = async  (fullName) => {
+    const responce= await axios.put(`${API_BASE_URL}/user/update`,{fullName})
   };
+  const handleEditEmailPress = async  (email) => {
+    const responce= await axios.put(`${API_BASE_URL}/user/update`,{email})
+  };
+  const handleEditDobPress = async  (dateOfBirth) => {
+    const responce= await axios.put(`${API_BASE_URL}/user/update`,{dateOfBirth})
+  };
+  // const handleEditNamePress = async  (fullName) => {
+  //   const responce= await axios.put(`${API_BASE_URL}/user/update`,{fullName})
+  // };
 
   const renderEditableTextInput = (value, setValue, placeholder, field) => (
     <TextInput
@@ -133,7 +146,7 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_email.png')} style={styles.inputIcon} />
             {renderEditableTextInput(email, setEmail, "Enter your email", 'email')}
-            <TouchableOpacity onPress={() => handleEditPress('email')}>
+            <TouchableOpacity onPress={() => handleEditEmailPress(email)}>
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             </TouchableOpacity>
           </View>
