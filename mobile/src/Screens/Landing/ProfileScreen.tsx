@@ -50,6 +50,11 @@ const ProfileScreen = ({ setTabBarVisibility }) => {
     setMakeMobilePrivate(data.user.makeMobilePrivate ? 'True' : 'False');
   }, [data]);
 
+  useEffect(() =>{
+
+
+  },[data.profile]);
+
   const handleAddProfileImage = (uri) => {
     setImageUri({ uri });
   };

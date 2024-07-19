@@ -11,6 +11,7 @@ type ProfileState = {
     };
     data: {
         user: any;
+        profile: any;
     };
 };
 
@@ -21,7 +22,9 @@ const initialState: ProfileState = {
         success: '',
     },
     data: {
-        user:[]
+        user:[],
+        profile:[]
+
     },
 };
 
@@ -40,6 +43,9 @@ const profileSlice = createSlice({
         },
         setUser: (state, action: PayloadAction<any>) => {
             state.data.user = action.payload;
+        },
+        setProfile: (state, action: PayloadAction<any>) =>{
+            state.data.profile = action.payload;
         }
     }
 });
@@ -58,6 +64,24 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
         dispatch(setSuccess('Profile fetched successfully.'));
         dispatch(setBusy(false));
         dispatch(setUser(response.data.message));
+    } catch (error) {
+        console.log(error)
+        dispatch(setError(error.response?.data?.message || error.message || 'Fetching profile failed.'));
+        dispatch(setBusy(false));
+    }
+};
+
+export const editprofile = (userId: number, profilepath: string): AppThunk => async (dispatch) => {
+    dispatch(setBusy(true));
+    dispatch(setError(''));
+    dispatch(setSuccess(''));
+    try {
+        const response = await axios.post(`${API_BASE_URL}/user/editprofile`,  { params:{userId:userId, path:profilepath} } );
+        console.log(response.status)
+
+        dispatch(setSuccess('Profile fetched successfully.'));
+        dispatch(setBusy(false));
+        dispatch(setProfile(response.data.message));
     } catch (error) {
         console.log(error)
         dispatch(setError(error.response?.data?.message || error.message || 'Fetching profile failed.'));
