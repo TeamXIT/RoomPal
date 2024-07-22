@@ -58,7 +58,7 @@ function App(): React.ReactElement {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Authn" headerMode="none">
+        <Stack.Navigator initialRouteName="Landing" headerMode="none">
           <Stack.Screen name="Authn" component={Authn} />
           <Stack.Screen name="Landing" component={Landing} />
         </Stack.Navigator>
