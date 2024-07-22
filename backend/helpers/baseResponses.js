@@ -25,6 +25,7 @@ const baseResponses = {
         MOBILE_NUMBER_ALREADY_EXISTS:(data=null) => baseResponses.error('Mobile number already exists',data),
         EMAIL_ALREADY_EXISTS:(data=null) => baseResponses.error('Email already exists',data),
         ROOM_FETCHED:(data=null)=> baseResponses.success('Fetched successfully',data),
+        ORDER_ID_ALREADY_EXISTS: (data=null) => baseResponses.error('Order Id already exists',data),
     }
 };
 module.exports = {baseResponses};

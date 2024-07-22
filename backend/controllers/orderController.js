@@ -1,6 +1,9 @@
 const { Cashfree } = require('cashfree-pg');
 const moment = require('moment');
+const mongoose = require('mongoose');
 require('dotenv').config();
+
+const User = require('../models/userModel');
 const Order = require('../models/orderModel');
 const Payment = require('../models/paymentModel');
 const PaymentLink = require('../models/paymentLinkModel');
@@ -22,7 +25,9 @@ const createOrder = async (req, res) => {
             },
             order_meta: { return_url }
         } = req.body;
-        console.log(request);
+        if (!mongoose.Types.ObjectId.isValid(customer_id)) {
+            return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
+        }
         const newOrder = new Order({
             order_id,
             order_amount,
@@ -36,12 +41,11 @@ const createOrder = async (req, res) => {
                 return_url,
             }
         });
-        newOrder.save();
+        await newOrder.save();
         const response = await Cashfree.PGCreateOrder('2022-09-01', request);
         console.log(response);
         return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(response.data));
     } catch (error) {
-        console.log(error)
         return res.status(500).json(baseResponses.error(error.message));
     }
 };

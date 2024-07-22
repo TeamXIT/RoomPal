@@ -24,7 +24,8 @@ const BASE_RESPONSE_MESSAGES = {
         ROOM_NOT_FOUND: 'Room not found',
         USER_OR_ROOM_NOT_FOUND:'User or room not found',
         MOBILE_NUMBER_ALREADY_EXISTS:'Mobile number already exists',
-        EMAIL_ALREADY_EXISTS:'Email already exists'
+        EMAIL_ALREADY_EXISTS:'Email already exists',
+        ORDER_ID_ALREADY_EXISTS:'Order Id already exists'
 
     }
 };
