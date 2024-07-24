@@ -50,7 +50,7 @@ const profileSlice = createSlice({
     }
 });
 
-export const { setBusy, setError, setSuccess, setUser } = profileSlice.actions;
+export const { setBusy, setError, setSuccess, setUser, setProfile} = profileSlice.actions;
 
 export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispatch) => {
     console.log(usermobileNumber);
@@ -59,7 +59,7 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
     dispatch(setSuccess(''));
     try {
         const response = await axios.get(`${API_BASE_URL}/user/getByNumber`,  { params:{mobileNumber:usermobileNumber} } );
-        console.log(response.status)
+        console.log(response.status);
 
         dispatch(setSuccess('Profile fetched successfully.'));
         dispatch(setBusy(false));
@@ -71,22 +71,39 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
     }
 };
 
-export const editprofile = (userId: number, profilepath: string): AppThunk => async (dispatch) => {
+   export const updateProfile = ( 
+    fullName: string,
+    image: string,
+    email: string,
+    dateOfBirth: string,
+    gender: string,
+    makeMobilePrivate: boolean,
+   ):
+    AppThunk => async (dispatch) => {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
-    try {
-        const response = await axios.post(`${API_BASE_URL}/user/editprofile`,  { params:{userId:userId, path:profilepath} } );
-        console.log(response.status)
-
-        dispatch(setSuccess('Profile fetched successfully.'));
+  try {
+        console.log("updatedData:", fullName, image, email, dateOfBirth, gender,  makeMobilePrivate, );
+        const response = await axios.put(`${API_BASE_URL}/user/update`, { 
+            fullName,
+            image,
+            email,
+            dateOfBirth,
+            gender,
+            makeMobilePrivate,
+            
+         });
+        console.log('Profile updated:', response.data);
+        dispatch(setSuccess('Profile updated successfully.'));
         dispatch(setBusy(false));
-        dispatch(setProfile(response.data.message));
+        dispatch(setProfile(response.data.message)); 
     } catch (error) {
-        console.log(error)
-        dispatch(setError(error.response?.data?.message || error.message || 'Fetching profile failed.'));
+        console.log("updateCatch:",error);
+        dispatch(setError(error.response?.data?.message || error.message || 'Updating profile failed.'));
         dispatch(setBusy(false));
-    }
+      }
 };
+
 
 export default profileSlice.reducer;
