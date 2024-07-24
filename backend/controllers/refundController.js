@@ -22,6 +22,10 @@ const createRefund = async (req, res) => {
         if(!order){
             return res.status(404).json(baseResponses.constantMessages.ORDER_NOT_FOUND());
         };
+        const refund = await Refund.findOne({refund_id: refund_id})
+        if(refund) {
+          return res.status(400).json(baseResponses.constantMessages.REFUND_ID_ALREADY_EXISTS());
+        }
         const response = await Cashfree.PGOrderCreateRefund("2022-09-01", order_id, request);
         console.log(response.data);
         const newRefund = new Refund(response.data);

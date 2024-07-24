@@ -27,6 +27,8 @@ const BASE_RESPONSE_MESSAGES = {
         MOBILE_NUMBER_ALREADY_EXISTS:'Mobile number already exists',
         EMAIL_ALREADY_EXISTS:'Email already exists',
         PAYMENT_NOT_FOUND: 'Payment not found',
+        ORDER_ID_ALREADY_EXISTS:'Order Id already exists',
+        REFUND_ID_ALREADY_EXISTS:'Refund Id already exists',
 
     }
 };

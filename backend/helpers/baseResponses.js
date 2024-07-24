@@ -27,6 +27,8 @@ const baseResponses = {
         PAYMENT_NOT_FOUND: (data=null) => baseResponses.error('Payment not found',data),
         PAYMENT_FETCHED: (data=null) => baseResponses.success('Payment fetched successfullly',data)
         ROOM_FETCHED:(data=null)=> baseResponses.success('Fetched successfully',data),
+        ORDER_ID_ALREADY_EXISTS: (data=null) => baseResponses.error('Order Id already exists',data),
+        REFUND_ID_ALREADY_EXISTS: (data=null) => baseResponses.error('Refund Id already exists',data),
     }
 };
 module.exports = {baseResponses};
