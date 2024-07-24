@@ -1,17 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Alert,
-  PermissionsAndroid,
-  Platform,
-  Linking,
-} from 'react-native';
+import { View,Text,TextInput,TouchableOpacity, Image,ScrollView,Alert,PermissionsAndroid,Platform,Linking,} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Slider from 'react-native-slider';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -30,7 +18,8 @@ import RNFS from 'react-native-fs';
 const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
-  const [details, setDetails] = useState('');
+  const [details, setDetails] = useState([]);
+  const [detail, setDetail] = useState('');
   const [availability, setAvailability] = useState(6);
   const [amenities, setAmenities] = useState([
     { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: true },
@@ -101,21 +90,32 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const telegramLinkRef = useRef(null);
   const addressRef = useRef(null);
 
-  const handleSubmitData = async () => {
-    let hasError = false;
-    if (!roomName) {
-      setRoomNameError('Please provide your room name');
-      hasError = true;
+  const handleAddDetail = () => {
+    if (detail.trim()) {
+      setDetails([...details, detail.trim()]);
+      
     } else {
-      setRoomNameError('');
+      Alert.alert('Error', 'Please enter a detail.');
     }
+  };
 
-    if (!details) {
-      setDetailsError('Please provide your details ');
-      hasError = true;
-    } else {
-      setDetailsError('');
-    }
+  const handleSubmitData = async () => {
+    try {
+      let hasError = false;
+      
+      if (!roomName) {
+        setRoomNameError('Please provide your room name');
+        hasError = true;
+      } else {
+        setRoomNameError('');
+      }
+      if (!detail) {
+        setDetailsError('Please provide your details ');
+        hasError = true;
+      } else {
+        setDetails(['1 bedroom', '2 bathroom', 'Furnished kitchen']);
+        setDetailsError('');
+      }
     if (availability === 0) {
       setAvailabilityError('Please select a capacity of at least 1');
       hasError = true;
@@ -159,38 +159,56 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
     } else {
       setFloorError('');
     }
-    if (!roomName) {
+    if (!roomType) {
       setRoomTypeError('Please select your room type');
       hasError = true;
     } else {
       setRoomTypeError('');
     }
-    location = { latitude, longitude };
+    // location = { lat: latitude, lon: longitude };
+    location = { lat: Number(latitude) || 0, lon: Number(longitude) || 0 };
+
+    const amenitiesObj = {
+      "wifi": amenities?.find(a => a.name === 'Wi-Fi')?.checked || false,
+      "airCondition": amenities?.find(a => a.name === 'Air Conditioning')?.checked || false,
+      "heater": amenities?.find(a => a.name === 'Heater')?.checked || false,
+      "washer": amenities?.find(a => a.name === 'Washer')?.checked || false,
+      "dryer": amenities?.find(a => a.name === 'Dryer')?.checked || false,
+      "kitchen": amenities?.find(a => a.name === 'Kitchen')?.checked || false,
+      "parking": amenities?.find(a => a.name === 'Parking')?.checked || false,
+      "gym": amenities?.find(a => a.name === 'Gym')?.checked || false,
+      "pool": amenities?.find(a => a.name === 'Pool')?.checked || false,
+    };
+
     if (!hasError) {
-      const images = roomImages
+      const images = roomImages; 
       const gender = lookingFor;
 
-      await dispatch(createRoom(
+      await dispatch(createRoom({
         roomName,
         details,
-        availability,
+        availability: availability > 0,
         roomType,
         floor,
         rent,
-        latitude,
-        longitude,
-        amenities,
+        location,
+        amenities: amenitiesObj,
         gender,
         images,
         whatsappLink,
         telegramLink,
+      }));
 
-
-      ));
-
-      Alert.alert('Success', 'Room created successfully');
+      // Alert.alert('Success', 'Room created successfully');
       // navigation.navigate() // Uncomment and implement navigation if needed
     }
+  }
+    
+  catch (error) {
+    console.error('Error creating room:', error);
+    Alert.alert('Error', 'Failed to create room. Please try again later.');
+  }
+    
   };
 
   const requestLocationPermission = async () => {
@@ -269,8 +287,8 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
     }
   };
 
-  const getLatitudeDirection = lat => (lat >= 0 ? 'N' : 'S');
-  const getLongitudeDirection = lon => (lon >= 0 ? 'E' : 'W');
+  const getLatitudeDirection = lat => (lat);
+  const getLongitudeDirection = lon => (lon);
 
 
   const handleLookingFor = () => {
@@ -342,7 +360,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
           ref={detailsRef}
           style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
           value={details}
-          onChangeText={setDetails}
+          onChangeText={setDetail}
           multiline
           placeholder="Enter your details"
           onSubmitEditing={() => rentRef.current.focus()}
@@ -391,7 +409,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
         >
           <RadioButton.Item label="Male" value="male" />
           <RadioButton.Item label="Female" value="female" />
-          <RadioButton.Item label="Both" value="family" />
+          <RadioButton.Item label="Family" value="family" />
         </RadioButton.Group>
       </View>
 
