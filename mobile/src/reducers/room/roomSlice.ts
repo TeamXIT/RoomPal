@@ -15,6 +15,7 @@ type Room = {
   gender: string;
   whatsappLink: string;
   telegramLink: string;
+  images: string[];
 };
 
 type RoomState = {
@@ -71,7 +72,8 @@ export const roomSlice = createSlice({
 
 export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom } = roomSlice.actions;
 
-export const createRoom = (roomName: string,
+export const createRoom = (
+  roomName: string,
   details: string,
   availability: boolean,
   roomType: string,
@@ -90,7 +92,7 @@ export const createRoom = (roomName: string,
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    // console.log(`data: ${roomData}`);
+  
     const response = await axios.post(`${API_BASE_URL}/room/create`, { 
       roomName,
       details,
@@ -105,7 +107,7 @@ export const createRoom = (roomName: string,
       whatsappLink,
       telegramLink
     });
-    console.log(response.data)
+   
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));
   } catch (error) {
@@ -122,7 +124,7 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.get(`${API_BASE_URL}/rooms`, {
+    const response = await axios.get(`${API_BASE_URL}/room/getAll`, {
       params: { limit, page, ...filters },
     });
     dispatch(setRooms({
@@ -132,7 +134,26 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
     }));
   } catch (error) {
     dispatch(setError(error.response?.data?.message || error.message || 'Fetching rooms failed'));
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) => {
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  try {
+    roomName=roomName.toString()
+    const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
+      params: { roomName:roomName },
+    });
+    console.log(response.data);
+    dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
+    dispatch(setSuccess('Room fetched successfully.'));
+  } catch (error) {
+    
     console.error(error);
+    dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {
     dispatch(setBusy(false));
   }

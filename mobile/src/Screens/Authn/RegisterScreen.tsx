@@ -7,12 +7,12 @@ import { primaryColor, styles } from '../Styles/Styles'
 import PhoneInput from "react-native-phone-number-input";
 import TeamXErrorText from '../molecule/TeamXErrorText';
 import { register } from '../../reducers/auth/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-
+  const signupError = useSelector(state => state.auth.screen.error);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -39,7 +39,7 @@ const RegisterScreen = ({ navigation }) => {
   const [lookingForRoommateError, setLookingForRoommateError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
+  const [generalError, setGeneralError] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDobSelected, setDobSelected] = useState(false); // State to manage if DOB is selected
 
@@ -109,19 +109,19 @@ const RegisterScreen = ({ navigation }) => {
       setGenderError('')
     }
 
-    if (!lookingForRoom) {
-      setLookingForRoomError("Please select if you are looking for a room.")
-      hasError = true;
-    } else {
-      setLookingForRoomError('')
-    }
+    // if (!lookingForRoom) {
+    //   setLookingForRoomError("Please select if you are looking for a room.")
+    //   hasError = true;
+    // } else {
+    //   setLookingForRoomError('')
+    // }
 
-    if (!lookingForRoommate) {
-      setLookingForRoommateError("Please select if you are looking for a roommate.")
-      hasError = true;
-    } else {
-      setLookingForRoommateError('')
-    }
+    // if (!lookingForRoommate) {
+    //   setLookingForRoommateError("Please select if you are looking for a roommate.")
+    //   hasError = true;
+    // } else {
+    //   setLookingForRoommateError('')
+    // }
 
     if (!password) {
       setPasswordError("Please provide your password.")
@@ -152,50 +152,50 @@ const RegisterScreen = ({ navigation }) => {
         mobileNumber, 
         dateOfBirth,
         gender,
-        lookingForRoom: lookingForRoom === true,
-        lookingForRoommate: lookingForRoommate === true,
+        lookingForRoom: lookingForRoom ,
+        lookingForRoommate: lookingForRoommate,
         preferences,
         makeMobilePrivate,
         password,
         confirmPassword,
       }
-      console.log('Form Data:', formData);
-      Alert.alert("Success", "Registration successful!");
-      // navigation.navigate() // Uncomment and implement navigation if needed
-
+       dispatch(register(
+        fullName, 
+        email, 
+        mobileNumber, 
+        dateOfBirth, 
+        gender, 
+        lookingForRoom , 
+        lookingForRoommate, 
+        preferences, 
+        makeMobilePrivate, 
+        password,
+        confirmPassword,
+      ));
+      if(signupError) {
+        setGeneralError(signupError)
+      }
     };
-    await dispatch(register(
-      fullName, 
-      email, 
-      mobileNumber, 
-      dateOfBirth, 
-      gender, 
-      lookingForRoom === true, 
-      lookingForRoommate === true, 
-      preferences, 
-      makeMobilePrivate, 
-      password,
-      confirmPassword,
-    ));
+   
 
     // Reset state values
-    setFullName('');
-    setEmail('');
-    setMobileNumber('');
-    setDateOfBirth('');
-    setGender('');
-    setLookingForRoom(false);
-    setLookingForRoommate(false);
-    setPreferences({
-      clean: false,
-      pets: false,
-      smoking: false,
-      drinking: false,
-    });
-    setMakeMobilePrivate(false);
-    setPassword('');
-    setConfirmPassword('');
-    setDatePickerVisibility(false); // Ensure date picker is hidden after submission
+    // setFullName('');
+    // setEmail('');
+    // setMobileNumber('');
+    // setDateOfBirth('');
+    // setGender('');
+    // setLookingForRoom(false);
+    // setLookingForRoommate(false);
+    // setPreferences({
+    //   clean: false,
+    //   pets: false,
+    //   smoking: false,
+    //   drinking: false,
+    // });
+    // setMakeMobilePrivate(false);
+    // setPassword('');
+    // setConfirmPassword('');
+    // setDatePickerVisibility(false); // Ensure date picker is hidden after submission
 
   }
     const showDatePicker = () => {
@@ -217,7 +217,7 @@ const RegisterScreen = ({ navigation }) => {
         <View style={{ alignSelf: 'center' }}>
           <TeamXLogoImage />
         </View>
-        <Text style={styles.title}>Registration</Text>
+        {/* <Text style={styles.title}>Registration</Text> */}
 
         <View style={{ gap: 10 }}>
           <Text style={styles.label}>Full Name</Text>
@@ -412,6 +412,7 @@ const RegisterScreen = ({ navigation }) => {
         </View>
 
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <TeamXErrorText errorText={generalError} />
           <TouchableOpacity style={styles.submitButton} onPress={handleSignUp}>
             <Text style={styles.submitButtonText}>Register</Text>
             <Image source={require('../Images/ic_rightArrow.png')} tintColor={'#FFFFFF'} style={{ paddingLeft: 5 }} />
@@ -433,3 +434,4 @@ const RegisterScreen = ({ navigation }) => {
 
 
   export default RegisterScreen
+ 

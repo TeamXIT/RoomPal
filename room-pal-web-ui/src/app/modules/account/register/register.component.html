@@ -1,1 +1,307 @@
-<p>register works!</p>
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <div class="row d-flex justify-content-center">
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow w-100 p-3 px-md-5 py-md-3 my-4">
+        <div class="mb-3">
+          <label for="register-name" class="form-label"> Name </label>
+          <input
+            type="text"
+            class="form-control"
+            id="register-name"
+            formControlName="name"
+            placeholder="Enter your name"
+            [class.is-invalid]="
+              registrationForm.controls['name'].errors &&
+              registrationForm.controls['name'].touched
+            " />
+          @if (
+            registrationForm.controls["name"].errors &&
+            registrationForm.controls["name"].touched
+          ) {
+            @if (registrationForm.controls["name"].errors["required"]) {
+              <div class="invalid-feedback">name is required</div>
+            }
+            @if (registrationForm.controls["name"].errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 6 characters required</div>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="register-mobile-number" class="form-label">
+            Mobile number
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="register-mobile-number"
+            formControlName="mobileNumber"
+            placeholder="Enter your mobile number"
+            [class.is-invalid]="
+              registrationForm.controls['mobileNumber'].errors &&
+              registrationForm.controls['mobileNumber'].touched
+            " />
+          @if (
+            registrationForm.controls["mobileNumber"].errors &&
+            registrationForm.controls["mobileNumber"].touched
+          ) {
+            @if (registrationForm.controls["mobileNumber"].errors["required"]) {
+              <div class="invalid-feedback">Mobile number is required</div>
+            }
+            @if (
+              registrationForm.controls["mobileNumber"].errors["minlength"]
+            ) {
+              <div class="invalid-feedback">Minimum 10 digits required</div>
+            }
+            @if (
+              registrationForm.controls["mobileNumber"].errors["maxlength"]
+            ) {
+              <div class="invalid-feedback">Maximum 10 digits a allowed</div>
+            }
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="register-dob" class="form-label"> Date of Birth </label>
+          <div class="input-group">
+            <input
+              type="date"
+              class="form-control"
+              formControlName="dateOfBirth"
+              [class.is-invalid]="
+                registrationForm.controls['dateOfBirth'].errors &&
+                registrationForm.controls['dateOfBirth'].touched
+              " />
+            @if (
+              registrationForm.controls["dateOfBirth"].errors &&
+              registrationForm.controls["dateOfBirth"].touched
+            ) {
+              @if (
+                registrationForm.controls["dateOfBirth"].errors["required"]
+              ) {
+                <div class="invalid-feedback">Date of birth is required</div>
+              }
+            }
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="register-gender" class="form-label"> Gender </label>
+          <div class="">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="register-gender-male"
+                formControlName="gender"
+                value="male"
+                [class.is-invalid]="
+                  registrationForm.controls['gender'].errors &&
+                  registrationForm.controls['gender'].touched
+                " />
+              <label
+                class="form-check-label"
+                for="register-gender-male"
+                [class.is-invalid]="
+                  registrationForm.controls['gender'].errors &&
+                  registrationForm.controls['gender'].touched
+                ">
+                Male
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="register-gender-female"
+                formControlName="gender"
+                value="female"
+                [class.is-invalid]="
+                  registrationForm.controls['gender'].errors &&
+                  registrationForm.controls['gender'].touched
+                " />
+              <label
+                class="form-check-label"
+                for="register-gender-female"
+                [class.is-invalid]="
+                  registrationForm.controls['gender'].errors &&
+                  registrationForm.controls['gender'].touched
+                ">
+                Female
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="register-gender-others"
+                formControlName="gender"
+                value="others"
+                [class.is-invalid]="
+                  registrationForm.controls['gender'].errors &&
+                  registrationForm.controls['gender'].touched
+                " />
+              <label
+                class="form-check-label"
+                for="register-gender-others"
+                [class.is-invalid]="
+                  registrationForm.controls['gender'].errors &&
+                  registrationForm.controls['gender'].touched
+                ">
+                Others
+              </label>
+            </div>
+            <div
+              class="invalid-feedback"
+              [class.d-block]="
+                registrationForm.controls['gender'].errors &&
+                registrationForm.controls['gender'].touched
+              ">
+              Gender is required
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="register-looking-for-room-mate"
+              formControlName="lookingForRoomMate" />
+            <label
+              class="form-check-label"
+              for="register-looking-for-room-mate">
+              Looking for Room mate
+            </label>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="register-looking-for-room"
+              formControlName="lookingForRoom" />
+            <label class="form-check-label" for="register-looking-for-room">
+              Looking for Room
+            </label>
+          </div>
+        </div>
+        <div class="mb-3" formGroupName="preferences">
+          <label for=""> Preferences </label>
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="register-preferences-clean"
+                  formControlName="clean" />
+                <label
+                  class="form-check-label"
+                  for="register-preferences-clean">
+                  Clean
+                </label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 mb-3 mb-md-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="register-preferences-pets"
+                  formControlName="pets" />
+                <label class="form-check-label" for="register-preferences-pets">
+                  Pets allowed
+                </label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 mb-3 mb-md-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="register-preferences-smoking"
+                  formControlName="smoking" />
+                <label
+                  class="form-check-label"
+                  for="register-preferences-smoking">
+                  Smoking allowed
+                </label>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 mb-3 mb-md-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="register-preferences-drinking"
+                  formControlName="drinking" />
+                <label
+                  class="form-check-label"
+                  for="register-preferences-drinking">
+                  Drinking allowed
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="register-password"> Create password </label>
+          <input
+            type="password"
+            id="register-password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Please create your password"
+            [class.is-invalid]="
+              registrationForm.controls['password'].errors &&
+              registrationForm.controls['password'].touched
+            " />
+          @if (
+            registrationForm.controls["password"].errors &&
+            registrationForm.controls["password"].touched
+          ) {
+            @if (registrationForm.controls["password"].errors["required"]) {
+              <div class="invalid-feedback">Password is required</div>
+            }
+            @if (registrationForm.controls["password"].errors["minlength"]) {
+              <div class="invalid-feedback">Minimum 6 characters required</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label for="register-confirmPassword"> Confirm password </label>
+          <input
+            type="password"
+            id="register-confirmPassword"
+            class="form-control"
+            formControlName="confirmPassword"
+            placeholder="Please enter your password"
+            [class.is-invalid]="
+              registrationForm.controls['confirmPassword'].errors &&
+              registrationForm.controls['confirmPassword'].touched
+            " />
+
+          @if (
+            registrationForm.controls["confirmPassword"].errors &&
+            registrationForm.controls["confirmPassword"].touched
+          ) {
+            @if (
+              registrationForm.controls["confirmPassword"].errors["invalid"]
+            ) {
+              <div class="invalid-feedback">
+                confirm password should match with your password
+              </div>
+            }
+          }
+        </div>
+        <button type="submit" class="btn btn-primary w-100">submit</button>
+        <div class="ms-auto mt-3">
+          Already have an account?, <a [routerLink]="'../login'">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

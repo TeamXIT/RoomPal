@@ -1,13 +1,19 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
-import {styles} from '../Styles/Styles'
+import { View, Image, Text, StyleSheet } from 'react-native';
+import { styles } from '../Styles/Styles';
 
 const TeamXLogoImage = () => {
   return (
-    <Image
-      source={require('../Images/Room-PalLogo.jpg')}
-      style={styles.logoImg}
-    />
+    <View style={styles.logoContainer}>
+      <Image
+        source={require('../Images/LOGO.png')}
+        style={styles.logoImg}
+      />
+     <View style={styles.textContainer}>
+        <Text style={styles.logoText}>Home Scout</Text>
+        <Text style={styles.taglineText}> Discover your ideal living space</Text>
+      </View>
+    </View>
   );
 };
 

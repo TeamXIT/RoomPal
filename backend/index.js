@@ -8,9 +8,12 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 const orderRoutes = require('./routes/orderRoutes')
 const paymentRoutes = require('./routes/paymentRoutes');
 const refundRoutes = require('./routes/refundRoutes');
+const userRoutes = require('./routes/userRoutes');
 const app = express();
+const cors=require('cors');
 const port = 3001;
 app.use(express.json());
+app.use(cors())
 app.use(bodyParser.json());
 connectDB();
 app.use('/api/auth', authRoutes);
@@ -20,6 +23,7 @@ app.use('/api/feedback', feedbackRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/refund',refundRoutes);
+app.use('/api/user',userRoutes);
 app.get('/',(req,res)=>{
     res.send('Welcome to RoomMate api');
 });

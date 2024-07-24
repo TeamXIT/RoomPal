@@ -1,0 +1,25 @@
+{
+  "printWidth": 80,
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "semi": false,
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular",
+        "arrowParens": "avoid",
+        "bracketSameLine": true,
+        "bracketSpacing": true,
+        "jsxSingleQuote": false,
+        "singleAttributePerLine": false
+      }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}

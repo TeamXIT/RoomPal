@@ -13,6 +13,7 @@ const BASE_RESPONSE_MESSAGES = {
         PASSWORD_RESET_SUCCESS:'Password updated successfully',
         FEEDBACK:'Feedback updated successfully',
         PAYMENT_FETCHED: 'Payment fetched successfully',
+        ROOM_FETCHED:'Room Fetched Successfully'
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',

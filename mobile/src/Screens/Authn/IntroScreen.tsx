@@ -5,10 +5,10 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import {styles} from '../Styles/Styles'
 
-const image1 = require('../Images/introImage1.png');
-const image2 = require('../Images/introImage2.jpg');
-const image3 = require('../Images/introImage3.jpg');
-const image4 = require('../Images/introImage4.jpg');
+const image1 = require('../Images/intro_image2.png');
+const image2 = require('../Images/intro_image2.png');
+const image3 = require('../Images/intro_image3.png');
+const image4 = require('../Images/intro_image4.png');
 
 
 
@@ -60,10 +60,8 @@ const RoomPalIntro = ({ navigation }) => {
         if (sliderRef.current) {
             sliderRef.current.goToSlide(currentIndex + 1);
             setCurrentIndex(currentIndex + 1);
-            console.log("Navigating to next slide. Current index:", currentIndex + 1);
-        } else {
-            console.log("SliderRef is not initialized or goToSlide method is not available.");
-        }
+            
+        } 
     };
 
     const RenderItem = ({ item }) => {

@@ -10,17 +10,19 @@ const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { error, isBusy, success } = useSelector(state => state.auth.screen);
   const authToken = useSelector(state => state.auth.data.authToken);
+  const signinError = useSelector(state => state.auth.screen.error); // Added signinError from Redux state
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [mobileNumberError, setMobileNumberError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [generalError, setGeneralError] = useState('');
 
   const validateMobileNumber = (mobile) => {
     return mobile.trim().length === 10 && /^\d+$/.test(mobile);
   };
 
-  const handleLoginPress = () => {
+  const handleLoginPress = async () => {
     let valid = true;
 
     if (!validateMobileNumber(mobileNumber)) {
@@ -38,14 +40,13 @@ const LoginScreen = ({ navigation }) => {
     }
 
     if (valid) {
-      dispatch(signIn(mobileNumber, password)).then((result) => {
-        if (result.success) {
-          console.log('Login successful, navigating to RoomDetails');
-          navigation.navigate('RoomCreateScreen');
-        } else {
-          setMobileNumber('login failed');
-        }
-      });
+      await dispatch(signIn(mobileNumber, password));
+
+      if (!authToken) {
+        setGeneralError(signinError); 
+      } else {
+        setGeneralError('');
+      }
     }
   };
 
@@ -59,8 +60,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (success) {
-      console.log('Navigation effect triggered, navigating to RoomDetails');
-      navigation.navigate('RoomCreateScreen');
+      navigation.navigate('Landing');
     }
   }, [success, navigation]);
 
@@ -73,8 +73,8 @@ const LoginScreen = ({ navigation }) => {
           defaultValue={mobileNumber}
           defaultCode="IN"
           layout="first"
-          onChangeText={setMobileNumber} // Use the custom change handler
-          containerStyle={[styles.input, { width: '100%' },]}
+          onChangeText={setMobileNumber}
+          containerStyle={[styles.input, { width: '100%' }]}
           textContainerStyle={{
             paddingVertical: 10,
             backgroundColor: 'white',
@@ -85,16 +85,10 @@ const LoginScreen = ({ navigation }) => {
             color: 'black'
           }}
           countryPickerButtonStyle={{ paddingVertical: 0 }}
-          renderDropdownImage={<Text >▼</Text>}
+          renderDropdownImage={<Text>▼</Text>}
           placeholder="Enter mobile number"
           keyboardType="number-pad"
         />
-
-
-
-
-
-
         {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
         <Text style={styles.label}>Password</Text>
         <TextInput
@@ -105,6 +99,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
         {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+        {generalError ? <Text style={styles.errorText}>{generalError}</Text> : null}
         <View style={styles.checkboxContainer}>
           <CheckBox
             value={rememberMe}
@@ -158,10 +153,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: '#fff',

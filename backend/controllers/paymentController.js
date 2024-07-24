@@ -4,6 +4,7 @@ const Order = require('../models/orderModel');
 const Payment = require('../models/paymentModel');
 const PaymentLink = require('../models/paymentLinkModel');
 const { baseResponses } = require('../helpers/baseResponses');
+const Transaction = require('../models/transactionModel');
 Cashfree.XClientId = process.env.X_CLIENT_ID;
 Cashfree.XClientSecret = process.env.X_CLIENT_SECRET;
 Cashfree.XEnvironment = 'SANDBOX';
@@ -32,15 +33,27 @@ const createPayment = async (req, res) => {
     try {
         const paymentData = req.body.paymentDetails;
         console.log(paymentData.order_id);
-
         const order = await Order.findOne({ order_id: paymentData.order_id });
-        // console.log(order);
+        // console.log(order);        
+        const order = await Order.findOne({order_id:paymentData.order_id});
+        console.log(order.customer_details.customer_id);
+        const customer_id = order.customer_details.customer_id;
         if (!order) {
             return res.status(400).send({ error: 'Invalid order_id' });
         }
         const payment = new Payment(paymentData);
-        // console.log(payment);
+        console.log(payment);
         payment.save();
+        if(payment.payment_status == 'SUCCESS'){
+            const transaction = new Transaction({
+                user_id: customer_id,
+                debit_amount: payment.payment_amount
+            });
+            console.log(transaction);
+            transaction.save();
+            console.log('Payment created');
+        }
+
         res.status(200).json(payment);
     } catch (error) {
         console.log(error);
@@ -121,3 +134,4 @@ const getByPaymentId = async (req,res) => {
 };
 
 module.exports = { payOrder, createPayment, getAllPayments, getByOrderId, getByPaymentId }
+

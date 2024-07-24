@@ -26,6 +26,7 @@ const baseResponses = {
         EMAIL_ALREADY_EXISTS:(data=null) => baseResponses.error('Email already exists',data),
         PAYMENT_NOT_FOUND: (data=null) => baseResponses.error('Payment not found',data),
         PAYMENT_FETCHED: (data=null) => baseResponses.success('Payment fetched successfullly',data)
+        ROOM_FETCHED:(data=null)=> baseResponses.success('Fetched successfully',data),
     }
 };
 module.exports = {baseResponses};

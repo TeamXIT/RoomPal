@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState, store } from '../../reducers/store';
 import { forgotPassword } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from "../molecule/TeamXLogoImage";
 
 const ForgotPassword = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [mobileNumberError, setMobileNumberError] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
-  const { screen, data } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const { screen } = useSelector(state => state.auth);
 
- 
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');
   };
@@ -19,22 +17,6 @@ const ForgotPassword = ({ navigation }) => {
   const handleRequestOTP = async () => {
     if (validateMobileNumber()) {
       await dispatch(forgotPassword(mobileNumber));
-  
-      // Define a sleep function to pause execution for a specified duration
-      const sleep = (milliseconds:number) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds));
-      };
-  
-      // Wait for 3 seconds (3000 milliseconds)
-      await sleep(150);
-  
-      // Check if OTP is received
-      const { otp } = store.getState().auth.data; // Ensure you're fetching the latest state from the store
-      if (otp) {
-        navigation.navigate('VerificationScreen');
-      } else {
-        setMobileNumberError('User Not Found');
-      }
     }
   };
 
@@ -108,10 +90,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: '#fff',
@@ -157,7 +139,3 @@ const styles = StyleSheet.create({
 });
 
 export default ForgotPassword;
-function sleep(arg0: number) {
-  throw new Error("Function not implemented.");
-}
-

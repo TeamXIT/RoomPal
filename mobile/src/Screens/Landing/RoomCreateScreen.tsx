@@ -24,10 +24,13 @@ import TeamXErrorText from '../molecule/TeamXErrorText';
 import { useDispatch } from 'react-redux';
 import { createRoom } from '../../reducers/room/roomSlice';
 import { RadioButton } from 'react-native-paper';
-const RoomCreateScreen = () => {
+import RNFS from 'react-native-fs';
+
+
+const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const dispatch = useDispatch();
-  const [roomName, setRoomName] = useState('individual');
-  const [details, setDetails] = useState('good');
+  const [roomName, setRoomName] = useState('');
+  const [details, setDetails] = useState('');
   const [availability, setAvailability] = useState(6);
   const [amenities, setAmenities] = useState([
     { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: true },
@@ -52,20 +55,22 @@ const RoomCreateScreen = () => {
       checked: false,
     },
   ]);
-  const [address, setAddress] = useState('dummy');
+  const [address, setAddress] = useState('');
   let [location, setLocation] = useState([]);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
+  const [imagePaths, setImagePaths] = useState([]); // State to hold image file paths
+
   const [rent, setRent] = useState(15000);
   const [floor, setFloor] = useState(1);
-  const [roomType, setRoomType] = useState('individual'); // State for room type
+  const [roomType, setRoomType] = useState(''); // State for room type
   const [roomTypeOpen, setRoomTypeOpen] = useState(false);
   const [whatsappLink, setWhatsappLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
   const [preferences, setPreferences] = useState([
-    { name: 'Vegetarian', checked: true },
-    { name: 'Non-Vegetarian', checked: true },
+    { name: 'Vegetarian', checked: false },
+    { name: 'Non-Vegetarian', checked: false },
     { name: 'Smoking', checked: false },
     { name: 'Drinking', checked: false },
 
@@ -160,26 +165,11 @@ const RoomCreateScreen = () => {
     } else {
       setRoomTypeError('');
     }
-    location ={latitude,longitude};
+    location = { latitude, longitude };
     if (!hasError) {
-      const images=roomImages
+      const images = roomImages
       const gender = lookingFor;
-      const formData = {
-        roomName,
-        details,
-        availability,
-        amenities,
-        address,
-        location,
-        roomImages,
-        rent,
-        floor,
-        roomType,
-        whatsappLink,
-        telegramLink,
-        preferences,
-        images
-      };
+
       await dispatch(createRoom(
         roomName,
         details,
@@ -194,10 +184,10 @@ const RoomCreateScreen = () => {
         images,
         whatsappLink,
         telegramLink,
-        
+
 
       ));
-      console.log('Form Data:', formData);
+
       Alert.alert('Success', 'Room created successfully');
       // navigation.navigate() // Uncomment and implement navigation if needed
     }
@@ -231,7 +221,6 @@ const RoomCreateScreen = () => {
       position => {
         const { latitude, longitude } = position.coords;
         const locationString = `${latitude}, ${longitude}`;
-        console.log('Location fetched:', locationString); // Log the fetched location
         setLocation(locationString);
       },
       error => {
@@ -253,9 +242,24 @@ const RoomCreateScreen = () => {
     setPreferences(updatedPreference);
   };
 
-  const handleAddRoomImage = imageUri => {
-    setRoomImages([...roomImages, imageUri]);
+
+  // const handleAddRoomImage = imageUri => {
+  // setRoomImages([...roomImages, imageUri]);
+  // };
+
+  const handleAddRoomImage = async (imageUri) => {
+    try {
+      const base64Image = await RNFS.readFile(imageUri, 'base64');
+     
+
+      setRoomImages([...roomImages, base64Image]);
+      setImagePaths([...imagePaths, imageUri]);
+    } catch (error) {
+      console.log('Error converting image to base64:', error);
+    }
+
   };
+
 
   const handleRemoveRoomImage = index => {
     if (index >= 0 && index < roomImages.length) {
@@ -268,13 +272,6 @@ const RoomCreateScreen = () => {
   const getLatitudeDirection = lat => (lat >= 0 ? 'N' : 'S');
   const getLongitudeDirection = lon => (lon >= 0 ? 'E' : 'W');
 
-  // const handleLookingForMaleChange = () => {
-  //   setLookingForMale(!lookingForMale);
-  // };
-
-  // const handleLookingForFemaleChange = () => {
-  //   setLookingForFemale(!lookingForFemale);
-  // };
 
   const handleLookingFor = () => {
     setLookingFor(!lookingFor);
@@ -282,47 +279,21 @@ const RoomCreateScreen = () => {
 
 
   const renderRoomImages = () => {
-    //     return (
-    //         <ScrollView style={styles.imageContainer}>
-    //             <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
-    //                 <ProfileComponent setImageUri={handleAddRoomImage} />
-    //             </View>
-    //             {roomImages.map((imageObj, index) => (
-    //                 <View style={{ height: 70, width: 280, backgroundColor: '#e6daf1', paddingTop: 10, paddingBottom: 10, paddingLeft: 10, borderRadius: 10, marginTop: 10 }}>
-    //                     <View key={index} style={styles.roomImageWrapper}>
-    //                         <View style={{ flexDirection: 'row' }}>
-    //                             <Image source={{ uri: imageObj }} style={styles.roomImage} />
-    //                             <Text style={{ color: '#000', fontSize: 14, marginRight: 80 }}>
-    //                                 {imageObj.length > 50 ? `${imageObj.substring(0, 50)}...` : imageObj}
 
-    //                             </Text>
-    //                         </View>
-    //                         <TouchableOpacity
-    //                             style={styles.removeButton}
-    //                             onPress={() => handleRemoveRoomImage(index)}
-    //                         >
-    //                             <Image source={require('../Images/ic_delete.png')} style={styles.deleteIcon} />
-    //                         </TouchableOpacity>
-    //                     </View>
-    //                 </View>
-    //             ))}
-
-    //         </ScrollView>
-    //     );
-    // };
     const rows = [];
     for (let i = 0; i < roomImages.length; i += 4) {
       const rowImages = roomImages.slice(i, i + 4);
       rows.push(
         <View key={i} style={styles.imageRow}>
-          {rowImages.map((imageObj, index) => (
+          {rowImages.map((base64Image, index) => (
             <View key={index} style={styles.roomImageWrapper}>
-              <Image source={{ uri: imageObj }} style={styles.roomImage} />
+              <Image source={{ uri: `data:image/png;base64,${base64Image}` }}
+                style={styles.roomImage} />
               <TouchableOpacity
-                 style={styles.removeButton}
-                
-                
-                
+                style={styles.removeButton}
+
+
+
                 onPress={() => handleRemoveRoomImage(i + index)}>
                 <Image
                   source={require('../Images/ic_delete.png')}
@@ -331,10 +302,11 @@ const RoomCreateScreen = () => {
               </TouchableOpacity>
             </View>
           ))}
-        </View>
+        </View>,
       );
     }
-    return (
+
+  return (
       <ScrollView style={styles.imageContainer}>
         <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
           <ProfileComponent setImageUri={handleAddRoomImage} />
@@ -344,9 +316,9 @@ const RoomCreateScreen = () => {
     );
   };
   return (
-    <ScrollView style={styles.createcontainer}>
+    <ScrollView style={styles.createcontainer} contentContainerStyle={{ paddingBottom: 90 }} keyboardShouldPersistTaps="handled" >
       <View style={{ alignSelf: 'center' }}>
-        <TeamXLogoImage />
+        {/* <TeamXLogoImage /> */}
       </View>
       <Text style={styles.createtitle}>Create Room</Text>
 
@@ -358,6 +330,8 @@ const RoomCreateScreen = () => {
           onChangeText={setRoomName}
           placeholder="Enter room name"
           onSubmitEditing={() => detailsRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={roomNameError} />
       </View>
@@ -372,6 +346,8 @@ const RoomCreateScreen = () => {
           multiline
           placeholder="Enter your details"
           onSubmitEditing={() => rentRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={detailsError} />
       </View>
@@ -386,6 +362,8 @@ const RoomCreateScreen = () => {
           keyboardType="numeric"
           placeholder="Enter your room rent"
           onSubmitEditing={() => floorRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={rentError} />
       </View>
@@ -399,6 +377,8 @@ const RoomCreateScreen = () => {
           keyboardType="numeric"
           placeholder="Enter your room floor"
           onSubmitEditing={() => whatsappLinkRef.current.focus()}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={floorError} />
       </View>
@@ -406,13 +386,13 @@ const RoomCreateScreen = () => {
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Looking for</Text>
         <RadioButton.Group
-        onValueChange={newValue => setLookingFor(newValue)}
-        value={lookingFor}
-      >
-        <RadioButton.Item label="Male" value="male" />
-        <RadioButton.Item label="Female" value="female" />
-        <RadioButton.Item label="Both" value="family" />
-      </RadioButton.Group>
+          onValueChange={newValue => setLookingFor(newValue)}
+          value={lookingFor}
+        >
+          <RadioButton.Item label="Male" value="male" />
+          <RadioButton.Item label="Female" value="female" />
+          <RadioButton.Item label="Both" value="family" />
+        </RadioButton.Group>
       </View>
 
       <View style={styles.inputGroup}>
@@ -431,6 +411,8 @@ const RoomCreateScreen = () => {
           placeholder="Select your room type"
           placeholderStyle={{ color: '#B3B3B3' }}
           textStyle={{ fontSize: 18 }}
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={roomTypeError} />
       </View>
@@ -445,6 +427,8 @@ const RoomCreateScreen = () => {
           minimumTrackTintColor="#814ABF"
           maximumTrackTintColor="#d3d3d3"
           thumbTintColor="#814ABF"
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <Text style={{ color: '#814ABF' }}>
           Selected availability: {availability}
@@ -468,6 +452,9 @@ const RoomCreateScreen = () => {
             value={whatsappLink}
             onChangeText={setWhatsappLink}
             onSubmitEditing={() => telegramLinkRef.current.focus()}
+            onFocus={() => setTabBarVisibility(false)}
+            onBlur={() => setTabBarVisibility(true)}
+
           />
         </View>
         <TeamXErrorText errorText={whatsappLinkError} />
@@ -489,6 +476,8 @@ const RoomCreateScreen = () => {
             value={telegramLink}
             onChangeText={setTelegramLink}
             onSubmitEditing={() => addressRef.current.focus()}
+            onFocus={() => setTabBarVisibility(false)}
+            onBlur={() => setTabBarVisibility(true)}
           />
         </View>
         <TeamXErrorText errorText={telegramLinkError} />
@@ -527,6 +516,8 @@ const RoomCreateScreen = () => {
           value={address}
           onChangeText={setAddress}
           placeholder="Enter your address"
+          onFocus={() => setTabBarVisibility(false)}
+          onBlur={() => setTabBarVisibility(true)}
         />
         <TeamXErrorText errorText={addressError} />
       </View>
@@ -553,6 +544,8 @@ const RoomCreateScreen = () => {
             onChangeText={setLatitude}
             keyboardType="numeric"
             placeholder="Enter latitude"
+            onFocus={() => setTabBarVisibility(false)}
+            onBlur={() => setTabBarVisibility(true)}
           />
           <Text style={styles.coordinateDirection}>
             {latitude ? getLatitudeDirection(parseFloat(latitude)) : 'N/S'}
@@ -569,6 +562,8 @@ const RoomCreateScreen = () => {
             onChangeText={setLongitude}
             keyboardType="numeric"
             placeholder="Enter longitude"
+            onFocus={() => setTabBarVisibility(false)}
+            onBlur={() => setTabBarVisibility(true)}
           />
           <Text style={styles.coordinateDirection}>
             {longitude ? getLongitudeDirection(parseFloat(longitude)) : 'E/W'}
@@ -612,3 +607,7 @@ const RoomCreateScreen = () => {
 };
 
 export default RoomCreateScreen;
+function launchImageLibrary(options: { mediaType: string; includeBase64: boolean; maxWidth: number; maxHeight: number; }, arg1: (response: any) => void) {
+  throw new Error('Function not implemented.');
+}
+
