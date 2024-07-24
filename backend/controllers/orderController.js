@@ -28,6 +28,10 @@ const createOrder = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(customer_id)) {
             return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
         }
+        const order = await Order.findOne({order_id: order_id})
+        if(order) {
+          return res.status(400).json(baseResponses.constantMessages.ORDER_ID_ALREADY_EXISTS());
+        }
         const newOrder = new Order({
             order_id,
             order_amount,
@@ -43,7 +47,6 @@ const createOrder = async (req, res) => {
         });
         await newOrder.save();
         const response = await Cashfree.PGCreateOrder('2022-09-01', request);
-        console.log(response);
         return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(response.data));
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
