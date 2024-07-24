@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { baseResponses } = require('../helpers/baseResponses');
 const { Rating } = require('../models/ratingModel');
 const User = require('../models/userModel');
@@ -8,19 +9,16 @@ const giveRatings = async (req, res) => {
         if (!user_id || !room_id || !rating) {
             return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
         }
-        const user = await User.findOne({ _id: user_id });
-        const room = await Room.findOne({ _id: room_id });
-        if (user && room) {
-            const newRating = new Rating({
-                user_id,
-                room_id,
-                rating
-            });
-            await newRating.save();
-            return res.status(200).json(baseResponses.constantMessages.RATING_GIVEN());
+        if (!mongoose.Types.ObjectId.isValid(user_id) || !mongoose.Types.ObjectId.isValid(room_id)) {
+            return res.status(404).json(baseResponses.constantMessages.USER_OR_ROOM_NOT_FOUND());
         }
-        return res.status(404).json(baseResponses.constantMessages.USER_OR_ROOM_NOT_FOUND());
-
+        const newRating = new Rating({
+            user_id,
+            room_id,
+            rating
+        });
+        await newRating.save();
+        return res.status(200).json(baseResponses.constantMessages.RATING_GIVEN());
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
     }
@@ -49,13 +47,13 @@ const getAllRatings = async (req, res) => {
         const room_id = req.query.room_id;
         const count = await Rating.countDocuments();
         const totalPages = Math.ceil(count / recLimit);
+        if (!mongoose.Types.ObjectId.isValid(room_id)) {
+            return res.status(400).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
+        }
         const rating = await Rating.find({ room_id: room_id })
             .skip((pageNumber - 1) * recLimit)
             .limit(recLimit);
 
-        if (!rating) {
-            return res.status(404).json(null);
-        }
         return res.status(200).json({ totalPages, count, rating });
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
@@ -66,6 +64,9 @@ const totalRatings = async (req, res) => {
         const room_id = req.query.room_id;
         if (!room_id) {
             return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
+        }
+        if (!mongoose.Types.ObjectId.isValid(room_id)) {
+            return res.status(400).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
         }
         const rating = await Rating.find({ room_id: room_id });
         const totalRating = rating.reduce((sum, rating) => sum + rating.rating, 0);
