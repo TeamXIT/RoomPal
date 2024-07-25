@@ -83,7 +83,7 @@ export const createRoom = (
   longitude: number,
   amenities: string[],
   gender: string,
-  images:string[],
+  images: string[],
   whatsappLink: string,
   telegramLink: string,
 
@@ -91,29 +91,29 @@ export const createRoom = (
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
+
   try {
-  
-    const response = await axios.post(`${API_BASE_URL}/room/create`, { 
+    const response = await axios.post(`${API_BASE_URL}/room/create`, {
       roomName,
       details,
       availability,
       roomType,
       floor,
       rent,
-      location:{lat:latitude,lon:longitude},
+      location: { lat: latitude, lon: longitude },
       amenities,
       gender,
       images,
       whatsappLink,
       telegramLink
     });
-   
+
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));
   } catch (error) {
     console.error(error);
     dispatch(setError(error.response?.data?.message || error.message || 'Room creation failed'));
-   
+
   } finally {
     dispatch(setBusy(false));
   }
@@ -143,15 +143,15 @@ export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) 
   dispatch(setBusy(true));
   dispatch(setError(''));
   try {
-    roomName=roomName.toString()
+    roomName = roomName.toString()
     const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
-      params: { roomName:roomName },
+      params: { roomName: roomName },
     });
     console.log(response.data);
     dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
     dispatch(setSuccess('Room fetched successfully.'));
   } catch (error) {
-    
+
     console.error(error);
     dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {

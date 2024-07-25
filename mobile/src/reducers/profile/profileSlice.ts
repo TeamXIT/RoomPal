@@ -22,8 +22,8 @@ const initialState: ProfileState = {
         success: '',
     },
     data: {
-        user:[],
-        profile:[]
+        user: [],
+        profile: []
 
     },
 };
@@ -44,66 +44,63 @@ const profileSlice = createSlice({
         setUser: (state, action: PayloadAction<any>) => {
             state.data.user = action.payload;
         },
-        setProfile: (state, action: PayloadAction<any>) =>{
+        setProfile: (state, action: PayloadAction<any>) => {
             state.data.profile = action.payload;
         }
     }
 });
 
-export const { setBusy, setError, setSuccess, setUser, setProfile} = profileSlice.actions;
+export const { setBusy, setError, setSuccess, setUser, setProfile } = profileSlice.actions;
 
 export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispatch) => {
-    console.log(usermobileNumber);
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
     try {
-        const response = await axios.get(`${API_BASE_URL}/user/getByNumber`,  { params:{mobileNumber:usermobileNumber} } );
-        console.log(response.status);
-
+        const response = await axios.get(`${API_BASE_URL}/user/getByNumber`, { params: { mobileNumber: usermobileNumber } });
         dispatch(setSuccess('Profile fetched successfully.'));
         dispatch(setBusy(false));
         dispatch(setUser(response.data.message));
     } catch (error) {
-        console.log(error)
         dispatch(setError(error.response?.data?.message || error.message || 'Fetching profile failed.'));
         dispatch(setBusy(false));
     }
 };
 
-   export const updateProfile = ( 
+export const updateProfile = (
+    mobileNumber: number,
     fullName: string,
     image: string,
     email: string,
     dateOfBirth: string,
     gender: string,
     makeMobilePrivate: boolean,
-   ):
+):
     AppThunk => async (dispatch) => {
-    dispatch(setBusy(true));
-    dispatch(setError(''));
-    dispatch(setSuccess(''));
-  try {
-        console.log("updatedData:", fullName, image, email, dateOfBirth, gender,  makeMobilePrivate, );
-        const response = await axios.put(`${API_BASE_URL}/user/update`, { 
-            fullName,
-            image,
-            email,
-            dateOfBirth,
-            gender,
-            makeMobilePrivate,
-            
-         });
-        console.log('Profile updated:', response.data);
-        dispatch(setSuccess('Profile updated successfully.'));
-        dispatch(setBusy(false));
-        dispatch(setProfile(response.data.message)); 
-    } catch (error) {
-        console.log("updateCatch:",error);
-        dispatch(setError(error.response?.data?.message || error.message || 'Updating profile failed.'));
-        dispatch(setBusy(false));
-      }
-};
+        dispatch(setBusy(true));
+        dispatch(setError(''));
+        dispatch(setSuccess(''));
+        try {
+            const response = await axios.put(`${API_BASE_URL}/user/update??mobileNumber=${mobileNumber}`, {
+                params: {
+                    fullName: fullName,
+                    image: image,
+                    email: email,
+                    dateOfBirth: dateOfBirth,
+                    gender: gender,
+                    makeMobilePrivate: makeMobilePrivate,
+                }
+            });
+            console.log('Profile updated:', response.data);
+            dispatch(setSuccess('Profile updated successfully.'));
+            dispatch(setBusy(false));
+            dispatch(setProfile(response.data.message));
+        } catch (error) {
+            console.log("updateCatch:", error);
+            dispatch(setError(error.response?.data?.message || error.message || 'Updating profile failed.'));
+            dispatch(setBusy(false));
+        }
+    };
 
 
 export default profileSlice.reducer;
