@@ -28,27 +28,23 @@ const telegramIcon = require('../Images/ic_telegram.png');
 
 const { width } = Dimensions.get('window');
 
-const allAmenities = [
-  { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value: 'wifi' },
-  { id: 'bathroom', src: bathroomImage, label: 'Inside Bathroom', value: 'bathroom' },
-  { id: 'airCondition', src: airConditionerImage, label: 'Air Conditioner', value: 'airCondition' },
-  { id: 'springBed', src: springBedImage, label: 'Spring Bed', value: 'springBed' },
-  { id: 'kitchen', src: kitchenImage, label: 'Kitchen', value: 'kitchen' },
-  { id: 'parking', src: parkingImage, label: 'Parking Area', value: 'parking' },
-  { id: 'balcony', src: balconyImage, label: 'Balcony', value: 'balcony' },
-];
+// const allAmenities = [
+//   { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value: 'wifi' },
+//   { id: 'bathroom', src: bathroomImage, label: 'Inside Bathroom', value: 'bathroom' },
+//   { id: 'airCondition', src: airConditionerImage, label: 'Air Conditioner', value: 'airCondition' },
+//   { id: 'springBed', src: springBedImage, label: 'Spring Bed', value: 'springBed' },
+//   { id: 'kitchen', src: kitchenImage, label: 'Kitchen', value: 'kitchen' },
+//   { id: 'parking', src: parkingImage, label: 'Parking Area', value: 'parking' },
+//   { id: 'balcony', src: balconyImage, label: 'Balcony', value: 'balcony' },
+// ];
 
 const RoomDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.room);
-  const { roomName } = route.params;
+  // const { room } = route;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [images, setImages] = useState([]);
-
-  useEffect(() => {
-    dispatch(fetchRoomByName(roomName));
-  }, [dispatch, roomName]);
 
   useEffect(() => {
     if (data && data[0]) {
@@ -175,8 +171,10 @@ const RoomDetails = ({ route, navigation }) => {
           </Text>
         </View>
       </View>
+      
       <View style={styles.detailsContainer}>
-        <Text style={styles.Roomtitle}>{roomName}</Text>
+        
+        <Text style={styles.Roomtitle}>{route.params.roomName.roomName}</Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.Roomrating}>⭐4.9 </Text>
           <Text style={styles.middleDot}> •</Text>
@@ -184,9 +182,9 @@ const RoomDetails = ({ route, navigation }) => {
         </View>
 
         <Text style={styles.amenitiesTitle}>Amenities and facilities</Text>
-        <View style={styles.amenitiesContainer}>
-          {allAmenities.map((item) => renderAmenityItem({ item }))}
-        </View>
+        {/* <View style={styles.amenitiesContainer}>
+          {route.params.amenities.map((item) => renderAmenityItem({ item }))}
+        </View> */}
         <View style={styles.contactContainer}>
           <TouchableOpacity style={styles.contactButton} onPress={openWhatsApp}>
             <Image

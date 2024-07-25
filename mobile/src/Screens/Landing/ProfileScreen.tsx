@@ -4,7 +4,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProfile } from '../../reducers/profile/profileSlice';
+import { fetchProfile, updateProfile } from '../../reducers/profile/profileSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor } from '../Styles/Styles';
 import axios from 'axios';
@@ -53,11 +53,6 @@ const ProfileScreen = () => {
     setMakeMobilePrivate(data.user.makeMobilePrivate ? 'True' : 'False');
   }, [data]);
 
-  useEffect(() =>{
-
-
-  },[data.profile]);
-
   const handleAddProfileImage = (uri) => {
     setImageUri({ uri });
   };
@@ -91,6 +86,7 @@ const ProfileScreen = () => {
     ]);
   };
 
+  
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -100,22 +96,10 @@ const ProfileScreen = () => {
   const handleConfirm = (dateOfBirth) => {
     const formattedDate = dateOfBirth.toLocaleDateString('en-GB');
     setDateOfBirth(formattedDate);
-    handleEditDobPress(formattedDate);
+    dispatch(updateProfile('dateOfBirth', formattedDate));
     hideDatePicker();
   };
 
-  const handleEditNamePress = async (fullName) => {
-    await axios.put(`${API_BASE_URL}/user/update`, { fullName });
-  };
-  const handleEditEmailPress = async (email) => {
-    await axios.put(`${API_BASE_URL}/user/update`, { email });
-  };
-  const handleEditDobPress = async (dateOfBirth) => {
-    await axios.put(`${API_BASE_URL}/user/update`, { dateOfBirth });
-  };
-  const handleEditMobileNumberPress = async (mobileNumber) => {
-    await axios.put(`${API_BASE_URL}/user/update`, { mobileNumber });
-  };
 
   const openEditModal = (field, value) => {
     setEditValue(value);
@@ -127,20 +111,28 @@ const ProfileScreen = () => {
     try {
       switch (fieldBeingEdited) {
         case 'fullName':
-          await handleEditNamePress(editValue);
+          dispatch(updateProfile('fullName', editValue));
           setFullName(editValue);
           break;
         case 'email':
-          await handleEditEmailPress(editValue);
+          dispatch(updateProfile('email', editValue));
           setEmail(editValue);
           break;
         case 'dateOfBirth':
-          await handleEditDobPress(editValue);
+          dispatch(updateProfile('dateOfBirth', editValue));
           setDateOfBirth(editValue);
           break;
         case 'mobileNumber':
-          await handleEditMobileNumberPress(editValue);
+          dispatch(updateProfile('mobileNumber', editValue));
           setMobileNumber(editValue);
+          break;
+        case 'gender':
+          dispatch(updateProfile('gender', editValue));
+          setGender(editValue);
+          break;
+        case 'makeMobilePrivate':
+          dispatch(updateProfile('makeMobilePrivate', editValue));
+          setMakeMobilePrivate(editValue);
           break;
       }
       setModalVisible(false);
