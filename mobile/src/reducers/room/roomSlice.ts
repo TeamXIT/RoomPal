@@ -126,7 +126,20 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   dispatch(setSuccess(''));
   try {
     console.log('create params:', room);
-    const response = await axios.post(`${API_BASE_URL}/room/create`, room);
+    const response = await axios.post(`${API_BASE_URL}/room/create`,{params:{
+      roomName:room.roomName, 
+      details:room.details,
+      availability:room.availability,
+      roomType:room.roomType,
+      floor:room.floor,
+      rent:room.rent,
+      location:room.location,
+      amenities:room.amenities,
+      gender:room.gender,
+      images:room.images,
+      whatsappLink:room.whatsappLink,
+      telegramLink:room.telegramLink
+    } });
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));
     dispatch(fetchRooms()); // Fetch the updated list of rooms

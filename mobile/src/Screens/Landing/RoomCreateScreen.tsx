@@ -34,7 +34,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
       checked: false,
     },
     {
-      name: 'Bathroom',
+      name: 'washer',
       image: require('../Images/ic_bathRoom.png'),
       checked: false,
     },
@@ -90,15 +90,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const telegramLinkRef = useRef(null);
   const addressRef = useRef(null);
 
-  const handleAddDetail = () => {
-    if (detail.trim()) {
-      setDetails([...details, detail.trim()]);
-      
-    } else {
-      Alert.alert('Error', 'Please enter a detail.');
-    }
-  };
-
+ 
   const handleSubmitData = async () => {
     try {
       let hasError = false;
@@ -165,8 +157,8 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
     } else {
       setRoomTypeError('');
     }
-    // location = { lat: latitude, lon: longitude };
-    location = { lat: Number(latitude) || 0, lon: Number(longitude) || 0 };
+    location = { lat: latitude, lon: longitude };
+    
 
     const amenitiesObj = {
       "wifi": amenities?.find(a => a.name === 'Wi-Fi')?.checked || false,
