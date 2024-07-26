@@ -28,9 +28,11 @@ const initialState: AuthState = {
     otp: null,
   },
 };
+
 const customConfig = {
   headers: { "Content-Type": "application/json" }
 }
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -99,7 +101,6 @@ export const register = (
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    console.log('params:', fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom, lookingForRoommate, password, confirmPassword)
     const reqUrl = `${API_BASE_URL}/auth/register`;
     console.log("Req URL: ", reqUrl);
     const response = await axios.post(reqUrl,
