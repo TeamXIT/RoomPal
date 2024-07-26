@@ -107,11 +107,11 @@ export const register = (
         fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom, lookingForRoommate, password, confirmPassword
       }, customConfig);
     console.log('response:', response)
-
-    await dispatch(setSuccess('User registered successfully.'));
-    await dispatch(signIn(mobileNumber, password));
+    if (response?.status == 200) {
+      await dispatch(setSuccess('User registered successfully.'));
+      await dispatch(signIn(mobileNumber, password));
+    }
   } catch (error) {
-    console.log('Error:', error)
     dispatch(setError(error.response?.data?.message || 'Registration failed'));
   } finally {
     dispatch(setBusy(false));
