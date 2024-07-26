@@ -100,23 +100,16 @@ export const register = (
   dispatch(setSuccess(''));
   try {
     console.log('params:', fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom, lookingForRoommate, password, confirmPassword)
-    const response = await axios.post(`${API_BASE_URL}/auth/register`, {
-      params: {
-        fullName: fullName,
-        email: email,
-        mobileNumber: mobileNumber,
-        dateOfBirth: dateOfBirth,
-        gender: gender,
-        lookingForRoom: lookingForRoom,
-        lookingForRoommate: lookingForRoommate,
-        password: password,
-        confirmPassword: confirmPassword
-      }
-    }, customConfig);
+    const reqUrl = `${API_BASE_URL}/auth/register`;
+    console.log("Req URL: ", reqUrl);
+    const response = await axios.post(reqUrl,
+      {
+        fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom, lookingForRoommate, password, confirmPassword
+      }, customConfig);
     console.log('response:', response)
+
     await dispatch(setSuccess('User registered successfully.'));
     await dispatch(signIn(mobileNumber, password));
-    console.log('register mobile number:', mobileNumber)
   } catch (error) {
     console.log('Error:', error)
     dispatch(setError(error.response?.data?.message || 'Registration failed'));

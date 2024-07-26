@@ -60,7 +60,6 @@ const RoomPalIntro = ({ navigation }) => {
         if (sliderRef.current) {
             sliderRef.current.goToSlide(currentIndex + 1);
             setCurrentIndex(currentIndex + 1);
-            
         } 
     };
 
