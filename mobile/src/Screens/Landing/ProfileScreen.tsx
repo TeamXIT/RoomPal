@@ -9,17 +9,22 @@ import { RootState } from '../../reducers/store';
 import { primaryColor } from '../Styles/Styles';
 import axios from 'axios';
 import API_BASE_URL from '../../reducers/config/apiConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setMobileNumber } from '../../reducers/auth/authSlice';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state: RootState) => state.profile);
   const usermobileNumber = useSelector((state: RootState) => state.auth.data.mobileNumber);
+   console.log("mobile number:",usermobileNumber)
+  // const [mobileNumber,setMobileNumber] = useState(data.user.mobileNumber)
+  const [userData, setUserData] = useState({});
 
   const [imageUri, setImageUri] = useState(data.user.image || require('../Images/ic_person.png'));
-  const [fullName, setFullName] = useState(data.user.fullName || 'Teamx');
-  const [email, setEmail] = useState(data.user.email || 'Teamx@gmail.com');
+  const [fullName, setFullName] = useState(data.user.fullName );
+  const [email, setEmail] = useState(data.user.email );
   const [dateOfBirth, setDateOfBirth] = useState(data.user.dateOfBirth ? new Date(data.user.dateOfBirth).toLocaleDateString('en-GB') : '12/07/2024');
-  const [gender, setGender] = useState(data.user.gender || 'Male');
+  const [gender, setGender] = useState(data.user.gender );
   const [makeMobilePrivate, setMakeMobilePrivate] = useState(data.user.makeMobilePrivate ? 'True' : 'False');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [genderTypeOpen, setGenderTypeOpen] = useState(false);
@@ -38,25 +43,88 @@ const ProfileScreen = () => {
   const [fieldBeingEdited, setFieldBeingEdited] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    dispatch(fetchProfile(usermobileNumber));
-  }, [dispatch, usermobileNumber]);
-
+   useEffect(() => {
+     dispatch(fetchProfile(usermobileNumber));
+    }, [dispatch, usermobileNumber]);
+   
   useEffect(() => {
    if(data.user){
+    console.log("Profile Data:", data.user); // Log entire user data
+
+    setMobileNumber('9888888888')
+    console.log("Profile mobile number:",data.user.mobileNumber ); // Log entire user data
+
     setImageUri(data.user.image || require('../Images/ic_person.png'));
-    setFullName(data.user.fullName || 'Teamx');
-    setEmail(data.user.email || 'Teamx@gmail.com');
-    setDateOfBirth(data.user.dateOfBirth ? new Date(data.user.dateOfBirth).toLocaleDateString('en-GB') : '12/07/1024');
-    setGender(data.user.gender || 'Male');
+    setFullName(data.user.fullName  );
+    setEmail(data.user.email  );
+    setDateOfBirth(data.user.dateOfBirth );
+    setGender(data.user.gender );
     setMakeMobilePrivate(data.user.makeMobilePrivate ? 'True' : 'False');
-}}, [data]);
+   }}, [data]);
+
+  // useEffect(() => {
+    // const fetchUserData = async () => {
+      // try {
+        // const data = await AsyncStorage.getItem('userData');
+        // if (data) {
+          // const parsedData = JSON.parse(data);
+          // setUserData(parsedData);
+
+          // setImageUri(parsedData.image || require('../Images/ic_person.png'));
+          // setFullName(parsedData.fullName);
+          // setEmail(parsedData.email);
+          // setDateOfBirth(parsedData.dateOfBirth);
+          // setGender(parsedData.gender);
+          // setMakeMobilePrivate(parsedData.makeMobilePrivate ? 'True' : 'False');
+        // }
+      // } catch (error) {
+        // console.error('Failed to load user data:', error);
+      // }
+    // };
+
+    // fetchUserData();
+  // }, []);
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+
 
 const handleAddProfileImage = (uri) => {
   setImageUri({ uri });
   dispatch(updateProfile({
-    ...data.user,
+     ...data.user,
+    //...userData,
     image: uri,
+    mobileNumber:usermobileNumber
   }));
 };
   
@@ -104,8 +172,12 @@ const handleAddProfileImage = (uri) => {
     const formattedDate = date.toLocaleDateString('en-GB');
     setDateOfBirth(formattedDate);
     dispatch(updateProfile({
-      ...data.user,
+       ...data.user,
+      //...userData,
       dateOfBirth: formattedDate,
+      mobileNumber:usermobileNumber
+
+      
     }));
     hideDatePicker();
   };
@@ -125,10 +197,11 @@ const handleAddProfileImage = (uri) => {
   const handleSave = async () => {
     try {
       const updatedProfile = {
-        ...data.user,
+         ...data.user,
+        //...userData,
         [fieldBeingEdited]: editValue,
       };
-      dispatch(updateProfile(updatedProfile));
+      dispatch(updateProfile(updatedProfile,usermobileNumber));
       switch (fieldBeingEdited) {
         case 'fullName':
           setFullName(editValue);

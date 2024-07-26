@@ -28,7 +28,9 @@ const initialState: AuthState = {
     otp: null,
   },
 };
-
+const customConfig = {
+  headers: { "Content-Type": "application/json" }
+}
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -69,8 +71,8 @@ export const signIn = (mobileNumber: string, password: string): AppThunk => asyn
     dispatch(setMobileNumber(mobileNumber));
     dispatch(setSuccess('User logged in successfully.'));
   } catch (error) {
-    
-    dispatch(setError(error.response?.data?.message ||  'Sign in failed'));
+
+    dispatch(setError(error.response?.data?.message || 'Sign in failed'));
   } finally {
     dispatch(setBusy(false));
   }
@@ -84,13 +86,12 @@ export const register = (
   gender: string,
   lookingForRoom: boolean,
   lookingForRoommate: boolean,
-  preferences: {
-    clean: boolean;
-    pets: boolean;
-    smoking: boolean;
-    drinking: boolean;
-  },
-  makeMobilePrivate: boolean,
+  // preferences: {
+  // clean: boolean;
+  // pets: boolean;
+  // smoking: boolean;
+  // drinking: boolean;
+  // },
   password: string,
   confirmPassword: string
 ): AppThunk => async (dispatch) => {
@@ -98,24 +99,26 @@ export const register = (
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
+    console.log('params:', fullName, email, mobileNumber, dateOfBirth, gender, lookingForRoom, lookingForRoommate, password, confirmPassword)
     const response = await axios.post(`${API_BASE_URL}/auth/register`, {
-      fullName,
-      email,
-      mobileNumber,
-      dateOfBirth,
-      gender,
-      lookingForRoom,
-      lookingForRoommate,
-      preferences,
-      makeMobilePrivate,
-      password,
-      confirmPassword,
-    });
- 
+      params: {
+        fullName: fullName,
+        email: email,
+        mobileNumber: mobileNumber,
+        dateOfBirth: dateOfBirth,
+        gender: gender,
+        lookingForRoom: lookingForRoom,
+        lookingForRoommate: lookingForRoommate,
+        password: password,
+        confirmPassword: confirmPassword
+      }
+    }, customConfig);
+    console.log('response:', response)
     await dispatch(setSuccess('User registered successfully.'));
     await dispatch(signIn(mobileNumber, password));
+    console.log('register mobile number:', mobileNumber)
   } catch (error) {
-    
+    console.log('Error:', error)
     dispatch(setError(error.response?.data?.message || 'Registration failed'));
   } finally {
     dispatch(setBusy(false));
@@ -126,10 +129,10 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
- 
+
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/forgotPassword`, { mobileNumber });
-    
+
     if (response.status === 200) {
       dispatch(setOTP(response.data.otp))
       dispatch(setMobileNumber(mobileNumber));
@@ -143,15 +146,15 @@ export const forgotPassword = (mobileNumber: string): AppThunk => async (dispatc
   }
 };
 
-export const verifyOTP = ( otp: string): AppThunk => async (dispatch,getState) => {
+export const verifyOTP = (otp: string): AppThunk => async (dispatch, getState) => {
   const { mobileNumber } = getState().auth.data;
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-   
-    const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber,otp });
-    
+
+    const response = await axios.post(`${API_BASE_URL}/auth/verifyOTP`, { mobileNumber, otp });
+
     if (response.status === 200) {
       dispatch(setOTP(otp));
       dispatch(setSuccess('OTP verified successfully.'));
@@ -186,7 +189,7 @@ export const resetPassword = (newPassword: string, confirmPassword: string): App
 };
 
 export const resendOtp = (): AppThunk => async (dispatch, getState) => {
-   const { mobileNumber } = getState().auth.data;
+  const { mobileNumber } = getState().auth.data;
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));

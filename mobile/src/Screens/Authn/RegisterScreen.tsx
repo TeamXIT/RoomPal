@@ -8,6 +8,8 @@ import PhoneInput from "react-native-phone-number-input";
 import TeamXErrorText from '../molecule/TeamXErrorText';
 import { register } from '../../reducers/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const RegisterScreen = ({ navigation }) => {
@@ -42,6 +44,7 @@ const RegisterScreen = ({ navigation }) => {
   const [generalError, setGeneralError] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDobSelected, setDobSelected] = useState(false); // State to manage if DOB is selected
+  
 
   const [errors, setErrors] = useState({}); // State for errors
 
@@ -144,8 +147,9 @@ const RegisterScreen = ({ navigation }) => {
     }
 
 
-
+  
     if (!hasError) {
+     try{
       const formData = {
         fullName,
         email,
@@ -154,11 +158,13 @@ const RegisterScreen = ({ navigation }) => {
         gender,
         lookingForRoom: lookingForRoom ,
         lookingForRoommate: lookingForRoommate,
-        preferences,
-        makeMobilePrivate,
+        // preferences,
         password,
         confirmPassword,
       }
+      console.log(formData)
+      await AsyncStorage.setItem('userData', JSON.stringify(formData));
+
        dispatch(register(
         fullName, 
         email, 
@@ -167,15 +173,20 @@ const RegisterScreen = ({ navigation }) => {
         gender, 
         lookingForRoom , 
         lookingForRoommate, 
-        preferences, 
-        makeMobilePrivate, 
         password,
         confirmPassword,
       ));
       if(signupError) {
         setGeneralError(signupError)
       }
-    };
+
+
+    
+  }catch(error){
+    console.log('Failed to save data:', error)
+  }
+
+}
    
 
     // Reset state values
@@ -206,8 +217,14 @@ const RegisterScreen = ({ navigation }) => {
       setDatePickerVisibility(false);
     };
 
+    // const handleConfirm = (dateOfBirth) => {
+      // setDateOfBirth(dateOfBirth.toLocaleDateString('en-GB')); // Format the date as "dd-mm-yyyy"
+      // setDobSelected(true); // Mark DOB as selected
+      // hideDatePicker();
+    // };
     const handleConfirm = (dateOfBirth) => {
-      setDateOfBirth(dateOfBirth.toLocaleDateString('en-GB')); // Format the date as "dd-mm-yyyy"
+      const formattedDate = moment(dateOfBirth).format('YYYY-MM-DD');
+      setDateOfBirth(formattedDate);
       setDobSelected(true); // Mark DOB as selected
       hideDatePicker();
     };
