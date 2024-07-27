@@ -90,8 +90,9 @@ export const updateProfile = (
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
+
     try {
-        const response = await axios.put(`${API_BASE_URL}/user/update`, {
+        const response = await axios.put(`${API_BASE_URL}/user/update?mobileNumber=${mobileNumber}`, {
             mobileNumber,
             fullName,
             image,
@@ -100,18 +101,22 @@ export const updateProfile = (
             gender,
             makeMobilePrivate,
         }, customConfig);
-        console.log("Update resp: ", response);
         if (response?.status == 200) {
             fetchProfile(mobileNumber);
             dispatch(setSuccess('Profile updated successfully.'));
             dispatch(setBusy(false));
             dispatch(setProfile(response.data.message));
         }
-    } catch (error) {
-        console.log("Update error: ", error);
+} catch (error) {
         dispatch(setError(error?.response?.data?.message || error?.message || 'Updating profile failed.'));
         dispatch(setBusy(false));
     }
 };
 
 export default profileSlice.reducer;
+
+
+
+
+
+
