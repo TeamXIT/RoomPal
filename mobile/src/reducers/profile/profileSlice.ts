@@ -49,7 +49,17 @@ const profileSlice = createSlice({
     }
 });
 
-export const { setBusy, setError, setSuccess, setUser, setProfile } = profileSlice.actions;
+export const {
+    setBusy,
+    setError,
+    setSuccess,
+    setUser,
+    setProfile
+} = profileSlice.actions;
+
+const customConfig = {
+    headers: { "Content-Type": "application/json" }
+}
 
 export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispatch) => {
     dispatch(setBusy(true));
@@ -57,19 +67,19 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
     dispatch(setSuccess(''));
     try {
         const response = await axios.get(`${API_BASE_URL}/user/getByNumber`, { params: { mobileNumber: usermobileNumber } });
-        dispatch(setSuccess('Profile fetched successfully.'));
-        dispatch(setBusy(false));
-        dispatch(setUser(response.data.message));
-        console.log(response.data.message); // This will log the entire response message
+        if (response?.status == 200) {
+            dispatch(setSuccess('Profile fetched successfully.'));
+            dispatch(setBusy(false));
+            dispatch(setUser(response.data.message));
+        }
     } catch (error) {
-        console.log("fetchData:", error);
-        dispatch(setError(error.response?.data?.message || error.message || 'Fetching profile failed.'));
+        dispatch(setError(error?.response?.data?.message || error?.message || 'Fetching profile failed.'));
         dispatch(setBusy(false));
     }
 };
 
 export const updateProfile = (
-    mobileNumber:string,
+    mobileNumber: string,
     fullName: string,
     image: string,
     email: string,
@@ -82,21 +92,24 @@ export const updateProfile = (
     dispatch(setSuccess(''));
     try {
         const response = await axios.put(`${API_BASE_URL}/user/update`, {
-            mobileNumber: mobileNumber,
-            fullName: fullName,
-            image: image,
-            email: email,
-            dateOfBirth: dateOfBirth,
-            gender: gender,
-            makeMobilePrivate: makeMobilePrivate,
-        });
-        console.log('Profile updated:', response.data);
-        dispatch(setSuccess('Profile updated successfully.'));
-        dispatch(setBusy(false));
-        dispatch(setProfile(response.data.message));
+            mobileNumber,
+            fullName,
+            image,
+            email,
+            dateOfBirth,
+            gender,
+            makeMobilePrivate,
+        }, customConfig);
+        console.log("Update resp: ", response);
+        if (response?.status == 200) {
+            fetchProfile(mobileNumber);
+            dispatch(setSuccess('Profile updated successfully.'));
+            dispatch(setBusy(false));
+            dispatch(setProfile(response.data.message));
+        }
     } catch (error) {
-        console.log("updateCatch:", error);
-        dispatch(setError(error.response?.data?.message || error.message || 'Updating profile failed.'));
+        console.log("Update error: ", error);
+        dispatch(setError(error?.response?.data?.message || error?.message || 'Updating profile failed.'));
         dispatch(setBusy(false));
     }
 };
