@@ -7,34 +7,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile, updateProfile } from '../../reducers/profile/profileSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor } from '../Styles/Styles';
-import axios from 'axios';
-import API_BASE_URL from '../../reducers/config/apiConfig';
+import { setMobileNumber } from '../../reducers/auth/authSlice';
+import RNFS from 'react-native-fs';
+import { format,parseISO } from 'date-fns';
+
+
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state: RootState) => state.profile);
   const usermobileNumber = useSelector((state: RootState) => state.auth.data.mobileNumber);
-
-  const [imageUri, setImageUri] = useState(data.user.image || require('../Images/ic_person.png'));
-  const [fullName, setFullName] = useState(data.user.fullName || 'Teamx');
-  const [mobileNumber, setMobileNumber] = useState(data.user.mobileNumber || '123456789');
-  const [email, setEmail] = useState(data.user.email || 'Teamx@gmail.com');
-  const [dateOfBirth, setDateOfBirth] = useState(data.user.dateOfBirth ? new Date(data.user.dateOfBirth).toLocaleDateString('en-GB') : '12/07/1024');
-  const [gender, setGender] = useState(data.user.gender || 'Male');
-  const [makeMobilePrivate, setMakeMobilePrivate] = useState(data.user.makeMobilePrivate ? 'True' : 'False');
+  const [userData, setUserData] = useState(data.user);
+  const [imageUri, setImageUri] = useState(require('../Images/ic_person.png'));
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('2000-01-01');
+  const [gender, setGender] = useState(userData.gender);
+  const [makeMobilePrivate, setMakeMobilePrivate] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [genderTypeOpen, setGenderTypeOpen] = useState(false);
   const [genderItems, setGenderItems] = useState([
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
   ]);
   const [makeMobilePrivateOpen, setMakeMobilePrivateOpen] = useState(false);
   const [makeMobilePrivateItems, setMakeMobilePrivateItems] = useState([
-    { label: 'False', value: 'False' },
-    { label: 'True', value: 'True' },
+    { label: 'False', value: false },
+    { label: 'True', value: true },
   ]);
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [editValue, setEditValue] = useState('');
   const [fieldBeingEdited, setFieldBeingEdited] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -44,20 +45,51 @@ const ProfileScreen = () => {
   }, [dispatch, usermobileNumber]);
 
   useEffect(() => {
-    setImageUri(data.user.image || require('../Images/ic_person.png'));
-    setFullName(data.user.fullName || 'Teamx');
-    setMobileNumber(data.user.mobileNumber || '123456789');
-    setEmail(data.user.email || 'Teamx@gmail.com');
-    setDateOfBirth(data.user.dateOfBirth ? new Date(data.user.dateOfBirth).toLocaleDateString('en-GB') : '12/07/1024');
-    setGender(data.user.gender || 'Male');
-    setMakeMobilePrivate(data.user.makeMobilePrivate ? 'True' : 'False');
-  }, [data]);
+    if (data.user) {
+      setUserData(data.user);
+      setMobileNumber(data.user.mobileNumber)
+      setImageUri(data.user.image || require('../Images/ic_person.png'));
+      setFullName(data.user.fullName);
+      setEmail(data.user.email);
+      setDateOfBirth(formatDateToISO(data.user.dateOfBirth ? formatDateToISO(data.user.dateOfBirth) : '2000-01-01'));
+      setGender(data.user.gender);
+      setMakeMobilePrivate(data.user.makeMobilePrivate );
+    }
+  }, [data.user]);
 
-  const handleAddProfileImage = (uri) => {
-    setImageUri({ uri });
+
+  useEffect(() => {
+    updateUserProfile();
+  }, [data.profile]);
+
+ 
+  const convertToBase64 = async (uri) => {
+    try {
+      const base64String = await RNFS.readFile(uri, 'base64');
+      return `data:image/png;base64,${base64String}`; // Ensure proper data URL format
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+      return null;
+    }
   };
+  
+  
 
-  const handleSelectGallery = () => {
+const handleAddProfileImage = async (uri) => {
+    const base64String = await convertToBase64(uri);
+
+    if (base64String) {
+      setImageUri({ uri: base64String }); // Ensure proper data URL format
+      setUserData((prevState) => ({
+        ...prevState,
+        image: base64String, // Update image in userData
+      }));
+    }
+
+  
+
+
+const handleSelectGallery = () => {
     Alert.alert('Select your option', 'Select one of the options to set your profile picture.', [
       {
         text: 'Open Camera',
@@ -90,69 +122,60 @@ const ProfileScreen = () => {
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
+
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-  const handleConfirm = (dateOfBirth) => {
-    const formattedDate = dateOfBirth.toLocaleDateString('en-GB');
-    setDateOfBirth(formattedDate);
-    dispatch(updateProfile('dateOfBirth', formattedDate));
+
+  const handleConfirm = (date) => {
+   {
+      const formattedDate = formatDateToISO(date);;
+      setDateOfBirth(formattedDate);
+    }
     hideDatePicker();
   };
 
-
-  const openEditModal = (field, value) => {
-    setEditValue(value);
-    setFieldBeingEdited(field);
-    setModalVisible(true);
+  const formatDateToISO = (date) => {
+    try {
+      if (typeof date === 'string') {
+        date = parseISO(date);
+      }
+      return format(date, 'yyyy-MM-dd'); // Format to ISO date
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '2000-01-01'; // Return a default date or handle the error appropriately
+    }
+  };
+const formatDateFromISO = (date) => {
+    return date; // Return date in yyyy-MM-dd format directly
   };
 
-  const handleSave = async () => {
-    try {
-      switch (fieldBeingEdited) {
-        case 'fullName':
-          dispatch(updateProfile('fullName', editValue));
-          setFullName(editValue);
-          break;
-        case 'email':
-          dispatch(updateProfile('email', editValue));
-          setEmail(editValue);
-          break;
-        case 'dateOfBirth':
-          dispatch(updateProfile('dateOfBirth', editValue));
-          setDateOfBirth(editValue);
-          break;
-        case 'mobileNumber':
-          dispatch(updateProfile('mobileNumber', editValue));
-          setMobileNumber(editValue);
-          break;
-        case 'gender':
-          dispatch(updateProfile('gender', editValue));
-          setGender(editValue);
-          break;
-        case 'makeMobilePrivate':
-          dispatch(updateProfile('makeMobilePrivate', editValue));
-          setMakeMobilePrivate(editValue);
-          break;
-      }
-      setModalVisible(false);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-      // Handle error (e.g., show a message to the user)
+
+
+
+const handleSave = async () => {
+     dispatch(updateProfile(
+      userData.mobileNumber,
+      fullName,
+      userData.image, // Use base64 image string
+      email,
+      dateOfBirth,
+      gender,
+      makeMobilePrivate));
+     setIsEditing(false); // Set isEditing to false after saving
+
+  }
+
+  const handleEditProfilePress = () => {
+    if (isEditing) {
+      handleSave();
+    } else {
+      setIsEditing(true);
     }
   };
 
-  const renderEditableTextInput = (value, placeholder, field, isEditable = true) => (
-    <View style={styles.editableInputContainer}>
-      <Text style={styles.textInput}>{value}</Text>
-      {isEditable && (
-        <TouchableOpacity onPress={() => openEditModal(field, value)}>
-          <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  
+  
 
   return (
     <ScrollView>
@@ -161,9 +184,11 @@ const ProfileScreen = () => {
           <Text style={styles.title}>Profile</Text>
           <View style={styles.imageContainer}>
             <Image source={imageUri} style={styles.profileImage} />
-            <TouchableOpacity style={styles.editButton} onPress={handleSelectGallery}>
-              <Image source={require('../Images/ic_editImage.png')} style={styles.editIcon} />
-            </TouchableOpacity>
+            {isEditing && (
+              <TouchableOpacity style={styles.editButton} onPress={handleSelectGallery}>
+                <Image source={require('../Images/ic_editImage.png')} style={styles.editIcon} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <Text style={{ textAlign: 'center', color: primaryColor, fontSize: 20, marginTop: 10, fontWeight: 'bold' }}>{fullName}</Text>
@@ -171,58 +196,29 @@ const ProfileScreen = () => {
           <Text style={styles.label}>Full Name</Text>
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_person.png')} style={styles.inputIcon} />
-            {isEditing ? (
-              <TextInput
-                style={styles.textInput}
-                value={fullName}
-                onChangeText={setFullName}
-                placeholder="Enter your full name"
-              />
-            ) : (
-              <Text style={styles.textInput}>{fullName}</Text>
-            )}
+            <TextInput
+              style={styles.textInput}
+              value={fullName}
+              onChangeText={setFullName}
+              placeholder="Enter your full name"
+              editable={isEditing}
+            />
             {isEditing && (
-              <TouchableOpacity onPress={() => openEditModal('fullName', fullName)}>
-                <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
-              </TouchableOpacity>
+              <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             )}
           </View>
           <Text style={styles.label}>Email</Text>
           <View style={styles.profileInput}>
             <Image source={require('../Images/ic_email.png')} style={styles.inputIcon} />
-            {isEditing ? (
-              <TextInput
-                style={styles.textInput}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Enter your email"
-              />
-            ) : (
-              <Text style={styles.textInput}>{email}</Text>
-            )}
+            <TextInput
+              style={styles.textInput}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+              editable={isEditing}
+            />
             {isEditing && (
-              <TouchableOpacity onPress={() => openEditModal('email', email)}>
-                <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
-              </TouchableOpacity>
-            )}
-          </View>
-          <Text style={styles.label}>Mobile Number</Text>
-          <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_phone.png')} style={styles.inputIcon} />
-            {isEditing ? (
-              <TextInput
-                style={styles.textInput}
-                value={mobileNumber}
-                onChangeText={setMobileNumber}
-                placeholder="Enter your mobile number"
-              />
-            ) : (
-              <Text style={styles.textInput}>{mobileNumber}</Text>
-            )}
-            {isEditing && (
-              <TouchableOpacity onPress={() => openEditModal('mobileNumber', mobileNumber)}>
-                <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
-              </TouchableOpacity>
+              <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             )}
           </View>
           <Text style={styles.label}>Date of Birth</Text>
@@ -232,17 +228,14 @@ const ProfileScreen = () => {
               <TouchableOpacity onPress={showDatePicker} style={{ flex: 1 }}>
                 <TextInput
                   style={styles.textInput}
-                  value={dateOfBirth}
+                  value={formatDateFromISO(dateOfBirth)}
                   editable={false}
+                  onFocus={showDatePicker}
+
                 />
               </TouchableOpacity>
             ) : (
-              <Text style={styles.textInput}>{dateOfBirth}</Text>
-            )}
-            {isEditing && (
-              <TouchableOpacity onPress={() => openEditModal('dateOfBirth', dateOfBirth)}>
-                <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
-              </TouchableOpacity>
+              <Text style={styles.textInput}>{formatDateFromISO(dateOfBirth)}</Text>
             )}
             <DateTimePickerModal
               textColor='black'
@@ -251,6 +244,9 @@ const ProfileScreen = () => {
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
             />
+            {isEditing && (
+              <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
+            )}
           </View>
           <Text style={styles.label}>Gender</Text>
           <View style={styles.profileInput}>
@@ -274,11 +270,6 @@ const ProfileScreen = () => {
             ) : (
               <Text style={styles.textInput}>{gender}</Text>
             )}
-            {isEditing && (
-              <TouchableOpacity onPress={() => openEditModal('gender', gender)}>
-               
-              </TouchableOpacity>
-            )}
           </View>
           <Text style={styles.label}>Make Mobile Number Private</Text>
           <View style={styles.profileInput}>
@@ -292,47 +283,23 @@ const ProfileScreen = () => {
                 setOpen={setMakeMobilePrivateOpen}
                 setValue={setMakeMobilePrivate}
                 setItems={setMakeMobilePrivateItems}
+                onChangeValue={(value) => setMakeMobilePrivate(value)}
+
+                
                 containerStyle={{ height: 40, marginBottom: 10, marginRight: 10, width: 310 }}
-                dropDownContainerStyle={{ zIndex: 1}}
+                dropDownContainerStyle={{ zIndex: 1 }}
                 placeholder="Select an option"
                 placeholderStyle={{ color: '#B3B3B3' }}
                 textStyle={{ fontSize: 18 }}
               />
             ) : (
-              <Text style={styles.textInput}>{makeMobilePrivate}</Text>
-            )}
-            {isEditing && (
-              <TouchableOpacity onPress={() => openEditModal('makeMobilePrivate', makeMobilePrivate)}>
-                
-              </TouchableOpacity>
+              <Text style={styles.textInput}>{makeMobilePrivate ? 'True' : 'False'}</Text>
             )}
           </View>
         </View>
-        <TouchableOpacity style={styles.editProfileButton} onPress={() => setIsEditing(!isEditing)}>
+        <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfilePress}>
           <Text style={styles.editProfileButtonText}>{isEditing ? 'Save' : 'Edit Profile'}</Text>
         </TouchableOpacity>
-        <Modal
-          animationType='fade'
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Edit {fieldBeingEdited}</Text>
-              <TextInput
-                style={styles.modalTextInput}
-                value={editValue}
-                onChangeText={setEditValue}
-                placeholder={`Enter new ${fieldBeingEdited}`}
-              />
-             <View style={styles.modalButtons}>
-                <Button title="Save" onPress={handleSave} />
-                <Button title="Cancel" onPress={() => setModalVisible(false)} />
-            </View>
-          </View>
-          </View>
-        </Modal>
       </View>
     </ScrollView>
   );
@@ -452,7 +419,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 20,
     marginBottom: 100,
-    marginTop: -70, 
+    marginTop: -70,
     alignItems: 'center',
   },
   editProfileButtonText: {
