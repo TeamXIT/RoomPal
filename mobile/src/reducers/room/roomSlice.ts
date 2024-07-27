@@ -3,13 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
 
-
 type Room = {
   roomName: string;
   details: string[];
   availability: boolean;
   roomType: string;
-  floor: number;
+  floor: string; 
   rent: number;
   location: Location;
   amenities: Amenities;
@@ -35,8 +34,6 @@ type Location = {
   lat: number;
   lon: number;
 };
-
-
 
 type RoomState = {
   screen: {
@@ -64,7 +61,7 @@ const initialState: RoomState = {
     details: [],
     availability: false,
     roomType: '',
-    floor: 0,
+    floor: '', 
     rent: 0,
     location: { lat: 0, lon: 0 },
     amenities: {
@@ -85,8 +82,14 @@ const initialState: RoomState = {
   },
 };
 
+
+const customConfig = {
+  headers: { "Content-Type": "application/json"}
+}
+
 export const roomSlice = createSlice({
   name: 'room',
+  
   initialState,
   reducers: {
     setBusy: (state, action: PayloadAction<boolean>) => {
@@ -125,41 +128,50 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
+    
     console.log('create params:', room);
-    const response = await axios.post(`${API_BASE_URL}/room/create`,{params:{
-      roomName:room.roomName, 
-      details:room.details,
-      availability:room.availability,
-      roomType:room.roomType,
-      floor:room.floor,
-      rent:room.rent,
-      location:room.location,
-      amenities:room.amenities,
-      gender:room.gender,
-      images:room.images,
-      whatsappLink:room.whatsappLink,
-      telegramLink:room.telegramLink
-    } });
-    dispatch(addRoom(response.data.data));
-    dispatch(setSuccess('Room created successfully.'));
-    dispatch(fetchRooms()); // Fetch the updated list of rooms
+    
+    const response = await axios.post(`${API_BASE_URL}/room/create`, {
+      roomName: room.roomName,
+      details: room.details,
+      availability: room.availability,
+      roomType: room.roomType,
+      floor: room.floor,
+      rent: room.rent,
+      location: room.location,
+      amenities: room.amenities,
+      gender: room.gender,
+      images: room.images,
+      whatsappLink: room.whatsappLink,
+      telegramLink: room.telegramLink,
+    },customConfig);
+    //  console.log('API Response:', response);
+    //  console.log('Response Data:', response.data);
+
+    if (response.data && response.data.success) { //indicating that the creation was successful.
+      
+      dispatch(setSuccess('Room created successfully.'));
+      dispatch(fetchRooms( )); // Optionally refresh room list
+    } 
   } catch (error) {
-    console.log('roomcreateError', error);
-    dispatch(setError(error.response?.data?.message || error.message || 'Room creation failed'));
-  } finally {
+    console.log('Room create error:', error);
+    dispatch(setError(error.message || 'Room creation failed'));
+     
+    } 
+   finally {
     dispatch(setBusy(false));
   }
 };
 
-
-export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partial<Room> = {}): AppThunk => async (dispatch) => {
+export const fetchRooms = (page: number, limit: number = 20, filters: Partial<Room> = {}): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
     const response = await axios.get(`${API_BASE_URL}/room/getAll`, {
       params: { limit, page, ...filters },
-    });
+    }, customConfig);
+
     dispatch(setRooms({
       data: response.data.data,
       totalPages: response.data.totalPages,
@@ -172,21 +184,26 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
   }
 };
 
+
+
+
+
 export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
   try {
-    roomName=roomName.toString()
+    roomName = roomName.toString();
     const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
-      params: { roomName:roomName },
-    });
+      params: { roomName },
+    },customConfig);
     console.log(response.data);
     dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
     dispatch(setSuccess('Room fetched successfully.'));
-  } catch (error) {
     
+  } catch (error) {
     console.error(error);
     dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
+    
   } finally {
     dispatch(setBusy(false));
   }
@@ -197,13 +214,12 @@ export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
   dispatch(setError(''));
   try {
     const response = await axios.get(`${API_BASE_URL}/room/getById`, {
-      params: { room_id:roomId },
-    });
+      params: { room_id: roomId },
+    },customConfig);
     console.log(response.data);
-    dispatch(roomData(response.data.data)); 
+    dispatch(roomData(response.data.data));
     dispatch(setSuccess('Room fetched successfully.'));
   } catch (error) {
-    
     console.error(error);
     dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {
@@ -216,7 +232,7 @@ export const modifyRoomDetails = (roomId: string, updateData: Partial<Room>): Ap
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    const response = await axios.put(`${API_BASE_URL}/rooms/${roomId}`, { updateData, roomId });
+    const response = await axios.put(`${API_BASE_URL}/rooms/${roomId}`, { updateData, roomId },customConfig);
     dispatch(updateRoom(response.data.data));
     dispatch(setSuccess('Room updated successfully.'));
   } catch (error) {

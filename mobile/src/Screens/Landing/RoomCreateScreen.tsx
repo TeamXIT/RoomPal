@@ -15,7 +15,7 @@ import { RadioButton } from 'react-native-paper';
 import RNFS from 'react-native-fs';
 
 
-const RoomCreateScreen = ({ setTabBarVisibility }) => {
+const RoomCreateScreen = ({ setTabBarVisibility, navigation }) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
   const [details, setDetails] = useState([]);
@@ -94,7 +94,8 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const handleSubmitData = async () => {
     try {
       let hasError = false;
-      
+  
+      // Validate fields
       if (!roomName) {
         setRoomNameError('Please provide your room name');
         hasError = true;
@@ -102,105 +103,104 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
         setRoomNameError('');
       }
       if (!detail) {
-        setDetailsError('Please provide your details ');
+        setDetailsError('Please provide your details');
         hasError = true;
       } else {
-        setDetails(['1 bedroom', '2 bathroom', 'Furnished kitchen']);
+        // setDetails(['1 bedroom', '2 bathroom', 'Furnished kitchen']);
         setDetailsError('');
       }
-    if (availability === 0) {
-      setAvailabilityError('Please select a capacity of at least 1');
-      hasError = true;
-    } else {
-      setAvailabilityError('');
-    }
-
-    if (!whatsappLink) {
-      setWhatsappLinkError('Please provide your whatsapp link');
-      hasError = true;
-    } else {
-      setWhatsappLinkError('');
-    }
-    if (!telegramLink) {
-      setTelegramLinkError('Please provide your telegram link');
-      hasError = true;
-    } else {
-      setTelegramLinkError('');
-    }
-    if (!address) {
-      setAddressError('Please provide your address');
-      hasError = true;
-    } else {
-      setAddressError('');
-    }
+      if (availability === 0) {
+        setAvailabilityError('Please select a capacity of at least 1');
+        hasError = true;
+      } else {
+        setAvailabilityError('');
+      }
+      if (!whatsappLink) {
+        setWhatsappLinkError('Please provide your WhatsApp link');
+        hasError = true;
+      } else {
+        setWhatsappLinkError('');
+      }
+      if (!telegramLink) {
+        setTelegramLinkError('Please provide your Telegram link');
+        hasError = true;
+      } else {
+        setTelegramLinkError('');
+      }
+      if (!address) {
+        setAddressError('Please provide your address');
+        hasError = true;
+      } else {
+        setAddressError('');
+      }
     // if (!location) {
     //   setLocationError('Please provide your location');
     //   hasError = true;
     // } else {
     //   setLocationError('');
     // }
-    if (!rent) {
-      setRentError('Please provide your rent');
-      hasError = true;
-    } else {
-      setRentError('');
-    }
-    if (!floor) {
-      setFloorError('Please provide your floor');
-      hasError = true;
-    } else {
-      setFloorError('');
-    }
-    if (!roomType) {
-      setRoomTypeError('Please select your room type');
-      hasError = true;
-    } else {
-      setRoomTypeError('');
-    }
-    location = { lat: latitude, lon: longitude };
-    
-
-    const amenitiesObj = {
-      "wifi": amenities?.find(a => a.name === 'Wi-Fi')?.checked || false,
-      "airCondition": amenities?.find(a => a.name === 'Air Conditioning')?.checked || false,
-      "heater": amenities?.find(a => a.name === 'Heater')?.checked || false,
-      "washer": amenities?.find(a => a.name === 'Washer')?.checked || false,
-      "dryer": amenities?.find(a => a.name === 'Dryer')?.checked || false,
-      "kitchen": amenities?.find(a => a.name === 'Kitchen')?.checked || false,
-      "parking": amenities?.find(a => a.name === 'Parking')?.checked || false,
-      "gym": amenities?.find(a => a.name === 'Gym')?.checked || false,
-      "pool": amenities?.find(a => a.name === 'Pool')?.checked || false,
-    };
-
-    if (!hasError) {
-      const images = roomImages; 
-      const gender = lookingFor;
-
-      await dispatch(createRoom({
+      if (!rent) {
+        setRentError('Please provide your rent');
+        hasError = true;
+      } else {
+        setRentError('');
+      }
+      if (!floor) {
+        setFloorError('Please provide your floor');
+        hasError = true;
+      } else {
+        setFloorError('');
+      }
+      if (!roomType) {
+        setRoomTypeError('Please select your room type');
+        hasError = true;
+      } else {
+        setRoomTypeError('');
+      }
+  
+      if (hasError) return;
+  
+      // Create the amenities object
+      const amenitiesObj = {
+        wifi: amenities.find(a => a.name === 'Wi-Fi')?.checked || false,
+        airCondition: amenities.find(a => a.name === 'Air Conditioning')?.checked || false,
+        heater: amenities.find(a => a.name === 'Heater')?.checked || false,
+        washer: amenities.find(a => a.name === 'Washer')?.checked || false,
+        dryer: amenities.find(a => a.name === 'Dryer')?.checked || false,
+        kitchen: amenities.find(a => a.name === 'Kitchen')?.checked || false,
+        parking: amenities.find(a => a.name === 'Parking')?.checked || false,
+        gym: amenities.find(a => a.name === 'Gym')?.checked || false,
+        pool: amenities.find(a => a.name === 'Pool')?.checked || false,
+      };
+  
+      // Prepare data for API
+      const roomData = {
         roomName,
         details,
         availability: availability > 0,
         roomType,
         floor,
         rent,
-        location,
+        location: { lat: latitude, lon: longitude },
         amenities: amenitiesObj,
-        gender,
-        images,
+        gender: lookingFor,
+        images: roomImages,
         whatsappLink,
         telegramLink,
-      }));
-
-      // Alert.alert('Success', 'Room created successfully');
-      // navigation.navigate() // Uncomment and implement navigation if needed
+      };
+  
+      // Dispatch action to create room
+      const response = await dispatch(createRoom(roomData));
+  
+    
+        Alert.alert('Success', 'Room created successfully');
+        // Navigate to the ListOfRooms screen or another screen if needed
+        navigation.navigate('ListOfRooms');
+     
+    } catch (error) {
+      console.error('Error creating room:', error);
+      Alert.alert('Error', 'Failed to create room. Please try again later.');
     }
-  }
-    
-  catch (error) {
-    console.error('Error creating room:', error);
-    Alert.alert('Error', 'Failed to create room. Please try again later.');
-  }
-    
   };
 
   const requestLocationPermission = async () => {
