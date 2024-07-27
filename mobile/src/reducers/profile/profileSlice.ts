@@ -49,34 +49,37 @@ const profileSlice = createSlice({
     }
 });
 
-export const {
-    setBusy,
-    setError,
-    setSuccess,
-    setUser,
-    setProfile
-} = profileSlice.actions;
+
+
 
 const customConfig = {
     headers: { "Content-Type": "application/json" }
 }
+
+export const { setBusy, setError, setSuccess, setUser, setProfile} = profileSlice.actions;
+
 
 export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispatch) => {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
     try {
+
         const response = await axios.get(`${API_BASE_URL}/user/getByNumber`, { params: { mobileNumber: usermobileNumber } });
         if (response?.status == 200) {
             dispatch(setSuccess('Profile fetched successfully.'));
             dispatch(setBusy(false));
             dispatch(setUser(response.data.message));
         }
+
+       
+
     } catch (error) {
         dispatch(setError(error?.response?.data?.message || error?.message || 'Fetching profile failed.'));
         dispatch(setBusy(false));
     }
 };
+
 
 export const updateProfile = (
     mobileNumber: string,
@@ -112,6 +115,7 @@ export const updateProfile = (
         dispatch(setBusy(false));
     }
 };
+
 
 export default profileSlice.reducer;
 

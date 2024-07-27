@@ -93,7 +93,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
       <FlatList 
         data={data}
         renderItem={renderItem}
-        // keyExtractor={(item) => item.roomName}
+        // keyExtractor={(item) => item.roomId}
         contentContainerStyle={{ paddingBottom:52 }} 
       />
     </View>

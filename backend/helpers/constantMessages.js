@@ -12,7 +12,8 @@ const BASE_RESPONSE_MESSAGES = {
         PAYMENT_CREATED: 'Payment created successfully',
         PASSWORD_RESET_SUCCESS:'Password updated successfully',
         FEEDBACK:'Feedback updated successfully',
-        ROOM_FETCHED:'Fetched Successfully'
+        PAYMENT_FETCHED: 'Payment fetched successfully',
+        ROOM_FETCHED:'Room Fetched Successfully'
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',
@@ -24,7 +25,10 @@ const BASE_RESPONSE_MESSAGES = {
         ROOM_NOT_FOUND: 'Room not found',
         USER_OR_ROOM_NOT_FOUND:'User or room not found',
         MOBILE_NUMBER_ALREADY_EXISTS:'Mobile number already exists',
-        EMAIL_ALREADY_EXISTS:'Email already exists'
+        EMAIL_ALREADY_EXISTS:'Email already exists',
+        PAYMENT_NOT_FOUND: 'Payment not found',
+        ORDER_ID_ALREADY_EXISTS:'Order Id already exists',
+        REFUND_ID_ALREADY_EXISTS:'Refund Id already exists',
 
     }
 };

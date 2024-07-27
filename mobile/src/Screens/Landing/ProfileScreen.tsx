@@ -57,14 +57,12 @@ const ProfileScreen = () => {
     }
   }, [data.user]);
 
+
   useEffect(() => {
     updateUserProfile();
   }, [data.profile]);
 
-  useEffect(() => {
-    console.log('Current makeMobilePrivate state:', makeMobilePrivate);
-  }, [makeMobilePrivate]);
-
+ 
   const convertToBase64 = async (uri) => {
     try {
       const base64String = await RNFS.readFile(uri, 'base64');
@@ -87,8 +85,8 @@ const handleAddProfileImage = async (uri) => {
         image: base64String, // Update image in userData
       }));
     }
-  };
 
+  
 
 
 const handleSelectGallery = () => {
@@ -120,6 +118,7 @@ const handleSelectGallery = () => {
     ]);
   };
 
+  
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -151,6 +150,9 @@ const formatDateFromISO = (date) => {
     return date; // Return date in yyyy-MM-dd format directly
   };
 
+
+
+
 const handleSave = async () => {
      dispatch(updateProfile(
       userData.mobileNumber,
@@ -172,14 +174,8 @@ const handleSave = async () => {
     }
   };
 
-  const updateUserProfile = () => {
-    try {
-      console.log("UpdateProfile response: ", fieldBeingEdited);
-      setIsEditing(false);
-    } catch (error) {
-      // Handle error (e.g., show a message to the user)
-    }
-  }
+  
+  
 
   return (
     <ScrollView>

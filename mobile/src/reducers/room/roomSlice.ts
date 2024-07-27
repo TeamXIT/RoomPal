@@ -3,20 +3,40 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
 
+
 type Room = {
   roomName: string;
-  details: string;
+  details: string[];
   availability: boolean;
   roomType: string;
   floor: number;
   rent: number;
-  location: string;
-  amenities: string[];
+  location: Location;
+  amenities: Amenities;
   gender: string;
   whatsappLink: string;
   telegramLink: string;
   images: string[];
 };
+
+type Amenities = {
+  wifi: boolean;
+  airCondition: boolean;
+  heater: boolean;
+  washer: boolean;
+  dryer: boolean;
+  kitchen: boolean;
+  parking: boolean;
+  gym: boolean;
+  pool: boolean;
+};
+
+type Location = {
+  lat: number;
+  lon: number;
+};
+
+
 
 type RoomState = {
   screen: {
@@ -27,6 +47,7 @@ type RoomState = {
   data: Room[];
   totalPages: number;
   totalCount: number;
+  roomData: Room;
 };
 
 const initialState: RoomState = {
@@ -38,6 +59,30 @@ const initialState: RoomState = {
   data: [],
   totalPages: 0,
   totalCount: 0,
+  roomData: {
+    roomName: '',
+    details: [],
+    availability: false,
+    roomType: '',
+    floor: 0,
+    rent: 0,
+    location: { lat: 0, lon: 0 },
+    amenities: {
+      wifi: false,
+      airCondition: false,
+      heater: false,
+      washer: false,
+      dryer: false,
+      kitchen: false,
+      parking: false,
+      gym: false,
+      pool: false,
+    },
+    gender: '',
+    whatsappLink: '',
+    telegramLink: '',
+    images: [],
+  },
 };
 
 export const roomSlice = createSlice({
@@ -67,67 +112,53 @@ export const roomSlice = createSlice({
         state.data[index] = action.payload;
       }
     },
+    roomData: (state, action: PayloadAction<Room>) => {
+      state.roomData = action.payload;
+    },
   },
 });
 
-export const {
-  setBusy,
-  setError,
-  setSuccess,
-  setRooms,
-  addRoom,
-  updateRoom
-} = roomSlice.actions;
+
 
 const customConfig = {
   headers: { "Content-Type": "application/json" }
 }
 
-export const createRoom = (
-  roomName: string,
-  details: string,
-  availability: boolean,
-  roomType: string,
-  floor: number,
-  rent: number,
-  latitude: number,
-  longitude: number,
-  amenities: string[],
-  gender: string,
-  images: string[],
-  whatsappLink: string,
-  telegramLink: string,
 
-): AppThunk => async (dispatch) => {
+export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData } = roomSlice.actions;
+
+export const createRoom = (room: Room): AppThunk => async (dispatch) => {
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  dispatch(setSuccess(''));
   try {
-    dispatch(setBusy(true));
-    dispatch(setError(''));
-    dispatch(setSuccess(''));
-
-    const response = await axios.post(`${API_BASE_URL}/room/create`, {
-      roomName,
-      details,
-      availability,
-      roomType,
-      floor,
-      rent,
-      location: { lat: latitude, lon: longitude },
-      amenities,
-      gender,
-      images,
-      whatsappLink,
-      telegramLink
-    }, customConfig);
-    if (response?.status == 200) {
-      dispatch(addRoom(response.data.data));
-      dispatch(setSuccess('Room created successfully.'));
-    }
+    console.log('create params:', room);
+    const response = await axios.post(`${API_BASE_URL}/room/create`,{params:{
+      roomName:room.roomName, 
+      details:room.details,
+      availability:room.availability,
+      roomType:room.roomType,
+      floor:room.floor,
+      rent:room.rent,
+      location:room.location,
+      amenities:room.amenities,
+      gender:room.gender,
+      images:room.images,
+      whatsappLink:room.whatsappLink,
+      telegramLink:room.telegramLink
+    } }, customConfig);
+    dispatch(addRoom(response.data.data));
+    dispatch(setSuccess('Room created successfully.'));
+    dispatch(fetchRooms()); // Fetch the updated list of rooms
   } catch (error) {
-    dispatch(setError(error?.response?.data?.message || error?.message || 'Room creation failed'));
+    console.log('roomcreateError', error);
+    dispatch(setError(error.response?.data?.message || error.message || 'Room creation failed'));
+
   } finally {
     dispatch(setBusy(false));
   }
 };
+
 
 export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partial<Room> = {}): AppThunk => async (dispatch) => {
   try {
@@ -166,6 +197,25 @@ export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) 
     }
   } catch (error) {
     dispatch(setError(error?.response?.data?.message || error?.message || 'Fetching room failed'));
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
+  dispatch(setBusy(true));
+  dispatch(setError(''));
+  try {
+    const response = await axios.get(`${API_BASE_URL}/room/getById`, {
+      params: { room_id:roomId },
+    });
+    console.log(response.data);
+    dispatch(roomData(response.data.data)); 
+    dispatch(setSuccess('Room fetched successfully.'));
+  } catch (error) {
+    
+    console.error(error);
+    dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {
     dispatch(setBusy(false));
   }
