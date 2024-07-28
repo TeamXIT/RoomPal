@@ -85,7 +85,7 @@ const handleAddProfileImage = async (uri) => {
         image: base64String, // Update image in userData
       }));
     }
-
+  }
   
 
 
@@ -118,7 +118,15 @@ const handleSelectGallery = () => {
     ]);
   };
 
-  
+  const updateUserProfile = () => {
+    try {
+      console.log("UpdateProfile response: ", fieldBeingEdited);
+      setIsEditing(false);
+    } catch (error) {
+      // Handle error (e.g., show a message to the user)
+    }
+  }
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
