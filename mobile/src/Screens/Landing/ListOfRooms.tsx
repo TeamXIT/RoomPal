@@ -28,11 +28,11 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-      
-        <Image 
-          source={{ uri: `data:image/png;base64,${item.images[0]}` }} 
-          style={styles.image} 
-          onError={() => console.log('Image failed to load')} 
+
+        <Image
+          source={{ uri: `data:image/png;base64,${item.images[0]}` }}
+          style={styles.image}
+          onError={() => console.log('Image failed to load')}
         />
         <View style={styles.info}>
           <Text style={[styles.name, { paddingBottom: 10 }]}>{item.roomName}</Text>
@@ -53,8 +53,8 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
           </View>
           <View style={{ flexDirection: 'row', gap: 20 }}>
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
-            <TouchableOpacity 
-              style={styles.detailsButton} 
+            <TouchableOpacity
+              style={styles.detailsButton}
               onPress={() => handleDetails(item.roomName)} // Pass roomName to handleDetails
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
@@ -71,6 +71,10 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
         <Text>Loading...</Text>
       </View>
     );
+  }
+
+  const onScroll = () => {
+    //TODO: Call fetch item more.
   }
 
   return (
@@ -90,11 +94,12 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
           <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
-      <FlatList 
+      <FlatList
         data={data}
         renderItem={renderItem}
         // keyExtractor={(item) => item.roomId}
-        contentContainerStyle={{ paddingBottom:52 }} 
+        contentContainerStyle={{ paddingBottom: 52 }}
+        onScroll={onScroll}
       />
     </View>
   );

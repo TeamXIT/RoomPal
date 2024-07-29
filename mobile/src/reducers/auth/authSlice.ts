@@ -79,13 +79,13 @@ export const signIn = (mobileNumber: string, password: string): AppThunk => asyn
 
     const response = await axios.post(`${API_BASE_URL}/auth/signIn`, { mobileNumber, password }, customConfig);
     if (response?.status == 200) {
-      dispatch(setAuthToken(response.data.token));
+      dispatch(setAuthToken(response.data.data));
       dispatch(setMobileNumber(mobileNumber));
       dispatch(setSuccess('User logged in successfully.'));
     }
   } catch (error) {
 
-    dispatch(setError(error.response?.data?.message || 'Sign in failed'));
+    dispatch(setError(error?.response?.data?.message || 'Sign in failed'));
   } finally {
     dispatch(setBusy(false));
   }
@@ -122,7 +122,7 @@ export const register = (
       await dispatch(signIn(mobileNumber, password));
     }
   } catch (error) {
-    dispatch(setError(error.response?.data?.message || 'Registration failed'));
+    dispatch(setError(error?.response?.data?.message || 'Registration failed'));
   } finally {
     dispatch(setBusy(false));
   }

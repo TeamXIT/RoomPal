@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import PhoneInput from 'react-native-phone-number-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { error, isBusy, success } = useSelector(state => state.auth.screen);
+  const { error, isBusy, success, } = useSelector(state => state.auth.screen);
   const authToken = useSelector(state => state.auth.data.authToken);
   const signinError = useSelector(state => state.auth.screen.error); // Added signinError from Redux state
   const [mobileNumber, setMobileNumber] = useState('');
@@ -43,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
       await dispatch(signIn(mobileNumber, password));
 
       if (!authToken) {
-        setGeneralError(signinError); 
+        setGeneralError(signinError);
       } else {
         setGeneralError('');
       }
@@ -60,7 +61,11 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (success) {
-      navigation.navigate('Landing');
+      AsyncStorage.setItem('AccessToken', authToken).then(() => {
+        AsyncStorage.setItem('MobileNumber', mobileNumber).then(() => {
+          navigation.navigate('Landing');
+        });
+      });
     }
   }, [success, navigation]);
 

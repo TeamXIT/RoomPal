@@ -1,9 +1,10 @@
 // IntroSlider.js
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
-import {styles} from '../Styles/Styles'
+import { styles } from '../Styles/Styles'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const image1 = require('../Images/intro_image2.png');
 const image2 = require('../Images/intro_image2.png');
@@ -41,7 +42,7 @@ const slides = [
         image: image4,
         backgroundColor: '#e6daf1',
     },
-    
+
 ];
 
 const RoomPalIntro = ({ navigation }) => {
@@ -60,16 +61,16 @@ const RoomPalIntro = ({ navigation }) => {
         if (sliderRef.current) {
             sliderRef.current.goToSlide(currentIndex + 1);
             setCurrentIndex(currentIndex + 1);
-        } 
+        }
     };
 
     const RenderItem = ({ item }) => {
         return (
             <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
-                <View style={{backgroundColor:'#FFFFFF',alignItems:'center',borderRadius:10,paddingTop:20}}>
-                <Image style={styles.introImageStyle} source={item.image} />
-                <Text style={styles.introTitleStyle}>{item.title}</Text>
-                <Text style={styles.introTextStyle}>{item.text}</Text>
+                <View style={{ backgroundColor: '#FFFFFF', alignItems: 'center', borderRadius: 10, paddingTop: 20 }}>
+                    <Image style={styles.introImageStyle} source={item.image} />
+                    <Text style={styles.introTitleStyle}>{item.title}</Text>
+                    <Text style={styles.introTextStyle}>{item.text}</Text>
                 </View>
             </View>
         );
@@ -78,7 +79,7 @@ const RoomPalIntro = ({ navigation }) => {
     const renderNextButton = () => {
         return (
             <TouchableOpacity style={styles.introbutton} onPress={onNext}>
-                <Text style={[styles.introbuttonText,{ color: '#814ABF' }]}>Next</Text>
+                <Text style={[styles.introbuttonText, { color: '#814ABF' }]}>Next</Text>
             </TouchableOpacity>
         );
     };
@@ -99,6 +100,14 @@ const RoomPalIntro = ({ navigation }) => {
         );
     };
 
+    useEffect(() => {
+        AsyncStorage.getItem('AccessToken').then((value) => {
+            if (value !== null) {
+                navigation.replace('Landing');
+            }
+        });
+    }, []);
+
     return (
         <View style={{ flex: 1 }}>
             <AppIntroSlider
@@ -118,54 +127,3 @@ const RoomPalIntro = ({ navigation }) => {
 };
 
 export default RoomPalIntro;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

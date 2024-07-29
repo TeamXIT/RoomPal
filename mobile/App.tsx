@@ -41,8 +41,6 @@ const Authn = () => (
   </Stack.Navigator>
 );
 
-
-
 const Landing = () => (
   <Stack.Navigator initialRouteName="Dashboard" headerMode="none">
     <Stack.Screen name="Dashboard" component={Dashboard} />

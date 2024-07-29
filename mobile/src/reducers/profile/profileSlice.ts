@@ -49,37 +49,34 @@ const profileSlice = createSlice({
     }
 });
 
-
-
-
 const customConfig = {
     headers: { "Content-Type": "application/json" }
 }
 
-export const { setBusy, setError, setSuccess, setUser, setProfile} = profileSlice.actions;
-
+export const {
+    setBusy,
+    setError,
+    setSuccess,
+    setUser,
+    setProfile
+} = profileSlice.actions;
 
 export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispatch) => {
-    dispatch(setBusy(true));
-    dispatch(setError(''));
-    dispatch(setSuccess(''));
     try {
-
+        dispatch(setBusy(true));
+        dispatch(setError(''));
+        dispatch(setSuccess(''));
         const response = await axios.get(`${API_BASE_URL}/user/getByNumber`, { params: { mobileNumber: usermobileNumber } });
         if (response?.status == 200) {
             dispatch(setSuccess('Profile fetched successfully.'));
             dispatch(setBusy(false));
             dispatch(setUser(response.data.message));
         }
-
-       
-
     } catch (error) {
         dispatch(setError(error?.response?.data?.message || error?.message || 'Fetching profile failed.'));
         dispatch(setBusy(false));
     }
 };
-
 
 export const updateProfile = (
     mobileNumber: string,
@@ -90,11 +87,10 @@ export const updateProfile = (
     gender: string,
     makeMobilePrivate: boolean,
 ): AppThunk => async (dispatch) => {
-    dispatch(setBusy(true));
-    dispatch(setError(''));
-    dispatch(setSuccess(''));
-
     try {
+        dispatch(setBusy(true));
+        dispatch(setError(''));
+        dispatch(setSuccess(''));
         const response = await axios.put(`${API_BASE_URL}/user/update?mobileNumber=${mobileNumber}`, {
             mobileNumber,
             fullName,
@@ -110,7 +106,7 @@ export const updateProfile = (
             dispatch(setBusy(false));
             dispatch(setProfile(response.data.message));
         }
-} catch (error) {
+    } catch (error) {
         dispatch(setError(error?.response?.data?.message || error?.message || 'Updating profile failed.'));
         dispatch(setBusy(false));
     }

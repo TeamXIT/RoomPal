@@ -9,14 +9,12 @@ import { RootState } from '../../reducers/store';
 import { primaryColor } from '../Styles/Styles';
 import { setMobileNumber } from '../../reducers/auth/authSlice';
 import RNFS from 'react-native-fs';
-import { format,parseISO } from 'date-fns';
-
-
+import { format, parseISO } from 'date-fns';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state: RootState) => state.profile);
-  const usermobileNumber = useSelector((state: RootState) => state.auth.data.mobileNumber);
   const [userData, setUserData] = useState(data.user);
   const [imageUri, setImageUri] = useState(require('../Images/ic_person.png'));
   const [fullName, setFullName] = useState('');
@@ -35,14 +33,15 @@ const ProfileScreen = () => {
     { label: 'False', value: false },
     { label: 'True', value: true },
   ]);
-
-  const [editValue, setEditValue] = useState('');
-  const [fieldBeingEdited, setFieldBeingEdited] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProfile(usermobileNumber));
-  }, [dispatch, usermobileNumber]);
+    AsyncStorage.getItem('MobileNumber').then((value) => {
+      if (value !== null) {
+        dispatch(fetchProfile(value));
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (data.user) {
@@ -53,7 +52,7 @@ const ProfileScreen = () => {
       setEmail(data.user.email);
       setDateOfBirth(formatDateToISO(data.user.dateOfBirth ? formatDateToISO(data.user.dateOfBirth) : '2000-01-01'));
       setGender(data.user.gender);
-      setMakeMobilePrivate(data.user.makeMobilePrivate );
+      setMakeMobilePrivate(data.user.makeMobilePrivate);
     }
   }, [data.user]);
 
@@ -62,7 +61,6 @@ const ProfileScreen = () => {
     updateUserProfile();
   }, [data.profile]);
 
- 
   const convertToBase64 = async (uri) => {
     try {
       const base64String = await RNFS.readFile(uri, 'base64');
@@ -72,10 +70,8 @@ const ProfileScreen = () => {
       return null;
     }
   };
-  
-  
 
-const handleAddProfileImage = async (uri) => {
+  const handleAddProfileImage = async (uri) => {
     const base64String = await convertToBase64(uri);
 
     if (base64String) {
@@ -86,10 +82,8 @@ const handleAddProfileImage = async (uri) => {
       }));
     }
   }
-  
 
-
-const handleSelectGallery = () => {
+  const handleSelectGallery = () => {
     Alert.alert('Select your option', 'Select one of the options to set your profile picture.', [
       {
         text: 'Open Camera',
@@ -120,7 +114,6 @@ const handleSelectGallery = () => {
 
   const updateUserProfile = () => {
     try {
-      console.log("UpdateProfile response: ", fieldBeingEdited);
       setIsEditing(false);
     } catch (error) {
       // Handle error (e.g., show a message to the user)
@@ -136,7 +129,7 @@ const handleSelectGallery = () => {
   };
 
   const handleConfirm = (date) => {
-   {
+    {
       const formattedDate = formatDateToISO(date);;
       setDateOfBirth(formattedDate);
     }
@@ -154,15 +147,15 @@ const handleSelectGallery = () => {
       return '2000-01-01'; // Return a default date or handle the error appropriately
     }
   };
-const formatDateFromISO = (date) => {
+  const formatDateFromISO = (date) => {
     return date; // Return date in yyyy-MM-dd format directly
   };
 
 
 
 
-const handleSave = async () => {
-     dispatch(updateProfile(
+  const handleSave = async () => {
+    dispatch(updateProfile(
       userData.mobileNumber,
       fullName,
       userData.image, // Use base64 image string
@@ -170,8 +163,7 @@ const handleSave = async () => {
       dateOfBirth,
       gender,
       makeMobilePrivate));
-     setIsEditing(false); // Set isEditing to false after saving
-
+    setIsEditing(false); // Set isEditing to false after saving
   }
 
   const handleEditProfilePress = () => {
@@ -182,8 +174,8 @@ const handleSave = async () => {
     }
   };
 
-  
-  
+
+
 
   return (
     <ScrollView>
@@ -293,7 +285,7 @@ const handleSave = async () => {
                 setItems={setMakeMobilePrivateItems}
                 onChangeValue={(value) => setMakeMobilePrivate(value)}
 
-                
+
                 containerStyle={{ height: 40, marginBottom: 10, marginRight: 10, width: 310 }}
                 dropDownContainerStyle={{ zIndex: 1 }}
                 placeholder="Select an option"
