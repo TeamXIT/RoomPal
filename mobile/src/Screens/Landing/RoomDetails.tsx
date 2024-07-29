@@ -12,7 +12,10 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomByName } from '../../reducers/room/roomSlice';
+import { fetchRoomById } from '../../reducers/room/roomSlice';
+import { RootState } from '../../reducers/store';
+import API_BASE_URL from '../../reducers/config/apiConfig';
+import axios from 'axios';
 
 // Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
@@ -38,24 +41,190 @@ const { width } = Dimensions.get('window');
 //   { id: 'balcony', src: balconyImage, label: 'Balcony', value: 'balcony' },
 // ];
 
+
+const amenitiesImages = {
+  wifi: wifiImage,
+  airCondition: airConditionerImage,
+  heater: bathroomImage,
+  washer: springBedImage,
+  dryer: kitchenImage,
+  kitchen: parkingImage,
+  parking: balconyImage,
+  gym: wifiImage,
+  pool: bathroomImage,
+};
+
+
+
+
 const RoomDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.room);
+  const { roomData,screen } = useSelector((state: RootState) => state.room);
   // const { room } = route;
+  const staticId = '6687da0442ff380054d83190';
+
+  const { roomId = staticId } = route.params || {};
+
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [roomName, setRoomName] = useState('');
+  const [details, setDetails] = useState({});
+  const [availability, setAvailability] = useState(false);
+  const [roomType, setRoomType] = useState('');
+  const [floor, setFloor] = useState(0);
+
+  const [rent, setRent] = useState(0);
+  const [location, setLocation] = useState({});
+
+  const [amenities, setamenities] = useState({});
+  const [gender, setGender] = useState('');
+
   const [images, setImages] = useState([]);
 
+  const [whatsappLink, setWhatsappLink] = useState('');
+  const [telegramLink, setTelegramLink] = useState('');
+
+
+
+
+
+  
+  
+  
+  
+  
+
   useEffect(() => {
-    if (data && data[0]) {
-      setImages(data[0].images || []);
+    dispatch(fetchRoomById(roomId));
+  }, [dispatch, roomId]);
+
+  useEffect(() => {
+    if (roomData && roomData[0]) {
+      setImages(roomData[0].images || []);
     }
-  }, [data]);
+  }, [roomData]);
+  
+  
+  
+  
+  
+  
+  
+
+  useEffect(() => {
+    if (roomData) {
+      setRoomName(roomData.roomName);
+      setDetails(roomData.details)
+      setAvailability(roomData.availability);
+      setRoomType(roomData.roomType);
+      setFloor(roomData.floor);
+      setRent(roomData.rent);
+      setLocation(roomData.location);
+      setamenities(roomData.amenities|| {});
+      setGender(roomData.gender);
+      setImages(roomData.images );
+
+      setWhatsappLink(roomData.whatsappLink);
+      setTelegramLink(roomData.telegramLink);
+
+    }
+  }, [roomData]);
+
+  
+  
+
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+ 
+
+ 
+ 
+ 
+ 
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  console.log('RoomDetails:',
+    roomName,
+    details,
+    availability,
+    roomType,
+    floor,
+    rent,
+    location,
+    amenities,
+    gender,
+    whatsappLink,
+    telegramLink,
+    images,
+
+  )
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (carouselRef.current) {
-        setActiveIndex(prevIndex => (prevIndex + 1) % images.length);
+        setActiveIndex(prevIndex => (prevIndex + 1) % roomData.images.length);
         carouselRef.current.snapToNext();
       }
     }, 3000); // Adjust interval time as needed
@@ -72,6 +241,8 @@ const RoomDetails = ({ route, navigation }) => {
   };
 
   const renderAmenityItem = ({ item }) => {
+    // const amenityKey = item; // Assuming item is a string key here
+
     return (
       <View style={styles.amenityItem}>
         <View
@@ -84,8 +255,13 @@ const RoomDetails = ({ route, navigation }) => {
             borderRadius: 10,
             padding: 5,
           }}>
-          <Image source={item.src} style={styles.amenityImage} />
-          <Text style={styles.amenityLabel}>{item.label}</Text>
+          {/* <Image source={item.src} style={styles.amenityImage} /> */}
+          <Image source={amenitiesImages[item]} style={styles.amenityImage} />
+
+          {/* <Text style={styles.amenityLabel}>{item.label}</Text> */}
+          <Text style={styles.amenityLabel}>
+          {item.charAt(0).toUpperCase() + item.slice(1)}
+          </Text>
         </View>
       </View>
     );
@@ -124,15 +300,15 @@ const RoomDetails = ({ route, navigation }) => {
   };
 
   const openWhatsApp = () => {
-    if (data && data[0]) {
-      const url = `whatsapp://send?text=Hello&phone=${data[0].whatsappLink}`;
+    if (roomData && roomData[0]) {
+      const url = `whatsapp://send?text=Hello&phone=${roomData[0].whatsappLink}`;
       Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
     }
   };
 
   const openTelegram = () => {
-    if (data && data[0]) {
-      const url = `tg://resolve?domain=${data[0].telegramLink}`;
+    if (roomData && roomData[0]) {
+      const url = `tg://resolve?domain=${roomData[0].telegramLink}`;
       Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
     }
   };
@@ -167,14 +343,14 @@ const RoomDetails = ({ route, navigation }) => {
         />
         <View style={styles.paginationContainer}>
           <Text style={styles.paginationText}>
-            {activeIndex + 1} / {images.length}
+          {activeIndex + 1} / {images.length}
           </Text>
         </View>
       </View>
-      
+
       <View style={styles.detailsContainer}>
-        
-        <Text style={styles.Roomtitle}>{route.params.roomName.roomName}</Text>
+
+        <Text style={styles.Roomtitle}>{roomName}</Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.Roomrating}>⭐4.9 </Text>
           <Text style={styles.middleDot}> •</Text>
@@ -185,6 +361,11 @@ const RoomDetails = ({ route, navigation }) => {
         {/* <View style={styles.amenitiesContainer}>
           {route.params.amenities.map((item) => renderAmenityItem({ item }))}
         </View> */}
+        {Object.keys(amenities).map(key => (
+          amenities[key] ? renderAmenityItem({ item: key }) : null
+        ))}
+       
+       
         <View style={styles.contactContainer}>
           <TouchableOpacity style={styles.contactButton} onPress={openWhatsApp}>
             <Image
@@ -192,7 +373,9 @@ const RoomDetails = ({ route, navigation }) => {
               style={styles.contactIcon}
               tintColor={'#1B8755'}
             />
-            <Text style={styles.contactText}>WhatsApp: {data && data[0] && data[0].whatsappLink}</Text>
+            {/* <Text style={styles.contactText}>WhatsApp: {data && data[0] && data[0].whatsappLink}</Text> */}
+            <Text style={styles.contactText}>WhatsApp: {whatsappLink}</Text>
+
           </TouchableOpacity>
           <TouchableOpacity style={styles.contactButton} onPress={openTelegram}>
             <Image
@@ -200,12 +383,28 @@ const RoomDetails = ({ route, navigation }) => {
               style={styles.contactIcon}
               tintColor={'#0088cc'}
             />
-            <Text style={styles.contactText}>Telegram: {data && data[0] && data[0].telegramLink}</Text>
+            {/* <Text style={styles.contactText}>Telegram: {data && data[0] && data[0].telegramLink}</Text> */}
+            <Text style={styles.contactText}>Telegram: {telegramLink}</Text>
+
           </TouchableOpacity>
+          <View>
+            <Text style={{ color: 'red', fontSize: 16 }}>{floor}</Text>
+            <Text style={{ color: 'red', fontSize: 16 }}>{rent}</Text>
+            <Text style={{ color: 'red', fontSize: 16 }}>{roomName}</Text>
+            <Text style={{ color: 'red', fontSize: 16 }}>{roomType}</Text>
+            <Text style={{ color: 'red', fontSize: 16 }}>{availability}</Text>
+            <Text style={{ color: 'red', fontSize: 16 }}>{gender}</Text>
+          </View>
+
+
+
+
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <View style={{ marginLeft: 10, marginRight: 35, marginTop:15 }}>
-            <Text style={styles.price}> {data && data[0] && data[0].rent}</Text>
+          <View style={{ marginLeft: 10, marginRight: 35, marginTop: 15 }}>
+            {/* <Text style={styles.price}> {data && data[0] && data[0].rent}</Text> */}
+            <Text style={styles.price}> {rent}</Text>
+
           </View>
           <TouchableOpacity style={styles.bookButton} onPress={bookAlert}>
             <Text style={styles.bookButtonText}>Book now</Text>
@@ -241,7 +440,7 @@ const styles = StyleSheet.create({
   carouselImage: {
     width: '100%',
     height: '100%',
-    resizeMode:'cover',
+    resizeMode: 'cover',
     alignItems: 'center',
 
   },

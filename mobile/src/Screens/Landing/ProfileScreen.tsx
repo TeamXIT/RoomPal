@@ -47,7 +47,7 @@ const ProfileScreen = () => {
     if (data.user) {
       setUserData(data.user);
       setMobileNumber(data.user.mobileNumber)
-      setImageUri(data.user.image || require('../Images/ic_person.png'));
+      setImageUri(data.user.image ? { uri: data.user.image } : require('../Images/ic_person.png'));
       setFullName(data.user.fullName);
       setEmail(data.user.email);
       setDateOfBirth(formatDateToISO(data.user.dateOfBirth ? formatDateToISO(data.user.dateOfBirth) : '2000-01-01'));
@@ -151,10 +151,19 @@ const ProfileScreen = () => {
     return date; // Return date in yyyy-MM-dd format directly
   };
 
-
+  // console.log("fetch data:",
+    // userData.mobileNumber,
+    // fullName,
+    // userData.image, // Use base64 image string
+    // email,
+    // dateOfBirth,
+    // gender,
+    // makeMobilePrivate
+  // )
 
 
   const handleSave = async () => {
+
     dispatch(updateProfile(
       userData.mobileNumber,
       fullName,
@@ -164,6 +173,15 @@ const ProfileScreen = () => {
       gender,
       makeMobilePrivate));
     setIsEditing(false); // Set isEditing to false after saving
+
+
+
+
+
+
+
+
+
   }
 
   const handleEditProfilePress = () => {

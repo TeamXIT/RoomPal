@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRooms } from '../../reducers/room/roomSlice';
+import { fetchRoomById, fetchRooms } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 
@@ -21,10 +21,23 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
     });
   };
 
-  const handleDetails = (roomName) => {
-    navigation.navigate('RoomDetails', { roomName });
-  };
+  // const handleDetails = (roomId) => {
+    //  console.log('Navigating to RoomDetails with ID:', roomId)
+    //  navigation.navigate('RoomDetails', { roomId });
+  // };
 
+  const handleDetails = async (roomId) => {
+    try {
+      // Fetch the room details
+      await dispatch(fetchRoomById(roomId));
+      
+      // Navigate to the RoomDetails screen with the fetched room ID
+      navigation.navigate('RoomDetails', { roomId });
+    } catch (error) {
+      console.error('Error fetching room details:', error);
+    }
+  };
+  
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
@@ -55,7 +68,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={() => handleDetails(item.roomName)} // Pass roomName to handleDetails
+              onPress={() => handleDetails(item.roomId)} // Pass roomName to handleDetails
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
