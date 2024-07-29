@@ -160,7 +160,7 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
 };
 
 
-export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partial<Room> = {}): AppThunk => async (dispatch) => {
+export const fetchRooms = (limit = 20, page = 1, filters = {}): AppThunk => async (dispatch, getState) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
@@ -169,11 +169,15 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
     const response = await axios.get(`${API_BASE_URL}/room/getAll`, {
       params: { limit, page, ...filters },
     });
-    if (response?.status == 200) {
+
+    if (response?.status === 200) {
+      const { data, totalPages, totalCount } = response.data;
+      const currentState = getState().room.data;
+
       dispatch(setRooms({
-        data: response.data.data,
-        totalPages: response.data.totalPages,
-        totalCount: response.data.totalCount,
+        data: page === 1 ? data : [...currentState, ...data],
+        totalPages,
+        totalCount,
       }));
     }
   } catch (error) {
@@ -182,6 +186,8 @@ export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partia
     dispatch(setBusy(false));
   }
 };
+
+
 
 export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) => {
   try {

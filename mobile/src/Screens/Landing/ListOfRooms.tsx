@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
@@ -7,13 +7,14 @@ import { primaryColor, styles } from '../Styles/Styles';
 
 const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const dispatch = useDispatch();
-  const { data, screen } = useSelector((state: RootState) => state.room);
-
+  const { data, screen, totalPages } = useSelector((state: RootState) => state.room);
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchRooms());
-  }, [dispatch]);
+    dispatch(fetchRooms(20, page)).finally(() => setLoading(false));
+  }, [dispatch, page]);
 
   const handleFilterPress = (filters) => {
     navigation.navigate('FilterScreen', {
@@ -28,7 +29,6 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-
         <Image
           source={{ uri: `data:image/png;base64,${item.images[0]}` }}
           style={styles.image}
@@ -65,16 +65,19 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
     </View>
   );
 
-  if (screen.isBusy || !data) {
+  const onScroll = () => {
+    if (!screen.isBusy && page < totalPages) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  if (loading && page === 1) {
     return (
       <View style={styles.roomlistcontainer}>
+        <ActivityIndicator size="large" color={primaryColor} />
         <Text>Loading...</Text>
       </View>
     );
-  }
-
-  const onScroll = () => {
-    //TODO: Call fetch item more.
   }
 
   return (
@@ -97,9 +100,10 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        // keyExtractor={(item) => item.roomId}
+        keyExtractor={(item) => item.roomId}
         contentContainerStyle={{ paddingBottom: 52 }}
         onScroll={onScroll}
+        onEndReachedThreshold={0.1}
       />
     </View>
   );
