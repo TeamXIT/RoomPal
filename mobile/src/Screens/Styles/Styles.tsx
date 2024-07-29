@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     // margin: 10,  
     // justifyContent: 'center',
     alignSelf: 'center',
-    left:-25
+    left:-10
   },
   info: {
     flex: 1,
