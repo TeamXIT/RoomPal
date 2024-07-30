@@ -24,7 +24,7 @@ const springBedImage = require('../Images/ic_springbed.png');
 const kitchenImage = require('../Images/ic_kitchen.png');
 const parkingImage = require('../Images/ic_parking.png');
 const balconyImage = require('../Images/ic_balcony.png');
-
+const dryearImage = require('../Images/ic_dryear.png')
 const gymImage = require('../Images/ic_gym.png');
 const washerImage = require('../Images/ic_washing_machine.png');
 const heaterImage = require('../Images/ic_heater.png');
@@ -73,23 +73,29 @@ const RoomDetails = ({ route, navigation }) => {
       setImages(room.images || []);
       setWhatsappLink(room.whatsappLink || '');
       setTelegramLink(room.telegramLink || '');
-      
-      
+
+
     }
   }, [room]);
-  
-  
+
+
   const amenitiesIcons = [
     { name: 'wifi', icon: wifiImage },
     { name: 'airCondition', icon: airConditionerImage },
+    { name: 'heater', icon: heaterImage },
+    { name: 'washer', icon: washerImage },
+    { name: 'dryer', icon: dryearImage },
+    { name: 'kitchen', icon: kitchenImage },
     { name: 'parking', icon: parkingImage },
     { name: 'gym', icon: gymImage },
-    { name: 'washer', icon: washerImage },
-    { name: 'heater', icon: heaterImage },
     { name: 'pool', icon: poolImage },
+
+
+
+
   ];
 
- useEffect(() => {
+  useEffect(() => {
     if (data && data[0]) {
       setImages(data[0].images || []);
     }
@@ -199,9 +205,9 @@ const RoomDetails = ({ route, navigation }) => {
           </Text>
         </View>
       </View>
-      
+
       <View style={styles.detailsContainer}>
-        
+
         <Text style={styles.Roomtitle}>{roomName}</Text>
         {/* {roomName ? <Text style={styles.roomdetails}>{roomName}</Text> : null} */}
 
@@ -214,41 +220,45 @@ const RoomDetails = ({ route, navigation }) => {
         <View style={styles.amenitiesContainer}>
           {amenitiesIcons.map((amenity, index) => (
             room.amenities && room.amenities[amenity.name] ? (
-              <View style={{height:70,width:70,borderWidth:1,borderColor:'black',marginLeft:10,marginBottom:10,borderRadius:10}}>
               <Image
                 key={index}
                 source={amenity.icon}
                 style={styles.amenityIcon}
               />
-              </View>
             ) : null
           ))}
         </View>
-        <View style={{paddingLeft:8,paddingRight:10,gap:8}}>
-           <Text style={styles.roomdetails}>{room.detailsroomdetails}</Text>
-                <Text style={[styles.roomdetails,{color:primaryColor,fontWeight:'bold',fontSize:18}]}>Description</Text>
-                <Text style={styles.roomdetails}>{room.details}</Text>
-                <View style={{flexDirection:'row',gap:15}}>
-                   <Text style={[styles.roomdetails,{color:primaryColor,fontWeight:'bold',fontSize:18}]}>Availability:</Text>
-                   <Text style={[styles.roomdetails]}>{room.availability}</Text>
-                </View>
-                <View style={{flexDirection:'row',gap:15}}>
-                   <Text style={[styles.roomdetails,{color:primaryColor,fontWeight:'bold',fontSize:18}]}>Room Type:</Text>
-                   <Text style={styles.roomdetails}>{room.roomType}</Text>
-                </View>
-                <View style={{flexDirection:'row',gap:15}}>
-                   <Text style={[styles.roomdetails,{color:primaryColor,fontWeight:'bold',fontSize:18}]}>Floor:</Text>
-                   <Text style={styles.roomdetails}>{room.floor}</Text>
-                </View>
+        <View style={{ paddingLeft: 10, paddingRight: 10,gap:20}}>
+          <Text style={styles.roomdetails}>{room.detailsroomdetails}</Text>
+          <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Description:</Text>
+          <Text style={styles.roomdetails}>{room.details}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Room available for:</Text>
+            <Text style={[styles.roomdetails]}>{room.availability} members</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Room Type:</Text>
+            <Text style={styles.roomdetails}>{room.roomType}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Floor:</Text>
+            <Text style={styles.roomdetails}>{room.floor}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                   <Text style={[styles.roomdetails,{color:primaryColor,fontWeight:'bold',fontSize:18}]}>Location</Text>
-                   <Text style={styles.roomdetails}>Latitude {room.location.lat}, Longitude {room.location.lon}</Text>
-                <View style={{flexDirection:'row',gap:15}}>
-                  <Text style={[styles.roomdetails,{color:primaryColor,fontWeight:'bold',fontSize:18}]}>lookingFor:</Text>
-                  <Text style={styles.roomdetails}>{room.gender}</Text>
-                </View>
-
+            <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Location:</Text>
+            <View>
+               <Text style={styles.roomdetails}>Latitude :{room.location.lat}</Text>
+               <Text style={styles.roomdetails}>Longitude :{room.location.lon}</Text>
             </View>
+          </View>
+
+          <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>
+            <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>LookingFor:</Text>
+            <Text style={styles.roomdetails}>{room.gender}</Text>
+          </View>
+
+        </View>
 
         <View style={styles.contactContainer}>
           <TouchableOpacity style={styles.contactButton} onPress={openWhatsApp}>
@@ -273,7 +283,7 @@ const RoomDetails = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <View style={{ marginLeft: 10, marginRight: 35, marginTop:15 }}>
+          <View style={{ marginLeft: 10, marginRight: 35, marginTop: 15 }}>
             <Text style={styles.price}>₹ {room.rent}</Text>
           </View>
           <TouchableOpacity style={styles.bookButton} onPress={bookAlert}>
@@ -310,7 +320,7 @@ const styles = StyleSheet.create({
   carouselImage: {
     width: '100%',
     height: '100%',
-    resizeMode:'cover',
+    resizeMode: 'cover',
     alignItems: 'center',
 
   },
@@ -333,7 +343,7 @@ const styles = StyleSheet.create({
   Roomtitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color:primaryColor
+    color: primaryColor
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -356,23 +366,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 10,
-    color:primaryColor
+    color: primaryColor
   },
   // amenitiesContainer: {
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // justifyContent: 'space-between',
+  // flexDirection: 'row',
+  // flexWrap: 'wrap',
+  // justifyContent: 'space-between',
   // },
   amenitiesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginVertical: 10,
+    marginVertical: 1,
   },
   amenityIcon: {
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
     margin: 10,
-    
+
   },
 
   amenityItem: {
@@ -380,8 +390,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   amenityImage: {
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
   },
   amenityLabel: {
     fontSize: 12,
@@ -411,7 +421,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     marginTop: 5,
     marginBottom: 15,
-    
+
   },
   bookButton: {
     backgroundColor: '#4CAF50',
@@ -422,14 +432,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     marginTop: 10,
-    marginBottom:5
+    marginBottom: 5
   },
   bookButtonText: {
     color: 'white',
     fontSize: 18,
-  }, roomdetails:{
-    fontSize:16,
-    color:'black'
+  }, roomdetails: {
+    fontSize: 18,
+    color: 'black'
   }
 
 });
