@@ -212,11 +212,11 @@ export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
   console.log(roomId);
   dispatch(setBusy(true));
   dispatch(setError(''));
+
   try {
-    const response = await axios.post(`${API_BASE_URL}/room/getById`, {
-      room_id: roomId
+    const response = await axios.get(`${API_BASE_URL}/room/getById`, {
+      params: { room_id: roomId }
     });
-    console.log(response.data);
     dispatch(roomData(response.data.data)); 
     dispatch(setSuccess('Room fetched successfully.'));
   } catch (error) {

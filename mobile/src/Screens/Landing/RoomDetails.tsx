@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,9 @@ import {
   Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchRoomById, fetchRoomByName} from '../../reducers/room/roomSlice';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import API_BASE_URL from '../../reducers/config/apiConfig';
 
 // Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
@@ -23,45 +24,46 @@ const springBedImage = require('../Images/ic_springbed.png');
 const kitchenImage = require('../Images/ic_kitchen.png');
 const parkingImage = require('../Images/ic_parking.png');
 const balconyImage = require('../Images/ic_balcony.png');
+const gymImage = require('../Images/ic_gym.png');
+const washerImage = require('../Images/ic_washing-machine.png');
+const heaterImage = require('../Images/ic_heater.png');
+const poolImage = require('../Images/ic_pool.png');
 const whatsappIcon = require('../Images/ic_whatsApp.png');
 const telegramIcon = require('../Images/ic_telegram.png');
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-// const allAmenities = [
-//   { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value: 'wifi' },
-//   { id: 'bathroom', src: bathroomImage, label: 'Inside Bathroom', value: 'bathroom' },
-//   { id: 'airCondition', src: airConditionerImage, label: 'Air Conditioner', value: 'airCondition' },
-//   { id: 'springBed', src: springBedImage, label: 'Spring Bed', value: 'springBed' },
-//   { id: 'kitchen', src: kitchenImage, label: 'Kitchen', value: 'kitchen' },
-//   { id: 'parking', src: parkingImage, label: 'Parking Area', value: 'parking' },
-//   { id: 'balcony', src: balconyImage, label: 'Balcony', value: 'balcony' },
-// ];
-
-const RoomDetails = ({route,navigation}) => {
+const RoomDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const {data} = useSelector(state => state.room);
-  const [details,setDetails]=useState({})
-  const {roomId} = route.params;
+  const [data, setData] = useState(null);
+  const { roomId } = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [images, setImages] = useState([]);
+  const [amenities, setAmenities] = useState({});
 
   useEffect(() => {
-    const response=dispatch(fetchRoomById(roomId));
-    setDetails(response.data);
-    console.log
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/room/getById`, {
+          params: { room_id: roomId },
+        });
+        setData(response.data.data);
+        console.log(response.data.data);
+        setAmenities(response.data.data.amenities);
+        console.log(amenities);
+        setImages(response.data.data.images || []);
+      } catch (error) {
+        console.error('Error fetching room data:', error);
+      }
+    };
+
+    fetchData();
   }, [dispatch, roomId]);
 
   useEffect(() => {
-    if (data && data[0]) {
-      setImages(data[0].images || []);
-    }
-  }, [data]);
-
-  useEffect(() => {
     const interval = setInterval(() => {
-      if (carouselRef.current) {
+      if (carouselRef.current && images.length > 0) {
         setActiveIndex(prevIndex => (prevIndex + 1) % images.length);
         carouselRef.current.snapToNext();
       }
@@ -70,36 +72,14 @@ const RoomDetails = ({route,navigation}) => {
     return () => clearInterval(interval);
   }, [images]);
 
-  const renderCarouselItem = ({item}) => {
-    return (
-      <View style={styles.carouselItem}>
-        <Image
-          source={{uri: `data:image/png;base64,${item}`}}
-          style={styles.carouselImage}
-        />
-      </View>
-    );
-  };
-
-  const renderAmenityItem = ({item}) => {
-    return (
-      <View style={styles.amenityItem}>
-        <View
-          style={{
-            height: 90,
-            width: 80,
-            borderColor: 'black',
-            borderWidth: 0.5,
-            alignItems: 'center',
-            borderRadius: 10,
-            padding: 5,
-          }}>
-          <Image source={item.src} style={styles.amenityImage} />
-          <Text style={styles.amenityLabel}>{item.label}</Text>
-        </View>
-      </View>
-    );
-  };
+  const renderCarouselItem = ({ item }) => (
+    <View style={styles.carouselItem}>
+      <Image
+        source={{ uri: `data:image/png;base64,${item}` }}
+        style={styles.carouselImage}
+      />
+    </View>
+  );
 
   const bookAlert = () => {
     Alert.alert(
@@ -111,31 +91,15 @@ const RoomDetails = ({route,navigation}) => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
       ],
-      {cancelable: false},
-    );
-  };
-
-  const chatAlert = () => {
-    Alert.alert(
-      'Are you looking for chat',
-      'Are you sure you want to chat with me?',
-      [
-        {
-          text: 'No',
-          onPress: () => console.log('No Pressed'),
-          style: 'cancel',
-        },
-        {text: 'Yes', onPress: () => console.log('Yes Pressed')},
-      ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
   const openWhatsApp = () => {
-    if (data && data[0]) {
-      const url = `whatsapp://send?text=Hello&phone=${data[0].whatsappLink}`;
+    if (data && data.whatsappLink) {
+      const url = `whatsapp://send?text=Hello&phone=${data.whatsappLink}`;
       Linking.openURL(url).catch(err =>
         console.error("Couldn't load page", err),
       );
@@ -143,29 +107,40 @@ const RoomDetails = ({route,navigation}) => {
   };
 
   const openTelegram = () => {
-    if (data && data[0]) {
-      const url = `tg://resolve?domain=${data[0].telegramLink}`;
+    if (data && data.telegramLink) {
+      const url = `tg://resolve?domain=${data.telegramLink}`;
       Linking.openURL(url).catch(err =>
         console.error("Couldn't load page", err),
       );
     }
   };
 
+  const amenitiesIcons = [
+    { name: 'wifi', icon: wifiImage },
+    { name: 'airCondition', icon: airConditionerImage },
+    { name: 'parking', icon: parkingImage },
+    // { name: 'kitchen', icon: kitchenImage },
+    { name: 'gym', icon: gymImage },
+    { name: 'washer', icon: washerImage },
+    { name: 'heater', icon: heaterImage },
+    { name: 'pool', icon: poolImage },
+  ];
+
+  if (!data) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView style={styles.Roomcontainer}>
+    <ScrollView style={styles.container}>
       <View style={styles.carouselContainer}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backArrowContainer}>
-          <View
-            style={{
-              height: 35,
-              width: 35,
-              borderRadius: 20,
-              backgroundColor: '#FFFFFF',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.backArrowWrapper}>
             <Image source={backArrowImage} style={styles.backArrow} />
           </View>
         </TouchableOpacity>
@@ -176,8 +151,8 @@ const RoomDetails = ({route,navigation}) => {
           sliderWidth={width}
           itemWidth={width}
           onSnapToItem={index => setActiveIndex(index)}
-          loop={true} // Enable looping
-          autoplay={false} // Autoplay controlled manually
+          loop={true}
+          autoplay={false}
         />
         <View style={styles.paginationContainer}>
           <Text style={styles.paginationText}>
@@ -187,17 +162,25 @@ const RoomDetails = ({route,navigation}) => {
       </View>
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.Roomtitle}></Text>
+        <Text style={styles.title}>{data.roomName}</Text>
         <View style={styles.ratingContainer}>
-          <Text style={styles.Roomrating}>⭐4.9 </Text>
+          <Text style={styles.rating}>⭐4.9 </Text>
           <Text style={styles.middleDot}> •</Text>
-          <Text style={styles.Roomreviews}>324 reviews</Text>
+          <Text style={styles.reviews}>324 reviews</Text>
         </View>
 
         <Text style={styles.amenitiesTitle}>Amenities and facilities</Text>
-        {/* <View style={styles.amenitiesContainer}>
-          {route.params.amenities.map((item) => renderAmenityItem({ item }))}
-        </View> */}
+        <View style={styles.amenitiesContainer}>
+          {amenitiesIcons.map((amenity, index) => (
+            data.amenities && data.amenities[amenity.name] ? (
+              <Image
+                key={index}
+                source={amenity.icon}
+                style={styles.amenityIcon}
+              />
+            ) : null
+          ))}
+        </View>
         <View style={styles.contactContainer}>
           <TouchableOpacity style={styles.contactButton} onPress={openWhatsApp}>
             <Image
@@ -206,7 +189,7 @@ const RoomDetails = ({route,navigation}) => {
               tintColor={'#1B8755'}
             />
             <Text style={styles.contactText}>
-              WhatsApp: {data && data[0] && data[0].whatsappLink}
+              WhatsApp: {data.whatsappLink}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contactButton} onPress={openTelegram}>
@@ -216,13 +199,13 @@ const RoomDetails = ({route,navigation}) => {
               tintColor={'#0088cc'}
             />
             <Text style={styles.contactText}>
-              Telegram: {data && data[0] && data[0].telegramLink}
+              Telegram: {data.telegramLink}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{marginLeft: 10, marginRight: 35, marginTop: 15}}>
-            <Text style={styles.price}> {data && data[0] && data[0].rent}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ marginLeft: 10, marginRight: 35, marginTop: 15 }}>
+            <Text style={styles.price}>{data.rent}</Text>
           </View>
           <TouchableOpacity style={styles.bookButton} onPress={bookAlert}>
             <Text style={styles.bookButtonText}>Book now</Text>
@@ -234,7 +217,7 @@ const RoomDetails = ({route,navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  Roomcontainer: {
+  container: {
     flex: 1,
     backgroundColor: '#fff',
   },
@@ -246,6 +229,14 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 1,
+  },
+  backArrowWrapper: {
+    height: 35,
+    width: 35,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backArrow: {
     width: 24,
@@ -277,7 +268,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 15,
   },
-  Roomtitle: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
   },
@@ -286,7 +277,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
   },
-  Roomrating: {
+  rating: {
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -294,69 +285,54 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginHorizontal: 2,
   },
-  Roomreviews: {
+  reviews: {
     fontSize: 18,
     color: 'gray',
   },
   amenitiesTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginVertical: 10,
+    marginTop: 20,
   },
   amenitiesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  amenityItem: {
-    alignItems: 'center',
     marginVertical: 10,
   },
-  amenityImage: {
+  amenityIcon: {
     width: 50,
     height: 50,
-  },
-  amenityLabel: {
-    fontSize: 12,
-    textAlign: 'center',
-    marginTop: 5,
+    margin: 10,
   },
   contactContainer: {
-    marginTop: 15,
+    marginVertical: 20,
   },
   contactButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    marginBottom: 10,
   },
   contactIcon: {
-    width: 30,
-    height: 30,
+    width: 24,
+    height: 24,
     marginRight: 10,
   },
   contactText: {
     fontSize: 16,
-    color: '#555',
   },
   price: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-    marginTop: 5,
-    marginBottom: 15,
   },
   bookButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1B8755',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
+    borderRadius: 10,
     justifyContent: 'center',
-    flex: 1,
-    marginTop: 10,
   },
   bookButtonText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 18,
   },
 });
