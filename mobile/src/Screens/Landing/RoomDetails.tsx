@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,10 @@ import {
   Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import axios from 'axios';
 import API_BASE_URL from '../../reducers/config/apiConfig';
 
-// Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
 const wifiImage = require('../Images/ic_wifi.png');
 const bathroomImage = require('../Images/ic_bathRoom.png');
@@ -31,12 +30,12 @@ const poolImage = require('../Images/ic_pool.png');
 const whatsappIcon = require('../Images/ic_whatsApp.png');
 const telegramIcon = require('../Images/ic_telegram.png');
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-const RoomDetails = ({ route, navigation }) => {
+const RoomDetails = ({route, navigation}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(null);
-  const { roomId } = route.params;
+  const {roomId} = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [images, setImages] = useState([]);
@@ -46,12 +45,10 @@ const RoomDetails = ({ route, navigation }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/room/getById`, {
-          params: { room_id: roomId },
+          params: {room_id: roomId},
         });
         setData(response.data.data);
-        console.log(response.data.data);
         setAmenities(response.data.data.amenities);
-        console.log(amenities);
         setImages(response.data.data.images || []);
       } catch (error) {
         console.error('Error fetching room data:', error);
@@ -67,15 +64,15 @@ const RoomDetails = ({ route, navigation }) => {
         setActiveIndex(prevIndex => (prevIndex + 1) % images.length);
         carouselRef.current.snapToNext();
       }
-    }, 3000); // Adjust interval time as needed
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [images]);
 
-  const renderCarouselItem = ({ item }) => (
+  const renderCarouselItem = ({item}) => (
     <View style={styles.carouselItem}>
       <Image
-        source={{ uri: `data:image/png;base64,${item}` }}
+        source={{uri: `data:image/png;base64,${item}`}}
         style={styles.carouselImage}
       />
     </View>
@@ -91,9 +88,9 @@ const RoomDetails = ({ route, navigation }) => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
@@ -116,15 +113,18 @@ const RoomDetails = ({ route, navigation }) => {
   };
 
   const amenitiesIcons = [
-    { name: 'wifi', icon: wifiImage },
-    { name: 'airCondition', icon: airConditionerImage },
-    { name: 'parking', icon: parkingImage },
-    // { name: 'kitchen', icon: kitchenImage },
-    { name: 'gym', icon: gymImage },
-    { name: 'washer', icon: washerImage },
-    { name: 'heater', icon: heaterImage },
-    { name: 'pool', icon: poolImage },
+    {name: 'wifi', icon: wifiImage},
+    {name: 'airCondition', icon: airConditionerImage},
+    {name: 'parking', icon: parkingImage},
+    {name: 'gym', icon: gymImage},
+    {name: 'washer', icon: washerImage},
+    {name: 'heater', icon: heaterImage},
+    {name: 'pool', icon: poolImage},
   ];
+
+  const hasAmenities = amenitiesIcons.some(
+    amenity => amenities[amenity.name]
+  );
 
   if (!data) {
     return (
@@ -169,18 +169,45 @@ const RoomDetails = ({ route, navigation }) => {
           <Text style={styles.reviews}>324 reviews</Text>
         </View>
 
-        <Text style={styles.amenitiesTitle}>Amenities and facilities</Text>
-        <View style={styles.amenitiesContainer}>
-          {amenitiesIcons.map((amenity, index) => (
-            data.amenities && data.amenities[amenity.name] ? (
-              <Image
-                key={index}
-                source={amenity.icon}
-                style={styles.amenityIcon}
-              />
-            ) : null
-          ))}
+        {hasAmenities && (
+          <>
+            <Text style={styles.amenitiesTitle}>Amenities and facilities</Text>
+            <View style={styles.amenitiesContainer}>
+              {amenitiesIcons.map((amenity, index) =>
+                amenities[amenity.name] ? (
+                  <Image
+                    key={index}
+                    source={amenity.icon}
+                    style={styles.amenityIcon}
+                  />
+                ) : null,
+              )}
+            </View>
+          </>
+        )}
+
+        <View style={styles.infoContainer}>
+          <Text style={styles.label}>Description :</Text>
+          <Text style={{ ...styles.value, marginBottom: 10, fontSize: 16 }}>
+            {data.details}
+          </Text>
+
+          <View style={styles.tableContainer}>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableKey}>Looking For:</Text>
+              <Text style={styles.tableValue}>{data.gender}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableKey}>Room available for:</Text>
+              <Text style={styles.tableValue}>{data.availability} members</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableKey}>Floor:</Text>
+              <Text style={styles.tableValue}>{data.floor}</Text>
+            </View>
+          </View>
         </View>
+
         <View style={styles.contactContainer}>
           <TouchableOpacity style={styles.contactButton} onPress={openWhatsApp}>
             <Image
@@ -203,9 +230,9 @@ const RoomDetails = ({ route, navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ marginLeft: 10, marginRight: 35, marginTop: 15 }}>
-            <Text style={styles.price}>{data.rent}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{marginLeft: 10, marginRight: 35, marginTop: 15}}>
+            <Text style={styles.price}>{data.rent} ₹</Text>
           </View>
           <TouchableOpacity style={styles.bookButton} onPress={bookAlert}>
             <Text style={styles.bookButtonText}>Book now</Text>
@@ -257,55 +284,94 @@ const styles = StyleSheet.create({
     bottom: 10,
     left: 0,
     right: 0,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   paginationText: {
-    color: 'white',
-    fontSize: 16,
+    fontSize: 14,
+    color: '#000',
   },
   detailsContainer: {
-    paddingHorizontal: 15,
-    paddingTop: 15,
+    padding: 15,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 10,
+    color:"#814ABF",
+    marginLeft: 10
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5,
+    marginBottom: 10,
   },
   rating: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
+    marginLeft: 10
   },
   middleDot: {
-    fontSize: 18,
-    marginHorizontal: 2,
+    fontSize: 16,
   },
   reviews: {
-    fontSize: 18,
-    color: 'gray',
+    fontSize: 16,
+    color: '#888',
   },
   amenitiesTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
+    color:"#814ABF",
+    marginBottom: 10,
+    marginLeft: 10
   },
   amenitiesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginVertical: 10,
+    marginBottom: 15,
   },
   amenityIcon: {
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
     margin: 10,
   },
+  infoContainer: {
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color:"#814ABF",
+    marginLeft: 10
+  },
+  value: {
+    fontSize: 18,
+    color: '#000',
+    marginBottom: 10,
+    marginLeft: 10
+  },
+  tableContainer: {
+   marginTop: 15,
+
+  },
+  tableRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  tableKey: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color:"#814ABF"
+  },
+  tableValue: {
+    fontSize: 20,
+    color:'#000',
+    textAlign:"center"
+  },
   contactContainer: {
-    marginVertical: 20,
+    marginBottom: 15,
   },
   contactButton: {
     flexDirection: 'row',
@@ -313,8 +379,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   contactIcon: {
-    width: 24,
-    height: 24,
+    width: 25,
+    height: 25,
     marginRight: 10,
   },
   contactText: {
@@ -323,17 +389,21 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#000',
   },
   bookButton: {
-    backgroundColor: '#1B8755',
-    paddingHorizontal: 20,
+    backgroundColor: '#814ABF',
     paddingVertical: 10,
-    borderRadius: 10,
-    justifyContent: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width:260,
+    marginRight:5
   },
   bookButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
