@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomByName } from '../../reducers/room/roomSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchRoomById, fetchRoomByName} from '../../reducers/room/roomSlice';
 
 // Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
@@ -26,7 +26,7 @@ const balconyImage = require('../Images/ic_balcony.png');
 const whatsappIcon = require('../Images/ic_whatsApp.png');
 const telegramIcon = require('../Images/ic_telegram.png');
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 // const allAmenities = [
 //   { id: 'wifi', src: wifiImage, label: '100 Mbps Wifi', value: 'wifi' },
@@ -38,13 +38,20 @@ const { width } = Dimensions.get('window');
 //   { id: 'balcony', src: balconyImage, label: 'Balcony', value: 'balcony' },
 // ];
 
-const RoomDetails = ({ route, navigation }) => {
+const RoomDetails = ({route,navigation}) => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.room);
-  // const { room } = route;
+  const {data} = useSelector(state => state.room);
+  const [details,setDetails]=useState({})
+  const {roomId} = route.params;
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const response=dispatch(fetchRoomById(roomId));
+    setDetails(response.data);
+    console.log
+  }, [dispatch, roomId]);
 
   useEffect(() => {
     if (data && data[0]) {
@@ -63,15 +70,18 @@ const RoomDetails = ({ route, navigation }) => {
     return () => clearInterval(interval);
   }, [images]);
 
-  const renderCarouselItem = ({ item }) => {
+  const renderCarouselItem = ({item}) => {
     return (
       <View style={styles.carouselItem}>
-        <Image source={{ uri: `data:image/png;base64,${item}` }} style={styles.carouselImage} />
+        <Image
+          source={{uri: `data:image/png;base64,${item}`}}
+          style={styles.carouselImage}
+        />
       </View>
     );
   };
 
-  const renderAmenityItem = ({ item }) => {
+  const renderAmenityItem = ({item}) => {
     return (
       <View style={styles.amenityItem}>
         <View
@@ -101,9 +111,9 @@ const RoomDetails = ({ route, navigation }) => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
@@ -117,23 +127,27 @@ const RoomDetails = ({ route, navigation }) => {
           onPress: () => console.log('No Pressed'),
           style: 'cancel',
         },
-        { text: 'Yes', onPress: () => console.log('Yes Pressed') },
+        {text: 'Yes', onPress: () => console.log('Yes Pressed')},
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
   const openWhatsApp = () => {
     if (data && data[0]) {
       const url = `whatsapp://send?text=Hello&phone=${data[0].whatsappLink}`;
-      Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+      Linking.openURL(url).catch(err =>
+        console.error("Couldn't load page", err),
+      );
     }
   };
 
   const openTelegram = () => {
     if (data && data[0]) {
       const url = `tg://resolve?domain=${data[0].telegramLink}`;
-      Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+      Linking.openURL(url).catch(err =>
+        console.error("Couldn't load page", err),
+      );
     }
   };
 
@@ -171,10 +185,9 @@ const RoomDetails = ({ route, navigation }) => {
           </Text>
         </View>
       </View>
-      
+
       <View style={styles.detailsContainer}>
-        
-        <Text style={styles.Roomtitle}>{route.params.roomName.roomName}</Text>
+        <Text style={styles.Roomtitle}></Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.Roomrating}>⭐4.9 </Text>
           <Text style={styles.middleDot}> •</Text>
@@ -192,7 +205,9 @@ const RoomDetails = ({ route, navigation }) => {
               style={styles.contactIcon}
               tintColor={'#1B8755'}
             />
-            <Text style={styles.contactText}>WhatsApp: {data && data[0] && data[0].whatsappLink}</Text>
+            <Text style={styles.contactText}>
+              WhatsApp: {data && data[0] && data[0].whatsappLink}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contactButton} onPress={openTelegram}>
             <Image
@@ -200,11 +215,13 @@ const RoomDetails = ({ route, navigation }) => {
               style={styles.contactIcon}
               tintColor={'#0088cc'}
             />
-            <Text style={styles.contactText}>Telegram: {data && data[0] && data[0].telegramLink}</Text>
+            <Text style={styles.contactText}>
+              Telegram: {data && data[0] && data[0].telegramLink}
+            </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ marginLeft: 10, marginRight: 35, marginTop:15 }}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{marginLeft: 10, marginRight: 35, marginTop: 15}}>
             <Text style={styles.price}> {data && data[0] && data[0].rent}</Text>
           </View>
           <TouchableOpacity style={styles.bookButton} onPress={bookAlert}>
@@ -241,9 +258,8 @@ const styles = StyleSheet.create({
   carouselImage: {
     width: '100%',
     height: '100%',
-    resizeMode:'cover',
+    resizeMode: 'cover',
     alignItems: 'center',
-
   },
   paginationContainer: {
     position: 'absolute',

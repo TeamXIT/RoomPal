@@ -22,8 +22,8 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
     });
   };
 
-  const handleDetails = (roomName) => {
-    navigation.navigate('RoomDetails', { roomName });
+  const handleDetails = (_id) => {
+    navigation.navigate('RoomDetails', { roomId:_id });
   };
 
   const renderItem = ({ item }) => (
@@ -55,7 +55,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={() => handleDetails(item.roomName)} // Pass roomName to handleDetails
+              onPress={() => handleDetails(item._id)} // Pass roomName to handleDetails
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
