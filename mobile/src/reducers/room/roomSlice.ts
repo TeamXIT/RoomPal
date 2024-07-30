@@ -6,8 +6,6 @@ import { AppThunk } from '../store';
 
 type Room = {
  
-  data: any;
-  success: Room;
   roomName: string;
   details: string[];
   availability: boolean;
@@ -194,7 +192,6 @@ export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) 
     const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
       params: { roomName: roomName },
     });
-    console.log('room details:',response)
 
     if (response?.status == 200) {
       dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
@@ -214,10 +211,10 @@ export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
   dispatch(setSuccess(''));
 
   try {
-    console.log('Fetching Room ID:', roomId); // Ensure roomId is correctly logged
+    console.log('Fetching Room ID:',roomId ); // Ensure roomId is correctly logged
 
     const response = await axios.get(`${API_BASE_URL}/room/getById`, {
-       params: { room_id:roomId },
+      params: { room_id: roomId } // Use params for query parameters
       
     });
     if (response?.status === 200) {
@@ -230,22 +227,8 @@ export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
   }
   } catch (error) {
     console.error('Error fetching room details:', error);
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.error('Error response data:', error.response.data);
-      console.error('Error response status:', error.response.status);
-      console.error('Error response headers:', error.response.headers);
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.error('Error request data:', error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error('Error message:', error.message);
-    }
     console.error(error);
-
-    dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
+   dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {
     dispatch(setBusy(false));
   }

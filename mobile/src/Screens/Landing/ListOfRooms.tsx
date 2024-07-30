@@ -7,7 +7,7 @@ import { primaryColor, styles } from '../Styles/Styles';
 
 const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
   const dispatch = useDispatch();
-  const { data, screen } = useSelector((state: RootState) => state.room);
+  const { data, screen,roomData } = useSelector((state: RootState) => state.room);
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -21,27 +21,13 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
     });
   };
 
-  // const handleDetails = (roomId) => {
-    //  console.log('Navigating to RoomDetails with ID:', roomId)
-    //  navigation.navigate('RoomDetails', { roomId });
-  // };
-
-  const handleDetails = async (roomId) => {
-    try {
-      // Fetch the room details
-      await dispatch(fetchRoomById(roomId));
-      
-      // Navigate to the RoomDetails screen with the fetched room ID
-      navigation.navigate('RoomDetails', { roomId });
-    } catch (error) {
-      console.error('Error fetching room details:', error);
-    }
-  };
-  
+   const handleDetails = (room:any) => {
+     navigation.navigate('RoomDetails', { room});
+   };
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-
+        
         <Image
           source={{ uri: `data:image/png;base64,${item.images[0]}` }}
           style={styles.image}
@@ -68,7 +54,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={() => handleDetails(item.roomId)} // Pass roomName to handleDetails
+              onPress={() => handleDetails(item)} // Pass roomName to handleDetails
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
