@@ -5,16 +5,19 @@ import { fetchRooms } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 
-const ListOfRooms = ({ navigation, setTabBarVisibility }) => {
+const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
   const dispatch = useDispatch();
   const { data, screen, totalPages } = useSelector((state: RootState) => state.room);
+  const {minRent, maxRent, gender, roomType, location, availability} =route.params|| {};
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchRooms(20, page)).finally(() => setLoading(false));
+    dispatch(fetchRooms(20, page,minRent, maxRent, gender, roomType, location, availability)).finally(() => setLoading(false));
   }, [dispatch, page]);
+
+
 
   const handleFilterPress = (filters) => {
     navigation.navigate('FilterScreen', {
