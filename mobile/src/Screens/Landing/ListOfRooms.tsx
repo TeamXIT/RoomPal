@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRooms } from '../../reducers/room/roomSlice';
+import { fetchRoomById, fetchRooms } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 
 const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
   const dispatch = useDispatch();
-  const { data, screen, totalPages } = useSelector((state: RootState) => state.room);
+  const { data, screen,roomData } = useSelector((state: RootState) => state.room);
+
+
+<!--   const { data, screen, totalPages } = useSelector((state: RootState) => state.room); -->
   const {minRent, maxRent, gender, roomType, location, availability} =route.params|| {};
+
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -25,13 +29,15 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
     });
   };
 
-  const handleDetails = (roomName) => {
-    navigation.navigate('RoomDetails', { roomName });
-  };
-
+   const handleDetails = (room:any) => {
+     navigation.navigate('RoomDetails', { room});
+   };
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
+
+        
+
         <Image
           source={{ uri: `data:image/png;base64,${item.images[0]}` }}
           style={styles.image}
@@ -58,7 +64,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={() => handleDetails(item.roomName)} // Pass roomName to handleDetails
+              onPress={() => handleDetails(item)} // Pass roomName to handleDetails
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
