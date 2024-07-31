@@ -10,7 +10,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
   const { data, screen,roomData } = useSelector((state: RootState) => state.room);
 
 
-<!--   const { data, screen, totalPages } = useSelector((state: RootState) => state.room); -->
+// <!--   const { data, screen, totalPages } = useSelector((state: RootState) => state.room); -->
   const {minRent, maxRent, gender, roomType, location, availability} =route.params|| {};
 
   const [searchQuery, setSearchQuery] = useState('');
