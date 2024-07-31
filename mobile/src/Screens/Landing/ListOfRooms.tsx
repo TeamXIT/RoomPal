@@ -7,7 +7,7 @@ import { primaryColor, styles } from '../Styles/Styles';
 
 const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
   const dispatch = useDispatch();
-  const { data, screen,roomData } = useSelector((state: RootState) => state.room);
+  const { data, screen,roomData,totalPages} = useSelector((state: RootState) => state.room);
 
 
 // <!--   const { data, screen, totalPages } = useSelector((state: RootState) => state.room); -->

@@ -79,10 +79,10 @@ const FilterScreen = ({ navigation }) => {
           <Text style={[styles.genderText, gender === 'female' && { color: '#fff' }]}>Female</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.genderButton, gender === 'both' && styles.selectedGender]}
-          onPress={() => handleGenderSelection('both')}
+          style={[styles.genderButton, gender === 'family' && styles.selectedGender]}
+          onPress={() => handleGenderSelection('family')}
         >
-          <Text style={[styles.genderText, gender === 'both' && { color: '#fff' }]}>Both</Text>
+          <Text style={[styles.genderText, gender === 'family' && { color: '#fff' }]}>family</Text>
         </TouchableOpacity>
       </View>
 
