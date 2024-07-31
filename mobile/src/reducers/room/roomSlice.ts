@@ -119,12 +119,9 @@ export const roomSlice = createSlice({
   },
 });
 
-
-
 const customConfig = {
   headers: { "Content-Type": "application/json" }
 }
-
 
 export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData } = roomSlice.actions;
 
@@ -134,20 +131,22 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   dispatch(setSuccess(''));
   try {
     console.log('create params:', room);
-    const response = await axios.post(`${API_BASE_URL}/room/create`,{params:{
-      roomName:room.roomName, 
-      details:room.details,
-      availability:room.availability,
-      roomType:room.roomType,
-      floor:room.floor,
-      rent:room.rent,
-      location:room.location,
-      amenities:room.amenities,
-      gender:room.gender,
-      images:room.images,
-      whatsappLink:room.whatsappLink,
-      telegramLink:room.telegramLink
-    } }, customConfig);
+    const response = await axios.post(`${API_BASE_URL}/room/create`, {
+      params: {
+        roomName: room.roomName,
+        details: room.details,
+        availability: room.availability,
+        roomType: room.roomType,
+        floor: room.floor,
+        rent: room.rent,
+        location: room.location,
+        amenities: room.amenities,
+        gender: room.gender,
+        images: room.images,
+        whatsappLink: room.whatsappLink,
+        telegramLink: room.telegramLink
+      }
+    }, customConfig);
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));
     dispatch(fetchRooms()); // Fetch the updated list of rooms
@@ -160,21 +159,34 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   }
 };
 
-
-export const fetchRooms = (limit: number = 10, page: number = 1, filters: Partial<Room> = {}): AppThunk => async (dispatch) => {
+export const fetchRooms = (limit = 20, page = 1, minRent: string, maxRent: string, gender: string, roomType: string, location: any, availability: any): AppThunk => async (dispatch, getState) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
 
+    // Construct query parameters based on filters
+    const queryParams: any = { limit, page };
+
+    if (minRent !== "" && minRent !== null) queryParams.minRent = minRent;
+    if (maxRent !== "" && maxRent !== null) queryParams.maxRent = maxRent;
+    if (gender) queryParams.gender = gender;
+    if (roomType) queryParams.roomType = roomType;
+    if (location) queryParams.location = location;
+    if (availability !== 0 && availability !== null) queryParams.availability = availability;
+
     const response = await axios.get(`${API_BASE_URL}/room/getAll`, {
-      params: { limit, page, ...filters },
+      params: queryParams,
     });
-    if (response?.status == 200) {
+
+    if (response?.status === 200) {
+      const { data, totalPages, totalCount } = response.data;
+      const currentState = getState().room.data;
+
       dispatch(setRooms({
-        data: response.data.data,
-        totalPages: response.data.totalPages,
-        totalCount: response.data.totalCount,
+        data: page === 1 ? data : [...currentState, ...data],
+        totalPages,
+        totalCount,
       }));
     }
   } catch (error) {
@@ -214,19 +226,22 @@ export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
     console.log('Fetching Room ID:',roomId ); // Ensure roomId is correctly logged
 
     const response = await axios.get(`${API_BASE_URL}/room/getById`, {
-      params: { room_id: roomId } // Use params for query parameters
-      
+
+      params: { room_id: roomId },
+
     });
     if (response?.status === 200) {
       console.log('Room details:', response.data);
     console.log(response.data);
-    dispatch(roomData(response.data.data)); 
+    dispatch(roomData(response.data.data));
     dispatch(setSuccess('Room fetched successfully.'));
   }else {
     dispatch(setError('Failed to fetch room details.'));
   }
   } catch (error) {
-    console.error('Error fetching room details:', error);
+
+    
+
     console.error(error);
    dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {

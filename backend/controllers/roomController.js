@@ -145,7 +145,7 @@ const updateRoomDetails = async (req, res) => {
 
 const getRoomById = async (req, res) => {
   try {
-    const { room_id } = req.body;
+    const { room_id } = req.query;
     if (!mongoose.Types.ObjectId.isValid(room_id)) {
       return res.status(400).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
     }
