@@ -135,7 +135,7 @@ const RoomDetails = ({ route, navigation }) => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'YES', onPress: () => navigation.navigate('MakeAnOrder') },
+        { text: 'YES', onPress: () => navigation.navigate('MakeAnOrder', { room }) },
       ],
       { cancelable: false },
     );

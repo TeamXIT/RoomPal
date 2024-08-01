@@ -20,7 +20,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const [roomName, setRoomName] = useState('');
   const [details, setDetails] = useState([]);
   const [detail, setDetail] = useState('');
-  const [availability, setAvailability] = useState(6);
+  const [availability, setAvailability] = useState(1);
   const [amenities, setAmenities] = useState([
     { name: 'Wi-Fi', image: require('../Images/ic_wifi.png'), checked: true },
     {
@@ -105,13 +105,14 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
         setDetailsError('Please provide your details ');
         hasError = true;
       } else {
-        setDetails(['1 bedroom', '2 bathroom', 'Furnished kitchen']);
+        setDetails(detail);
         setDetailsError('');
       }
     if (availability === 0) {
       setAvailabilityError('Please select a capacity of at least 1');
       hasError = true;
     } else {
+      setAvailability(availability)
       setAvailabilityError('');
     }
 
@@ -175,15 +176,15 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
     if (!hasError) {
       const images = roomImages; 
       const gender = lookingFor;
-
+      console.log(details)
       await dispatch(createRoom({
         roomName,
-        details,
-        availability: availability > 0,
+        details:details,
+        availability,
         roomType,
         floor,
         rent,
-        location,
+        location:{lat:latitude, lon:longitude},
         amenities: amenitiesObj,
         gender,
         images,
