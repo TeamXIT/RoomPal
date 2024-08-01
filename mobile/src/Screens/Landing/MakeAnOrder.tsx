@@ -136,7 +136,7 @@ export default function MakeAnOrder({route}) {
         <View style={styles.container}>
               <RoomCard  room={room} />
             <TouchableOpacity style={styles.btn} onPress={_startCheckout}>
-                <Text style={{ color: 'white',fontSize:20,fontWeight:'bold' }}>Buy</Text>
+                <Text style={{ color: 'white',fontSize:20,fontWeight:'bold' }}>Pay now</Text>
             </TouchableOpacity>
         </View>
     );
