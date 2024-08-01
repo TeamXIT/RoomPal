@@ -22,6 +22,7 @@ import ListOfRooms from './src/Screens/Landing/ListOfRooms';
 import FilterScreen from './src/Screens/Landing/FilterScreen';
 import ProfileScreen from './src/Screens/Landing/ProfileScreen';
 import Dashboard from './src/Screens/Landing/Dashboard';
+import MakeAnOrder from './src/Screens/Landing/MakeAnOrder';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,7 @@ const Landing = () => (
     <Stack.Screen name="ListOfRooms" component={ListOfRooms} />
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+    <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
   </Stack.Navigator>
 );
 

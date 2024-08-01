@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomByName } from '../../reducers/room/roomSlice';
 import { primaryColor } from '../Styles/Styles';
 
 // Importing local images
@@ -29,16 +28,14 @@ const gymImage = require('../Images/ic_gym.png');
 const washerImage = require('../Images/ic_washing_machine.png');
 const heaterImage = require('../Images/ic_heater.png');
 const poolImage = require('../Images/ic_pool.png');
-
 const whatsappIcon = require('../Images/ic_whatsApp.png');
 const telegramIcon = require('../Images/ic_telegram.png');
-
 const { width } = Dimensions.get('window');
+
 const RoomDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.room);
   const room = route.params.room // Access the room data from route.params
-
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [roomName, setRoomName] = useState('');
@@ -46,21 +43,16 @@ const RoomDetails = ({ route, navigation }) => {
   const [availability, setAvailability] = useState(false);
   const [roomType, setRoomType] = useState('');
   const [floor, setFloor] = useState(0);
-
   const [rent, setRent] = useState(0);
   const [location, setLocation] = useState({});
-
   const [amenities, setAmenities] = useState({});
   const [gender, setGender] = useState('');
-
   const [images, setImages] = useState([]);
-
   const [whatsappLink, setWhatsappLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
 
   useEffect(() => {
     if (room) {
-
       setRoomName(room.roomName || '');
       setDetails(room.details || []);
       setAvailability(room.availability || false);
@@ -73,11 +65,8 @@ const RoomDetails = ({ route, navigation }) => {
       setImages(room.images || []);
       setWhatsappLink(room.whatsappLink || '');
       setTelegramLink(room.telegramLink || '');
-
-
     }
   }, [room]);
-
 
   const amenitiesIcons = [
     { name: 'wifi', icon: wifiImage },
@@ -89,10 +78,6 @@ const RoomDetails = ({ route, navigation }) => {
     { name: 'parking', icon: parkingImage },
     { name: 'gym', icon: gymImage },
     { name: 'pool', icon: poolImage },
-
-
-
-
   ];
 
   useEffect(() => {
@@ -100,7 +85,6 @@ const RoomDetails = ({ route, navigation }) => {
       setImages(data[0].images || []);
     }
   }, [data]);
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -143,15 +127,15 @@ const RoomDetails = ({ route, navigation }) => {
 
   const bookAlert = () => {
     Alert.alert(
-      'Booking Confirmation',
-      'Are you sure!  book this room?',
+      'Ready to book!',
+      'Are you sure! book this room?',
       [
         {
           text: 'NO',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'YES', onPress: () => console.log('OK Pressed') },
+        { text: 'YES', onPress: () => navigation.navigate('MakeAnOrder') },
       ],
       { cancelable: false },
     );
@@ -228,7 +212,7 @@ const RoomDetails = ({ route, navigation }) => {
             ) : null
           ))}
         </View>
-        <View style={{ paddingLeft: 10, paddingRight: 10,gap:20}}>
+        <View style={{ paddingLeft: 10, paddingRight: 10, gap: 20 }}>
           <Text style={styles.roomdetails}>{room.detailsroomdetails}</Text>
           <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Description:</Text>
           <Text style={styles.roomdetails}>{room.details}</Text>
@@ -248,12 +232,12 @@ const RoomDetails = ({ route, navigation }) => {
 
             <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>Location:</Text>
             <View>
-               <Text style={styles.roomdetails}>Latitude :{room.location.lat}</Text>
-               <Text style={styles.roomdetails}>Longitude :{room.location.lon}</Text>
+              <Text style={styles.roomdetails}>Latitude :{room.location.lat}</Text>
+              <Text style={styles.roomdetails}>Longitude :{room.location.lon}</Text>
             </View>
           </View>
 
-          <View style={{ flexDirection: 'row',justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[styles.roomdetails, { color: primaryColor, fontWeight: 'bold', fontSize: 20 }]}>LookingFor:</Text>
             <Text style={styles.roomdetails}>{room.gender}</Text>
           </View>
