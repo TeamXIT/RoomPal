@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, View, StyleSheet, Keyboard } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Import your screen components
@@ -21,6 +21,22 @@ const Dashboard = () => {
     const handleTabBarVisibility = (visible) => {
         setIsTabBarVisible(visible);
     };
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => handleTabBarVisibility(false)
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => handleTabBarVisibility(true)
+        );
+
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
 
     return (
         <Tab.Navigator
@@ -47,7 +63,6 @@ const Dashboard = () => {
             </Tab.Screen>
             <Tab.Screen
                 name="Create"
-                // component={RoomCreateScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.createIconContainer}>
@@ -58,13 +73,11 @@ const Dashboard = () => {
                         </View>
                     ),
                 }}
-                >
+            >
                 {props => <RoomCreateScreen {...props} setTabBarVisibility={handleTabBarVisibility} />}
-            
-                </Tab.Screen>
+            </Tab.Screen>
             <Tab.Screen
                 name="Profile"
-                component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={styles.iconContainer}>
@@ -75,7 +88,9 @@ const Dashboard = () => {
                         </View>
                     ),
                 }}
-            />
+            >
+                {props => <ProfileScreen {...props} setTabBarVisibility={handleTabBarVisibility} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 };

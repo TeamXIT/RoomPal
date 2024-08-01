@@ -490,6 +490,18 @@ detailsButtonText: {
     fontSize: 16,
     color: '#000',
   },
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  noResultsText: {
+    fontSize: 18,
+    color: '#666',
+    textAlign: 'center',
+  },
+  
   filtercontainer: {
     flex: 1,
     backgroundColor: '#f8f8f8',
