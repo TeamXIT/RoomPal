@@ -5,23 +5,19 @@ import { fetchRoomById, fetchRooms } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 
-const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
+const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
   const dispatch = useDispatch();
-  const { data, screen,roomData,totalPages} = useSelector((state: RootState) => state.room);
+  const { data, screen, roomData, totalPages } = useSelector((state: RootState) => state.room);
 
-
-// <!--   const { data, screen, totalPages } = useSelector((state: RootState) => state.room); -->
-  const {minRent, maxRent, gender, roomType, location, availability} =route.params|| {};
+  const { minRent, maxRent, gender, roomType, location, availability } = route.params || {};
 
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchRooms(20, page,minRent, maxRent, gender, roomType, location, availability)).finally(() => setLoading(false));
+    dispatch(fetchRooms(20, page, minRent, maxRent, gender, roomType, location, availability)).finally(() => setLoading(false));
   }, [dispatch, page]);
-
-
 
   const handleFilterPress = (filters) => {
     navigation.navigate('FilterScreen', {
@@ -29,15 +25,21 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
     });
   };
 
-   const handleDetails = (room:any) => {
-     navigation.navigate('RoomDetails', { room});
-   };
+  const handleDetails = (room) => {
+    navigation.navigate('RoomDetails', { room });
+  };
+
+  const filterRoomsByName = () => {
+    if (!searchQuery) return data;
+    return data.filter(room =>
+      room.roomName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+  
+
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={{ flexDirection: 'row' }}>
-
-        
-
         <Image
           source={{ uri: `data:image/png;base64,${item.images[0]}` }}
           style={styles.image}
@@ -64,7 +66,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
             <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={() => handleDetails(item)} // Pass roomName to handleDetails
+              onPress={() => handleDetails(item)} 
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
@@ -89,12 +91,14 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
     );
   }
 
+  const filteredData = filterRoomsByName();
+
   return (
     <View style={styles.roomlistcontainer}>
       <View style={styles.searchBarContainer}>
         <Image source={require('../Images/ic_search.png')} style={styles.searchIcon} />
         <TextInput
-          placeholder="Search by name or location..."
+          placeholder="Search by name..."
           placeholderTextColor="#666"
           style={styles.searchinput}
           value={searchQuery}
@@ -106,14 +110,21 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route}) => {
           <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.roomId}
-        contentContainerStyle={{ paddingBottom: 52 }}
-        onScroll={onScroll}
-        onEndReachedThreshold={0.1}
-      />
+      
+      {filteredData.length > 0 ? (
+        <FlatList
+          data={filteredData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.roomId}
+          contentContainerStyle={{ paddingBottom: 52 }}
+          onScroll={onScroll}
+          onEndReachedThreshold={0.1}
+        />
+      ) : (
+        <View style={styles.noResultsContainer}>
+          <Text style={styles.noResultsText}>No rooms found matching your search.</Text>
+        </View>
+      )}
     </View>
   );
 };
