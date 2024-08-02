@@ -2,6 +2,7 @@ import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthState = {
   screen: {
@@ -79,6 +80,7 @@ export const signIn = (mobileNumber: string, password: string): AppThunk => asyn
 
     const response = await axios.post(`${API_BASE_URL}/auth/signIn`, { mobileNumber, password }, customConfig);
     if (response?.status == 200) {
+      AsyncStorage.setItem('MobileNumber', mobileNumber);
       dispatch(setAuthToken(response.data.data));
       dispatch(setMobileNumber(mobileNumber));
       dispatch(setSuccess('User logged in successfully.'));
