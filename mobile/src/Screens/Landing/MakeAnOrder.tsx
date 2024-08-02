@@ -9,12 +9,15 @@ import {
     CFSession,
     CFThemeBuilder,
 } from 'cashfree-pg-api-contract';
-
-export default function MakeAnOrder() {
+import  {X_CLIENT_ID, X_CLIENT_SECRET} from '../../reducers/config/cashfree'
+import RoomCard from '../molecule/roomCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+export default function MakeAnOrder({route}) {
+    const room=route.params.room;
     const [order, setOrder] = useState({
-        payment_session_id: '',
-        order_id: '',
-        order_expiry_time: 'order_expiry_time',
+        payment_session_id: '123456780',
+        order_id: 'Order_id_002',
+        order_expiry_time: ' ',
     });
     const [orderStatus, setOrderStatus] = useState();
     const createOrder = () => {
@@ -22,20 +25,20 @@ export default function MakeAnOrder() {
         return new Promise((resolve, reject) => {
             fetch('https://sandbox.cashfree.com/pg/orders', {
                 headers: {
-                    'X-Client-Secret': 'Your Client-Secret',
-                    'X-Client-Id': 'Your Client-Id',
+                    'X-Client-Secret': X_CLIENT_SECRET,
+                    'X-Client-Id': X_CLIENT_ID,
                     'Content-Type': 'application/json',
                     'x-api-version': '2023-08-01',
                 },
                 method: 'POST',
                 body: JSON.stringify({
-                    order_amount: 100.1,
+                    order_amount: room.rent,
                     order_currency: 'INR',
                     customer_details: {
                         customer_id: 'USER123',
                         customer_name: 'joe',
                         customer_email: 'joe.s@cashfree.com',
-                        customer_phone: '+919876543210',
+                        customer_phone:'+919705074430',
                     },
                     order_meta: {
                         return_url: 'https://b8af79f41056.eu.ngrok.io?order_id=order_123',
@@ -83,7 +86,7 @@ export default function MakeAnOrder() {
     const _startCheckout = async () => {
         try {
             console.log("_startCheckout start");
-            const session = getSession();
+            const session =  getSession();
             console.log("Session: ", JSON.stringify(session));
             const paymentModes = new CFPaymentComponentBuilder()
                 .add(CFPaymentModes.CARD)
@@ -94,7 +97,7 @@ export default function MakeAnOrder() {
                 .build();
             console.log("paymentModes: ", JSON.stringify(paymentModes));
             const theme = new CFThemeBuilder()
-                .setNavigationBarBackgroundColor('#94ee95')
+                .setNavigationBarBackgroundColor('#814ABF')
                 .setNavigationBarTextColor('#FFFFFF')
                 .setButtonBackgroundColor('#FFC107')
                 .setButtonTextColor('#FFFFFF')
@@ -115,20 +118,25 @@ export default function MakeAnOrder() {
     };
     // Implement other methods similarly
     const getSession = () => {
+        console.log("getSession: ", order);
+        if (!order.payment_session_id || !order.order_id) {
+            throw new Error('Invalid order details');
+        }
         return new CFSession(
             order.payment_session_id, // sessionId
             order.order_id, // orderId
             CFEnvironment.SANDBOX,
         );
     };
+
     useEffect(() => {
         createOrder();
     }, []);
-
     return (
         <View style={styles.container}>
+              <RoomCard  room={room} />
             <TouchableOpacity style={styles.btn} onPress={_startCheckout}>
-                <Text>Buy</Text>
+                <Text style={{ color: 'white',fontSize:20,fontWeight:'bold' }}>Pay now</Text>
             </TouchableOpacity>
         </View>
     );
@@ -161,12 +169,13 @@ const styles = StyleSheet.create({
     },
     btn: {
         marginTop: 20,
-        backgroundColor: '#94ee95',
+        backgroundColor: '#814ABF',
         width: '50%',
+        height: 50,
         padding: 10,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
+    
     },
 });

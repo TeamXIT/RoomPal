@@ -5,10 +5,12 @@ import { AppThunk } from '../store';
 
 
 type Room = {
+  _id: string;
+  roomId: string;
  
   roomName: string;
   details: string[];
-  availability: boolean;
+  availability: number;
   roomType: string;
   floor: number;
   rent: number;
@@ -63,7 +65,7 @@ const initialState: RoomState = {
   roomData: {
     roomName: '',
     details: [],
-    availability: false,
+    availability: 0,
     roomType: '',
     floor: 0,
     rent: 0,
@@ -126,13 +128,14 @@ const customConfig = {
 export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData } = roomSlice.actions;
 
 export const createRoom = (room: Room): AppThunk => async (dispatch) => {
+  console.log(room)
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    console.log('create params:', room);
+    // console.log('create params:', room);
     const response = await axios.post(`${API_BASE_URL}/room/create`, {
-      params: {
+       
         roomName: room.roomName,
         details: room.details,
         availability: room.availability,
@@ -145,8 +148,8 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
         images: room.images,
         whatsappLink: room.whatsappLink,
         telegramLink: room.telegramLink
-      }
-    }, customConfig);
+    });
+    console.log(response.data.data)
     dispatch(addRoom(response.data.data));
     dispatch(setSuccess('Room created successfully.'));
     dispatch(fetchRooms()); // Fetch the updated list of rooms

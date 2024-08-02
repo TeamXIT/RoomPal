@@ -125,6 +125,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
           <Text style={styles.noResultsText}>No rooms found matching your search.</Text>
         </View>
       )}
+
     </View>
   );
 };
