@@ -201,7 +201,7 @@ const EditProfile = () => {
         <View style={{ marginLeft: 20, marginRight: 20, marginTop: 20, marginBottom: 80 }}>
           <Text style={styles.label}>Full Name</Text>
           <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_profile.png')} style={styles.inputIcon} />
+            <Image source={require('../Images/ic_person.png')} style={styles.inputIcon} />
             <TextInput
               style={styles.textInput}
               value={fullName}
@@ -256,7 +256,7 @@ const EditProfile = () => {
           </View>
           <Text style={styles.label}>Gender</Text>
           <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_gender.png')} style={styles.inputIcon} />
+            <Image source={require('../Images/ic_gender.png')} style={styles.back} />
             {isEditing ? (
               <DropDownPicker
                 open={genderTypeOpen}
@@ -313,6 +313,7 @@ const EditProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
   },
   title: {
     fontSize: 30,
@@ -354,7 +355,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: primaryColor,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 7,
+    marginLeft:7
   },
   profileInput: {
     flexDirection: 'row',
@@ -364,7 +366,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
     borderColor: primaryColor,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   textInput: {
     flex: 1,
