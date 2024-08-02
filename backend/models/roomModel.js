@@ -1,5 +1,11 @@
 const mongoose=require('mongoose');
 const  roomSchema= new mongoose.Schema({
+   userId:{
+    type: mongoose.Types.ObjectId,
+    ref:'User',
+    required:true
+  },
+
     roomName: {
         type: String,
         required: true,
