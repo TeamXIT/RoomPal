@@ -13,6 +13,8 @@ import  {X_CLIENT_ID, X_CLIENT_SECRET} from '../../reducers/config/cashfree'
 import RoomCard from '../molecule/roomCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function MakeAnOrder({route}) {
+    const mobileNumber=AsyncStorage.getItem("MobileNumber");
+console.log(mobileNumber)
     const room=route.params.room;
     const [order, setOrder] = useState({
         payment_session_id: '123456780',
