@@ -23,6 +23,7 @@ import FilterScreen from './src/Screens/Landing/FilterScreen';
 import ProfileScreen from './src/Screens/Landing/ProfileScreen';
 import Dashboard from './src/Screens/Landing/Dashboard';
 import MakeAnOrder from './src/Screens/Landing/MakeAnOrder';
+import EditProfile from './src/Screens/Landing/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -49,8 +50,9 @@ const Landing = () => (
     <Stack.Screen name="RoomCreateScreen" component={RoomCreateScreen} />
     <Stack.Screen name="ListOfRooms" component={ListOfRooms} />
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
-    <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+    <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
     <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
+    <Stack.Screen name="EditProfile" component={EditProfile} />
   </Stack.Navigator>
 );
 
