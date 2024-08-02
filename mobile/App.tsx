@@ -24,9 +24,14 @@ import ProfileScreen from './src/Screens/Landing/ProfileScreen';
 import Dashboard from './src/Screens/Landing/Dashboard';
 import MakeAnOrder from './src/Screens/Landing/MakeAnOrder';
 import EditProfile from './src/Screens/Landing/EditProfile';
+
 import TransactionHistory from './src/Screens/Landing/TransactionHistory';
 
+import BookingHistory from './src/Screens/Landing/BookingHistory';
+
+
 const Stack = createStackNavigator();
+const primaryColor = '#814ABF';
 
 // Authentication stack
 const AuthStack = createStackNavigator();
@@ -53,8 +58,21 @@ const Landing = () => (
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
     <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
-    <Stack.Screen name="EditProfile" component={EditProfile} />
+
     <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }}/>
+
+
+    <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: true }}/>
+    <Stack.Screen name="BookingHistory" 
+    component={BookingHistory}  
+    options={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#f5f5f5', 
+        },
+        headerTintColor: primaryColor,  
+      }}/>
+    
 
   </Stack.Navigator>
 );

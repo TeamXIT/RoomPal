@@ -9,12 +9,18 @@ import {
     CFSession,
     CFThemeBuilder,
 } from 'cashfree-pg-api-contract';
+
 import  {X_CLIENT_ID, X_CLIENT_SECRET} from '../../reducers/config/cashfree'
 import RoomCard from '../molecule/roomCard';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../reducers/store';
 export default function MakeAnOrder({route}) {
-    const mobileNumber=AsyncStorage.getItem("MobileNumber");
-console.log(mobileNumber)
+   const [MobileNumber, setMobileNumber] = useState('');
+  AsyncStorage.getItem('MobileNumber').then((value) => {
+    setMobileNumber(value);
+  })
     const room=route.params.room;
     const [order, setOrder] = useState({
         payment_session_id: '123456780',
@@ -40,7 +46,7 @@ console.log(mobileNumber)
                         customer_id: 'USER123',
                         customer_name: 'joe',
                         customer_email: 'joe.s@cashfree.com',
-                        customer_phone:'+919705074430',
+                        customer_phone:`+91${MobileNumber}`,
                     },
                     order_meta: {
                         return_url: 'https://b8af79f41056.eu.ngrok.io?order_id=order_123',
@@ -86,6 +92,7 @@ console.log(mobileNumber)
         setOrderStatus(message);
     };
     const _startCheckout = async () => {
+
         try {
             console.log("_startCheckout start");
             const session =  getSession();
