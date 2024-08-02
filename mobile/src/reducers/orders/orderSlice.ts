@@ -48,7 +48,6 @@ const { setBusy, setError, setSuccess, setOrders } = orderSlice.actions;
 
   export const createOrders = (orderData: any): AppThunk => async dispatch => {
     try {
-        console.log(orderData)
       dispatch(setBusy(true));
       dispatch(setError(''));
       dispatch(setSuccess(''));
@@ -56,7 +55,6 @@ const { setBusy, setError, setSuccess, setOrders } = orderSlice.actions;
       const response = await axios.post(`${API_BASE_URL}/order/create-order`, orderData);
         
       if (response.data) {
-        console.log(response)
         dispatch(setOrders(response.data));
         dispatch(setSuccess('Order created successfully!'));
       } else {
