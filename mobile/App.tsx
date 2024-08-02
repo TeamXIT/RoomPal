@@ -24,6 +24,7 @@ import ProfileScreen from './src/Screens/Landing/ProfileScreen';
 import Dashboard from './src/Screens/Landing/Dashboard';
 import MakeAnOrder from './src/Screens/Landing/MakeAnOrder';
 import EditProfile from './src/Screens/Landing/EditProfile';
+import TransactionHistory from './src/Screens/Landing/TransactionHistory';
 
 const Stack = createStackNavigator();
 
@@ -53,6 +54,8 @@ const Landing = () => (
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
     <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
     <Stack.Screen name="EditProfile" component={EditProfile} />
+    <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }}/>
+
   </Stack.Navigator>
 );
 
