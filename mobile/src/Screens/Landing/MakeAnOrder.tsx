@@ -22,7 +22,6 @@ export default function MakeAnOrder({route}) {
    const [MobileNumber, setMobileNumber] = useState('');
    const [userId,setUserId] = useState('')
   AsyncStorage.getItem('MobileNumber').then((value) => {
-    console.log(value);
     setMobileNumber(value);
   })
     const room=route.params.room;
@@ -34,11 +33,10 @@ export default function MakeAnOrder({route}) {
     const [orderStatus, setOrderStatus] = useState();
     const handleCreateOrder = async() => {
         AsyncStorage.getItem('userId').then((value) => {
-            console.log(value)
             setUserId(value);
         })
         const orderData = {
-          order_id: 'Order_id_002',
+          order_id: 'Order_id_005',
           order_amount: room.rent,
           order_currency: 'INR',
           customer_details: {
@@ -58,7 +56,7 @@ export default function MakeAnOrder({route}) {
       };
     const createOrder = async() => {
         console.log("createOrder Started");
-        await handleCreateOrder();
+       
         return new Promise((resolve, reject) => {
             fetch('https://sandbox.cashfree.com/pg/orders', {
                 headers: {
@@ -99,9 +97,10 @@ export default function MakeAnOrder({route}) {
                 JSON.stringify(map),
             );
         };
-        const onVerify = (orderId: string) => {
+        const onVerify = async (orderId: string) => {
             console.log('orderId is :' + orderId);
             updateStatus(orderId);
+            await handleCreateOrder();
         };
         const onError = (error: any, orderId: string) => {
             console.log(
@@ -151,6 +150,7 @@ export default function MakeAnOrder({route}) {
             );
             console.log("dropPayment: ", JSON.stringify(dropPayment));
             CFPaymentGatewayService.doPayment(dropPayment);
+        
         } catch (e) {
             console.log("Exception in _startCheckout: ", e);
         }
