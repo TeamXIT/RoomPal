@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type ProfileState = {
     screen: {
@@ -68,6 +69,7 @@ export const fetchProfile = (usermobileNumber: string): AppThunk => async (dispa
         dispatch(setSuccess(''));
         const response = await axios.get(`${API_BASE_URL}/user/getByNumber`, { params: { mobileNumber: usermobileNumber } });
         if (response?.status == 200) {
+            AsyncStorage.setItem('userId', response.data.message._id);
             dispatch(setSuccess('Profile fetched successfully.'));
             dispatch(setBusy(false));
             dispatch(setUser(response.data.message));
