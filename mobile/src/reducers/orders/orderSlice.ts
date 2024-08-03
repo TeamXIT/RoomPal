@@ -54,15 +54,16 @@ const { setBusy, setError, setSuccess, setOrders } = orderSlice.actions;
       dispatch(setSuccess(''));
   
       const response = await axios.post(`${API_BASE_URL}/order/create-order`, orderData);
-        
+      console.log(response.data);
       if (response.data) {
-        console.log(response.data)
+      
         dispatch(setOrders(response.data));
         dispatch(setSuccess('Order created successfully!'));
       } else {
         throw new Error('Order creation failed');
       }
     } catch (error: any) {
+        console.log(error)
       dispatch(setError(error.message));
     } finally {
       dispatch(setBusy(false));

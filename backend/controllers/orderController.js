@@ -67,6 +67,22 @@ const fetchOrder = async (req, res) => {
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
+const getOrdersByCustomerId = async (req, res) => {
+    try {
+        const customer_id = req.params.customer_id;
+        if (!mongoose.Types.ObjectId.isValid(customer_id)) {
+            return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
+        }
+        const orders = await Order.find({ 'customer_details.customer_id': customer_id });
+        if (!orders || orders.length === 0) {
+            return res.status(404).json(baseResponses.constantMessages.ORDER_NOT_FOUND());
+        }
+        return res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(orders));
+    } catch (error) {
+        return res.status(500).json(baseResponses.error(error.message));
+    }
+};
+
 const webhook = async (req, res) => {
     try {
         Cashfree.PGVerifyWebhookSignature(req.headers["x-webhook-signature"], req.rawBody, req.headers["x-webhook-timestamps"]);
@@ -96,4 +112,4 @@ const getAllOrders = async (req, res) => {
 
 
 
-module.exports = { createOrder, fetchOrder, webhook, getAllOrders }
+module.exports = { createOrder, fetchOrder, webhook, getAllOrders,getOrdersByCustomerId}
