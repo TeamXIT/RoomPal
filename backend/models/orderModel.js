@@ -26,6 +26,7 @@ const orderSchema = new mongoose.Schema({
         return_url: { type: String, required: true }
     },
     order_status: { type: String, default: 'PENDING' },
+    room_id: { type: mongoose.Types.ObjectId, ref: 'Room' },
     created_at: { type: Date, default: Date.now }
 },{timestamps:true, versionKey:false});
 const Order = mongoose.model('Order', orderSchema);

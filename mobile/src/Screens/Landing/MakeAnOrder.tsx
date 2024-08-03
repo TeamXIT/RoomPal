@@ -55,6 +55,7 @@ export default function MakeAnOrder({route}) {
         return_url:
           'https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id={order_id}',
       },
+      room_id: room._id,
     };
     try {
       await dispatch(createOrders(orderData));
