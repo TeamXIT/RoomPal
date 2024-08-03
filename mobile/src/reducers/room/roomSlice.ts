@@ -234,8 +234,8 @@ export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
 
     });
     if (response?.status === 200) {
-      console.log('Room details:', response.data);
-    console.log(response.data);
+    //   console.log('Room details:', response.data);
+    // console.log(response.data);
     dispatch(roomData(response.data.data));
     dispatch(setSuccess('Room fetched successfully.'));
   }else {

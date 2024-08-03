@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../reducers/auth/authSlice';
 import roomSlice from './room/roomSlice';
 import profileSlice from './profile/profileSlice';
-import { orderSlice } from './orders/orderSlice';
+import  orderSlice  from './orders/orderSlice';
 
 
 export const store = configureStore({

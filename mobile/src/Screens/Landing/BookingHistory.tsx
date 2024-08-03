@@ -1,70 +1,126 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducers/store';
+import axios from 'axios';
+import API_BASE_URL from '../../reducers/config/apiConfig';
+import { getOrdersByCustomerId } from '../../reducers/orders/orderSlice';
+const { width } = Dimensions.get('window');
 const BookingHistory = () => {
-    const bookings = [
-        {
-          roomName: "Cozy Room ",
-          rent: "₹5000",
-          lookingFor: "Male",
-          date: "August 5, 2024",
-          imageSource: require('../Images/ic_kitchen.png'),
-        },
-        {
-          roomName: "Modern Studio Apartment",
-          rent: "₹8000",
-          lookingFor: "Female",
-          date: "August 10, 2024",
-          imageSource: require('../Images/ic_balcony.png'),
-        },
-    ];
-  
-    return (
-        <View style={styles.roomlistcontainer}>
-            {bookings.map((booking, index) => (
-                <View key={index} style={styles.card}>
-                    <View style={styles.bookedLabelContainer}>
-                        <Text style={styles.bookedLabel}>Booked</Text>
-                    </View>
-                    <View style={styles.cardContent}>
-                        <Image
-                            source={booking.imageSource}
+  const dispatch = useDispatch();
+  const [userId, setUserId] = useState('');
+  const [roomIds, setRoomIds] = useState([]);
+  const orderState = useSelector((state: RootState) => state.orders);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userId');
+        if (value) {
+          setUserId(value);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user ID from async storage', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        if (userId) {
+          await dispatch(getOrdersByCustomerId(userId));
+        }
+      } catch (error) {
+        console.error('Failed to fetch orders', error);
+      }
+    };
+
+    fetchOrders();
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (orderState.orders.length > 0) {
+      const ids = orderState.orders.map(order => order.room_id);
+      setRoomIds(ids);
+      console.log('Room IDs:', ids);
+    }
+  }, [orderState.orders]);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const fetchedRooms = [];
+        for (const roomId of roomIds) {
+          const response = await axios.get(`${API_BASE_URL}/room/getById`, {
+            params: { room_id: roomId },
+          });
+          if (response?.status === 200 && response.data) {
+            fetchedRooms.push(response.data.data);
+          }
+        }
+        setRooms(fetchedRooms);
+      } catch (error) {
+        console.error('Failed to fetch room details', error);
+      }
+    };
+
+    if (roomIds.length > 0) {
+      fetchRooms();
+    }
+  }, [roomIds]);
+
+  return (
+    <ScrollView>
+      <View style={styles.roomlistcontainer}>
+        {rooms.map((room, index) => (
+          <View key={index} style={styles.card}>
+            <View style={styles.bookedLabelContainer}>
+              <Text style={styles.bookedLabel}>Booked</Text>
+            </View>
+            <View style={styles.cardContent}>
+            <Image
+                            source={{ uri: `data:image/png;base64,${room.images[0]}` }}
                             style={styles.image}
                             onError={() => console.log('Image failed to load')}
                         />
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.roomName}>{booking.roomName}</Text>
-                            <View style={styles.detailsContainer}>
-                                <Text style={styles.detail}>Rent: {booking.rent}</Text>
-                                <Text style={styles.detail}>Looking For: {booking.lookingFor}</Text>
-                                <Text style={styles.detail}>Date: {booking.date}</Text>
-                            </View>
-                            <TouchableOpacity style={styles.detailsButton}>
-                                <Text style={styles.detailsButtonText}>See Details</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.roomName}>{room.roomName}</Text>
+                <View style={styles.detailsContainer}>
+                  <Text style={styles.detail}>Rent: ₹{room.rent}</Text>
+                  <Text style={styles.detail}>Looking For: {room.gender}</Text>
                 </View>
-            ))}
-        </View>
-    );
+                <TouchableOpacity style={styles.detailsButton}>
+                  <Text style={styles.detailsButtonText}>See Details</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({
-    roomlistcontainer: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 20,
-        paddingTop: 5,
-    },
+  roomlistcontainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingTop: 5,
+  },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     marginBottom: 15,
-    shadowColor:'#814ABF',
+    shadowColor: '#814ABF',
     shadowOffset: {
-        width: 2,
-        height: 10,
+      width: 2,
+      height: 10,
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
@@ -72,15 +128,25 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: '#DDD',
-    marginTop:5
+    marginTop: 5,
+  },
+  cardImage: {
+    width: 300,
+    height: width / 2,
+  },
+  image: {
+    width: 120,
+    height: 120,
+    borderRadius: 12,
+    marginRight: 20,
     
   },
   bookedLabelContainer: {
     position: 'absolute',
     top: 15,
     right: 5,
-    backgroundColor: '#d4edda', // Light green background
-    borderColor: '#155724', // Dark green border
+    backgroundColor: '#d4edda',
+    borderColor: '#155724',
     borderWidth: 2,
     borderRadius: 12,
     paddingHorizontal: 10,
@@ -91,18 +157,10 @@ const styles = StyleSheet.create({
     color: '#155724',
     fontWeight: 'bold',
     fontSize: 14,
-    
   },
   cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  image: {
-    width: 120,
-    height: 120,
-    borderRadius: 12,
-    marginRight: 20,
-    
   },
   infoContainer: {
     flex: 1,
@@ -123,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   detailsButton: {
-    backgroundColor: '#814ABF', 
+    backgroundColor: '#814ABF',
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 15,
