@@ -71,7 +71,7 @@ const fetchOrder = async (req, res) => {
 };
 const getOrdersByCustomerId = async (req, res) => {
     try {
-        const customer_id = req.params.customer_id;
+        const customer_id = req.query.customer_id;
         if (!mongoose.Types.ObjectId.isValid(customer_id)) {
             return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
         }

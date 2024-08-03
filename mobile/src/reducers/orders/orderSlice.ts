@@ -7,7 +7,7 @@ type OrderState = {
       isBusy: boolean;
       error: string;
       success: string;
-    };
+    },
     data: {
       orders: any[];
     };
@@ -69,4 +69,25 @@ const { setBusy, setError, setSuccess, setOrders } = orderSlice.actions;
       dispatch(setBusy(false));
     }
   };
+  export const getOrdersByCustomerId = (customerId: string): AppThunk => async dispatch => {
+    try {
+     
+      dispatch(setBusy(true));
+      dispatch(setError(''));
+      dispatch(setSuccess(''));
+      const response = await axios.get(`${API_BASE_URL}/orders/customer/${customerId}`);
+  
+      if (response.data) {
+        dispatch(setOrders(response.data.orders));
+        dispatch(setSuccess('Orders fetched successfully!'));
+      } else {
+        throw new Error('No orders found');
+      }
+    } catch (error: any) {
+      dispatch(setError(error.message));
+    } finally {
+      dispatch(setBusy(false));
+    }
+  };
+  
   export default orderSlice.reducer;
