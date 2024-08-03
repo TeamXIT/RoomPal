@@ -23,7 +23,8 @@ const createOrder = async (req, res) => {
                 customer_phone,
                 customer_email
             },
-            order_meta: { return_url }
+            order_meta: { return_url },
+            room_id
         } = req.body;
         if (!mongoose.Types.ObjectId.isValid(customer_id)) {
             return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
@@ -43,7 +44,8 @@ const createOrder = async (req, res) => {
             },
             order_meta: {
                 return_url,
-            }
+            },
+            room_id: room_id,
         });
         await newOrder.save();
         const response = await Cashfree.PGCreateOrder('2022-09-01', request);
