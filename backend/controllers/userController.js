@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const { baseResponses } = require("../helpers/baseResponses");
+const mongoose = require("mongoose");
 module.exports = {
   getUserbyMobile: async (req, res) => {
     const { mobileNumber } = req.query;
@@ -17,9 +18,9 @@ module.exports = {
   },
   updateUser: async (req, res) => {
     try {
-      const { fullName, email, dateOfBirth, gender, makeMobilePrivate,image } = req.body;
-      const {mobileNumber} = req.query;
-      const user =  await User.findOne({ mobileNumber: mobileNumber });
+      const { fullName, email, dateOfBirth, gender, makeMobilePrivate, image } = req.body;
+      const { mobileNumber } = req.query;
+      const user = await User.findOne({ mobileNumber: mobileNumber });
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
@@ -46,5 +47,47 @@ module.exports = {
         .json(baseResponses.constantMessages.USER_NOT_FOUND());
     }
     return res.status(200).json(baseResponses.success(users));
+  },
+  addToFavourites: async (req, res) => {
+    try {
+      const { userId, roomId } = req.query;
+
+      if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(roomId)) {
+        return res.status(400).json(baseResponses.constantMessages.USER_OR_ROOM_NOT_FOUND());
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+      if (!user.favouritesList.includes(roomId)) {
+        user.favouritesList.push(roomId);
+        await user.save();
+        return res.status(200).json(baseResponses.constantMessages.ROOM_ADDED_TO_FAVOURITE_LIST());
+      }
+      return res.status(500).json(baseResponses.constantMessages.FAVOURITE_LIST_NOT_UPDATED());
+    } catch (error) {
+      return res.status(500).json(baseResponses.error(error.message));
+    }
+  },
+  removeFromFavourites: async (req, res) => {
+    try {
+      const { userId, roomId } = req.query;
+
+      if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(roomId)) {
+        return res.status(400).json(baseResponses.constantMessages.USER_OR_ROOM_NOT_FOUND());
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+      if (user.favouritesList.includes(roomId)) {
+        user.favouritesList.pull(roomId);
+        await user.save();
+        return res.status(200).json(baseResponses.constantMessages.ROOM_REMOVE_TO_FAVOURITE_LIST());
+      }
+      return res.status(500).json(baseResponses.constantMessages.FAVOURITE_LIST_NOT_UPDATED());
+    } catch (error) {
+      return res.status(500).json(baseResponses.error(error.message));
+    }
   }
 };

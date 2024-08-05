@@ -21,8 +21,11 @@ export default function MakeAnOrder({route}) {
   const dispatch = useDispatch();
   const [MobileNumber, setMobileNumber] = useState('');
   const [userId, setUserId] = useState('');
+  const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
-    // console.log(value);
+
+      // console.log(value);
+
     setUserId(value);
   });
   AsyncStorage.getItem('MobileNumber').then(value => {
@@ -32,6 +35,7 @@ export default function MakeAnOrder({route}) {
   const room = route.params.room;
   const generateOrderId = () => {
     const randomPart = Math.floor(1000000 + Math.random() * 9000000).toString();
+    setOrderId(`HomeScout_Order_id${randomPart}`)
     return `HomeScout_Order_id${randomPart}`;
   };
 
@@ -53,7 +57,7 @@ export default function MakeAnOrder({route}) {
       },
       order_meta: {
         return_url:
-          'https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id={order_id}',
+          `https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id=${order_id}`,
       },
       room_id: room._id,
     };
@@ -85,7 +89,7 @@ export default function MakeAnOrder({route}) {
             customer_phone: `+91${MobileNumber}`,
           },
           order_meta: {
-            return_url: 'https://b8af79f41056.eu.ngrok.io?order_id=order_123',
+            return_url:`https://b8af79f41056.eu.ngrok.io?order_id=${order_id}`,
           },
         }),
       })
@@ -127,12 +131,13 @@ export default function MakeAnOrder({route}) {
   }, []);
   const updateStatus = (message: any) => {
     setOrderStatus(message);
+    console.log(message);
   };
   const _startCheckout = async () => {
     try {
       console.log('_startCheckout start');
       const session = getSession();
-      console.log('Session: ', JSON.stringify(session));
+      // console.log('Session: ', JSON.stringify(session));
       const paymentModes = new CFPaymentComponentBuilder()
         .add(CFPaymentModes.CARD)
         .add(CFPaymentModes.UPI)
@@ -140,7 +145,7 @@ export default function MakeAnOrder({route}) {
         .add(CFPaymentModes.WALLET)
         .add(CFPaymentModes.PAY_LATER)
         .build();
-      console.log('paymentModes: ', JSON.stringify(paymentModes));
+      // console.log('paymentModes: ', JSON.stringify(paymentModes));
       const theme = new CFThemeBuilder()
         .setNavigationBarBackgroundColor('#814ABF')
         .setNavigationBarTextColor('#FFFFFF')
@@ -155,15 +160,48 @@ export default function MakeAnOrder({route}) {
         paymentModes,
         theme,
       );
-      console.log('dropPayment: ', JSON.stringify(dropPayment));
+      // console.log('dropPayment: ', JSON.stringify(dropPayment));
       CFPaymentGatewayService.doPayment(dropPayment);
+      // console.log('Payment Initiated:', dropPayment);
+      // CFPaymentGatewayService.setEventSubscriber({
+      //   onReceivedEvent: (eventName, map) => {
+      //     if (eventName === 'cf_success') {
+      //       console.log('Payment Success:', map);
+      //       handlePaymentSuccess(map);
+      //     } else if (eventName === 'cf_failed') {
+      //       console.log('Payment Failed:', map);
+      //       handlePaymentFailure(map);
+      //     }
+      //   },
+      // });
     } catch (e) {
       console.log('Exception in _startCheckout: ', e);
     }
   };
+  const handlePaymentSuccess = (map) => {
+    const paymentDetails = {
+      order_id: order.order_id,
+      payment_session_id: order.payment_session_id,
+      payment_status: 'success',
+      ...map,
+    };
+    console.log('paymentDetails:',paymentDetails);
+    // sendPaymentDetailsToBackend(paymentDetails);
+  };
+  
+  const handlePaymentFailure = (map) => {
+    const paymentDetails = {
+      order_id: order.order_id,
+      payment_session_id: order.payment_session_id,
+      payment_status: 'failed',
+      ...map,
+    };
+    console.log('paymentDetails:',paymentDetails);
+    // sendPaymentDetailsToBackend(paymentDetails);
+  };
   // Implement other methods similarly
   const getSession = () => {
-    console.log('getSession: ', order);
+    // console.log('getSession: ', order);
     if (!order.payment_session_id || !order.order_id) {
       throw new Error('Invalid order details');
     }

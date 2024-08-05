@@ -13,7 +13,9 @@ const BASE_RESPONSE_MESSAGES = {
         PASSWORD_RESET_SUCCESS:'Password updated successfully',
         FEEDBACK:'Feedback updated successfully',
         PAYMENT_FETCHED: 'Payment fetched successfully',
-        ROOM_FETCHED:'Room Fetched Successfully'
+        ROOM_FETCHED:'Room Fetched Successfully',
+        ROOM_ADDED_TO_FAVOURITE_LIST: 'Room added to favorites list successfully',
+        ROOM_REMOVE_TO_FAVOURITE_LIST:'Room removed to favorites list successfully',
     },
     ERROR:{
         ALL_FIELDS_REQUIRED: 'All fields are required',
@@ -29,7 +31,7 @@ const BASE_RESPONSE_MESSAGES = {
         PAYMENT_NOT_FOUND: 'Payment not found',
         ORDER_ID_ALREADY_EXISTS:'Order Id already exists',
         REFUND_ID_ALREADY_EXISTS:'Refund Id already exists',
-
+        FAVOURITE_LIST_NOT_UPDATED:'Favorites list not updated',
     }
 };
 module.exports = {BASE_RESPONSE_MESSAGES};
