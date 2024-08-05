@@ -24,8 +24,12 @@ import ProfileScreen from './src/Screens/Landing/ProfileScreen';
 import Dashboard from './src/Screens/Landing/Dashboard';
 import MakeAnOrder from './src/Screens/Landing/MakeAnOrder';
 import EditProfile from './src/Screens/Landing/EditProfile';
+
+import TransactionHistory from './src/Screens/Landing/TransactionHistory';
+
 import BookingHistory from './src/Screens/Landing/BookingHistory';
 import YourRooms from './src/Screens/Landing/YourRooms';
+
 
 const Stack = createStackNavigator();
 const primaryColor = '#814ABF';
@@ -55,6 +59,7 @@ const Landing = () => (
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
     <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
+
     <Stack.Screen name="EditProfile" component={EditProfile} options={{
         headerShown: true,
         headerStyle: {
@@ -62,6 +67,12 @@ const Landing = () => (
         },
         headerTintColor: "#814ABF",  
       }}/>
+
+
+    <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }}/>
+
+
+    
     <Stack.Screen name="BookingHistory" 
     component={BookingHistory}  
     options={{
@@ -81,6 +92,7 @@ const Landing = () => (
         headerTintColor: "#814ABF",  
       }}/>
     
+
   </Stack.Navigator>
 );
 

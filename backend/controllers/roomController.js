@@ -5,6 +5,7 @@ const { Room } = require("../models/roomModel");
 const roomCreation = async (req, res) => {
   try {
     const {
+      userId,
       roomName,
       details,
       availability,
@@ -22,6 +23,7 @@ const roomCreation = async (req, res) => {
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
     const newRoom = new Room({
+      userId,
       roomName,
       details,
       availability,
@@ -92,7 +94,18 @@ const getAllRooms = async (req, res) => {
     res.status(500).json(baseResponses.error(error.message));
   }
 };
-
+const getRoomsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({message:'User Not Found'});
+    }
+    const rooms = await Room.find({ userId });
+    return res.status(200).json({ success: true, data: rooms });
+  } catch (error) {
+    return res.status(500).json(baseResponses.error(error.message));
+  }
+};
 const updateRoomDetails = async (req, res) => {
   try {
     const { updateData, roomId } = req.body;
@@ -172,4 +185,4 @@ const getRoomByName = async (req, res) => {
   }
 };
 
-module.exports = { getAllRooms, roomCreation, updateRoomDetails, getRoomById, getRoomByName }
+module.exports = { getAllRooms, roomCreation, updateRoomDetails, getRoomById, getRoomByName,getRoomsByUserId }
