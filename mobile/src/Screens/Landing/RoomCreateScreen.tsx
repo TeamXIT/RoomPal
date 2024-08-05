@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { createRoom } from '../../reducers/room/roomSlice';
 import { RadioButton } from 'react-native-paper';
 import RNFS from 'react-native-fs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const RoomCreateScreen = ({ setTabBarVisibility }) => {
@@ -77,6 +78,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const [whatsappLinkError, setWhatsappLinkError] = useState('');
   const [telegramLinkError, setTelegramLinkError] = useState('');
   const [lookingFor, setLookingFor] = useState('');
+  const [userId, setUserId] = useState('');
   // const [lookingForFemale, setLookingForFemale] = useState(false);
   // const [lookingForFamily, setLookingForFamily] = useState(false);
 
@@ -90,7 +92,10 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const telegramLinkRef = useRef(null);
   const addressRef = useRef(null);
 
- 
+  AsyncStorage.getItem('userId').then(value => {
+    console.log(value);
+  setUserId(value);
+});
   const handleSubmitData = async () => {
     try {
       let hasError = false;
@@ -178,6 +183,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
       const gender = lookingFor;
       console.log(details)
       await dispatch(createRoom({
+        userId,
         roomName,
         details:details,
         availability,
