@@ -5,8 +5,6 @@ import { AppThunk } from '../store';
 
 
 type Room = {
-  _id: string;
-  roomId: string;
   userId: string;
   roomName: string;
   details: string[];
@@ -150,12 +148,15 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
         whatsappLink: room.whatsappLink,
         telegramLink: room.telegramLink
     });
-    console.log(response.data.data)
-    dispatch(addRoom(response.data.data));
-    dispatch(setSuccess('Room created successfully.'));
-    dispatch(fetchRooms()); // Fetch the updated list of rooms
+    console.log(response)
+    if(response.status ==200){
+      dispatch(addRoom(response.data.data));
+      dispatch(setSuccess('Room created successfully.'));
+      dispatch(fetchRooms());
+    }
+    // Fetch the updated list of rooms
   } catch (error) {
-    console.log('roomcreateError', error);
+
     dispatch(setError(error.response?.data?.message || error.message || 'Room creation failed'));
 
   } finally {
