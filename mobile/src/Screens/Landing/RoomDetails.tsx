@@ -158,6 +158,8 @@ const RoomDetails = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.Roomcontainer}>
       <View style={styles.carouselContainer}>
+      <View style={styles.headerContainer}>
+
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backArrowContainer}>
@@ -171,8 +173,14 @@ const RoomDetails = ({ route, navigation }) => {
               alignItems: 'center',
             }}>
             <Image source={backArrowImage} style={styles.backArrow} />
+            
           </View>
         </TouchableOpacity>
+        <TouchableOpacity >
+            <Image source={require('../Images/ic_favorites.png')} style={styles.favoritesIcon} />
+          </TouchableOpacity>
+          </View>
+
         <Carousel
           ref={carouselRef}
           data={room.images}
@@ -288,10 +296,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   backArrowContainer: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    zIndex: 1,
+    // position: 'absolute',
+    // top: 10,
+    // left: 10,
+    // zIndex: 1,
+    height: 35,
+    width: 35,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backArrow: {
     width: 24,
@@ -424,7 +438,27 @@ const styles = StyleSheet.create({
   }, roomdetails: {
     fontSize: 18,
     color: 'black'
-  }
+  },
+  headerContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    zIndex: 1,
+    alignItems: 'center',
+
+  },
+  favoritesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  favoritesIcon: {
+    height: 30,
+    width: 30,
+    tintColor:'#FFFFFF'
+  },
 
 });
 
