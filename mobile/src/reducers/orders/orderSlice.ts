@@ -61,13 +61,13 @@ const { setBusy, setError, setSuccess, setOrders } = orderSlice.actions;
 
 export const createOrders = (orderData: Order): AppThunk => async dispatch => {
   try {
-    console.log(orderData)
+    console.log(orderData.order_id)
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
 
     const response = await axios.post(`${API_BASE_URL}/order/create-order`, orderData);
-    console.log(response.data);
+    // console.log(response.data);
     if (response.data) {
       dispatch(setOrders(response.data));
       dispatch(setSuccess('Order created successfully!'));
@@ -89,7 +89,7 @@ export const getOrdersByCustomerId = (customerId: string): AppThunk => async dis
     dispatch(setError(''));
     dispatch(setSuccess(''));
     const response = await axios.get(`${API_BASE_URL}/order/getUsersOrders`, { params: { customer_id: customerId } });
-    //  console.log(response.data.data);
+      // console.log(response.data.data);
     if (response.data) {
       dispatch(setOrders(response.data.data));
       dispatch(setSuccess('Orders fetched successfully!'));

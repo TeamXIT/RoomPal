@@ -9,7 +9,7 @@ const TransactionHistory = () => {
 
     const renderBookings = () => {
         switch (selectedTab) {
-            case 'Ongoing':
+            case 'Pending':
                 return (
                     <><><View style={styles.bookingContainer}>
                         {/* Render Ongoing Bookings here */}
