@@ -112,7 +112,15 @@ const getByOrderId = async (req, res) => {
     }
 };
 
-
+const getPaymentByStatus=async(req,res)=>{
+    try{
+        const {status}=req.query;
+        const payment = await Payment.find({payment_status:status});
+        return res.status(200).json(baseResponses.constantMessages.PAYMENT_FETCHED(payment));
+    }catch(error){
+        return res.status(404).json(baseResponses.error(error.message));
+    }
+}
 const getByPaymentId = async (req,res) => {
     try{
         const { payment_id } = req.body;
@@ -126,4 +134,4 @@ const getByPaymentId = async (req,res) => {
     }
 };
 
-module.exports = { payOrder, createPayment, getAllPayments, getByOrderId, getByPaymentId }
+module.exports = { payOrder, createPayment, getAllPayments, getByOrderId, getByPaymentId, getPaymentByStatus}
