@@ -29,6 +29,9 @@ const baseResponses = {
         ROOM_FETCHED:(data=null)=> baseResponses.success('Fetched successfully',data),
         ORDER_ID_ALREADY_EXISTS: (data=null) => baseResponses.error('Order Id already exists',data),
         REFUND_ID_ALREADY_EXISTS: (data=null) => baseResponses.error('Refund Id already exists',data),
+        ROOM_ADDED_TO_FAVOURITE_LIST: (data=null) => baseResponses.success('Room added to favorites list successfully',data),
+        FAVOURITE_LIST_NOT_UPDATED: (data=null) => baseResponses.error('Favorites list not updated',data),
+        ROOM_REMOVE_TO_FAVOURITE_LIST: (data=null) => baseResponses.success('Room removed to favorites list successfully',data),
     }
 };
 module.exports = {baseResponses};
