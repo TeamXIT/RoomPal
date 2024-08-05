@@ -62,8 +62,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
             <Text style={styles.distance}>{item.distance} Km</Text>
             <Text style={{ fontSize: 16, color: '#000' }}> from your search</Text>
           </View>
-          <View style={{ flexDirection: 'row', gap: 20 }}>
-            <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
+          <View style={{ flexDirection: 'row', gap: 20 }}>        
             <TouchableOpacity
               style={styles.detailsButton}
               onPress={() => handleDetails(item)} 

@@ -28,6 +28,7 @@ import EditProfile from './src/Screens/Landing/EditProfile';
 import TransactionHistory from './src/Screens/Landing/TransactionHistory';
 
 import BookingHistory from './src/Screens/Landing/BookingHistory';
+import YourRooms from './src/Screens/Landing/YourRooms';
 
 
 const Stack = createStackNavigator();
@@ -59,10 +60,19 @@ const Landing = () => (
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
     <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
 
+    <Stack.Screen name="EditProfile" component={EditProfile} options={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#f5f5f5', 
+        },
+        headerTintColor: "#814ABF",  
+      }}/>
+
+
     <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }}/>
 
 
-    <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: true }}/>
+    
     <Stack.Screen name="BookingHistory" 
     component={BookingHistory}  
     options={{
@@ -71,6 +81,15 @@ const Landing = () => (
           backgroundColor: '#f5f5f5', 
         },
         headerTintColor: primaryColor,  
+      }}/>
+     <Stack.Screen name="YourRooms" 
+    component={YourRooms}  
+    options={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#f5f5f5', 
+        },
+        headerTintColor: "#814ABF",  
       }}/>
     
 
