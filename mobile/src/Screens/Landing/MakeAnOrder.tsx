@@ -38,8 +38,8 @@ export default function MakeAnOrder({route}) {
   };
 
   const [order, setOrder] = useState({
-    payment_session_id: '',
-    order_id: '',
+    payment_session_id: '123456780',
+    order_id: 'Order_id_002',
     order_expiry_time: ' ',
   });
   const [orderStatus, setOrderStatus] = useState();
@@ -161,17 +161,17 @@ export default function MakeAnOrder({route}) {
       // console.log('dropPayment: ', JSON.stringify(dropPayment));
       CFPaymentGatewayService.doPayment(dropPayment);
       // console.log('Payment Initiated:', dropPayment);
-      CFPaymentGatewayService.setEventSubscriber({
-        onReceivedEvent: (eventName, map) => {
-          if (eventName === 'cf_success') {
-            console.log('Payment Success:', map);
-            handlePaymentSuccess(map);
-          } else if (eventName === 'cf_failed') {
-            console.log('Payment Failed:', map);
-            handlePaymentFailure(map);
-          }
-        },
-      });
+      // CFPaymentGatewayService.setEventSubscriber({
+      //   onReceivedEvent: (eventName, map) => {
+      //     if (eventName === 'cf_success') {
+      //       console.log('Payment Success:', map);
+      //       handlePaymentSuccess(map);
+      //     } else if (eventName === 'cf_failed') {
+      //       console.log('Payment Failed:', map);
+      //       handlePaymentFailure(map);
+      //     }
+      //   },
+      // });
     } catch (e) {
       console.log('Exception in _startCheckout: ', e);
     }
@@ -199,7 +199,7 @@ export default function MakeAnOrder({route}) {
   };
   // Implement other methods similarly
   const getSession = () => {
-    console.log('getSession: ', order);
+    // console.log('getSession: ', order);
     if (!order.payment_session_id || !order.order_id) {
       throw new Error('Invalid order details');
     }
