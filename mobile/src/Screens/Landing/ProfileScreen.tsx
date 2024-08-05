@@ -38,9 +38,9 @@ const ProfileScreen = () => {
         <Text style={styles.optionText}>Favorites</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.option} onPress={() => handleNavigation('CreatedRooms')}>
+      <TouchableOpacity style={styles.option} onPress={() => handleNavigation('YourRooms')}>
         <Image source={require('../Images/ic_office.png')} style={styles.optionIcon} />
-        <Text style={styles.optionText}>Created Rooms</Text>
+        <Text style={styles.optionText}>Your Rooms</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.option} onPress={() => handleNavigation('BookingHistory')}>

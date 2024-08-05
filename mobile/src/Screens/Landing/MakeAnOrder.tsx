@@ -22,7 +22,7 @@ export default function MakeAnOrder({route}) {
   const [MobileNumber, setMobileNumber] = useState('');
   const [userId, setUserId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
-    // console.log(value);
+    console.log(value);
     setUserId(value);
   });
   AsyncStorage.getItem('MobileNumber').then(value => {

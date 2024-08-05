@@ -25,6 +25,7 @@ import Dashboard from './src/Screens/Landing/Dashboard';
 import MakeAnOrder from './src/Screens/Landing/MakeAnOrder';
 import EditProfile from './src/Screens/Landing/EditProfile';
 import BookingHistory from './src/Screens/Landing/BookingHistory';
+import YourRooms from './src/Screens/Landing/YourRooms';
 
 const Stack = createStackNavigator();
 const primaryColor = '#814ABF';
@@ -54,7 +55,13 @@ const Landing = () => (
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
     <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
     <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
-    <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: true }}/>
+    <Stack.Screen name="EditProfile" component={EditProfile} options={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#f5f5f5', 
+        },
+        headerTintColor: "#814ABF",  
+      }}/>
     <Stack.Screen name="BookingHistory" 
     component={BookingHistory}  
     options={{
@@ -63,6 +70,15 @@ const Landing = () => (
           backgroundColor: '#f5f5f5', 
         },
         headerTintColor: primaryColor,  
+      }}/>
+     <Stack.Screen name="YourRooms" 
+    component={YourRooms}  
+    options={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#f5f5f5', 
+        },
+        headerTintColor: "#814ABF",  
       }}/>
     
   </Stack.Navigator>
