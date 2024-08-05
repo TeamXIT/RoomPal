@@ -69,7 +69,13 @@ const userSchema = new mongoose.Schema({
         required:true,
         trim:true,
         minlength:6,
+    },
+    favouritesList:{
+        type:[String],
+        required:false,
     }
-},{timestamps:true, versionKey:false});
+       
+
+    },{timestamps:true, versionKey:false});
 const User = mongoose.model('users',userSchema);
 module.exports = User;
