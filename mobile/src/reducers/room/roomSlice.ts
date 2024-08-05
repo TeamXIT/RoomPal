@@ -7,7 +7,7 @@ import { AppThunk } from '../store';
 type Room = {
   _id: string;
   roomId: string;
- 
+  userId: string;
   roomName: string;
   details: string[];
   availability: number;
@@ -63,6 +63,7 @@ const initialState: RoomState = {
   totalPages: 0,
   totalCount: 0,
   roomData: {
+    userId:'',
     roomName: '',
     details: [],
     availability: 0,
@@ -135,7 +136,7 @@ export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   try {
     // console.log('create params:', room);
     const response = await axios.post(`${API_BASE_URL}/room/create`, {
-       
+        userId: room.userId,
         roomName: room.roomName,
         details: room.details,
         availability: room.availability,
