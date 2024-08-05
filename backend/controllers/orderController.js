@@ -57,7 +57,7 @@ const createOrder = async (req, res) => {
 
 const fetchOrder = async (req, res) => {
     try {
-        const order_id = req.query.order_id;
+        const {order_id} = req.query;
         // const response = await Cashfree.PGFetchOrder('2022-09-01', order_id);
         // res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(response.data));
         const order = await Order.findOne({ order_id: order_id });
