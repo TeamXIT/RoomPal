@@ -37,7 +37,7 @@ const createPayment = async (req, res) => {
             return res.status(400).send({ error: 'Invalid order_id' });
         }
         const payment = new Payment(paymentData);
-        payment.save();
+        await payment.save();
         if (payment.payment_status == 'SUCCESS') {
             const transaction = new Transaction({
                 user_id: customer_id,
