@@ -5,6 +5,7 @@ const { Room } = require("../models/roomModel");
 const roomCreation = async (req, res) => {
   try {
     const {
+      userId,
       roomName,
       details,
       availability,
@@ -22,6 +23,7 @@ const roomCreation = async (req, res) => {
       return res.status(400).json(baseResponses.constantMessages.ALL_FIELDS_REQUIRED());
     }
     const newRoom = new Room({
+      userId,
       roomName,
       details,
       availability,

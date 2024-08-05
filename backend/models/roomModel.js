@@ -5,7 +5,6 @@ const  roomSchema= new mongoose.Schema({
     ref:'User',
     required:true
   },
-
     roomName: {
         type: String,
         required: true,
