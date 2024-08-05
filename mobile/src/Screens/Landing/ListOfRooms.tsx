@@ -114,7 +114,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
         <FlatList
           data={filteredData}
           renderItem={renderItem}
-          keyExtractor={(item) => item.roomId}
+          keyExtractor={(item) => item._id}
           contentContainerStyle={{ paddingBottom: 52 }}
           onScroll={onScroll}
           onEndReachedThreshold={0.1}

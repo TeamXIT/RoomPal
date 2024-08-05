@@ -5,6 +5,7 @@ import { AppThunk } from '../store';
 
 
 type Room = {
+  _id:'';
   userId: string;
   roomName: string;
   details: string[];

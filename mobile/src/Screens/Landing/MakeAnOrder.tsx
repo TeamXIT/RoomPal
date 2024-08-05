@@ -23,7 +23,7 @@ export default function MakeAnOrder({route}) {
   const [userId, setUserId] = useState('');
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
-      console.log(value);
+      // console.log(value);
     setUserId(value);
   });
   AsyncStorage.getItem('MobileNumber').then(value => {
@@ -199,7 +199,7 @@ export default function MakeAnOrder({route}) {
   };
   // Implement other methods similarly
   const getSession = () => {
-    // console.log('getSession: ', order);
+    console.log('getSession: ', order);
     if (!order.payment_session_id || !order.order_id) {
       throw new Error('Invalid order details');
     }
