@@ -92,7 +92,18 @@ const getAllRooms = async (req, res) => {
     res.status(500).json(baseResponses.error(error.message));
   }
 };
-
+const getRoomsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json(baseResponses.constantMessages.INVALID_USER_ID());
+    }
+    const rooms = await Room.find({ userId });
+    return res.status(200).json({ success: true, data: rooms });
+  } catch (error) {
+    return res.status(500).json(baseResponses.error(error.message));
+  }
+};
 const updateRoomDetails = async (req, res) => {
   try {
     const { updateData, roomId } = req.body;
@@ -172,4 +183,4 @@ const getRoomByName = async (req, res) => {
   }
 };
 
-module.exports = { getAllRooms, roomCreation, updateRoomDetails, getRoomById, getRoomByName }
+module.exports = { getAllRooms, roomCreation, updateRoomDetails, getRoomById, getRoomByName,getRoomsByUserId }
