@@ -37,7 +37,7 @@ const createPayment = async (req, res) => {
             return res.status(400).send({ error: 'Invalid order_id' });
         }
         const payment = new Payment(paymentData);
-        payment.save();
+        await payment.save();
         if (payment.payment_status == 'SUCCESS') {
             const transaction = new Transaction({
                 user_id: customer_id,
@@ -50,6 +50,7 @@ const createPayment = async (req, res) => {
 
         res.status(200).json(payment);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -112,7 +113,25 @@ const getByOrderId = async (req, res) => {
     }
 };
 
-
+const getPaymentByStatus = async (req, res) => {
+    try {
+      const { status, userId } = req.query;
+      
+      // Validate the presence of status and userId
+      if (!status || !userId) {
+        return res.status(400).json(baseResponses.error('Status and userId are required'));
+      }
+  
+      // Query to find payments with the given status and userId
+      const payment = await Payment.find({ payment_status: status, userId });
+  
+      return res.status(200).json(baseResponses.constantMessages.PAYMENT_FETCHED(payment));
+    } catch (error) {
+        console.log(error);
+      return res.status(404).json(baseResponses.error(error.message));
+    }
+  };
+  
 const getByPaymentId = async (req,res) => {
     try{
         const { payment_id } = req.body;
@@ -126,4 +145,4 @@ const getByPaymentId = async (req,res) => {
     }
 };
 
-module.exports = { payOrder, createPayment, getAllPayments, getByOrderId, getByPaymentId }
+module.exports = { payOrder, createPayment, getAllPayments, getByOrderId, getByPaymentId, getPaymentByStatus}

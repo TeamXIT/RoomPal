@@ -49,6 +49,7 @@ type RoomState = {
     success: string;
   };
   data: Room[];
+  userRooms: Room[]; 
   totalPages: number;
   totalCount: number;
   roomData: Room;
@@ -63,6 +64,7 @@ const initialState: RoomState = {
     success: '',
   },
   data: [],
+  userRooms: [], 
   totalPages: 0,
   totalCount: 0,
   roomData: {
@@ -112,6 +114,9 @@ export const roomSlice = createSlice({
       state.totalPages = action.payload.totalPages;
       state.totalCount = action.payload.totalCount;
     },
+    setUserRooms: (state, action: PayloadAction<Room[]>) => { 
+      state.userRooms = action.payload; 
+    },
     addRoom: (state, action: PayloadAction<Room>) => {
       state.data.push(action.payload);
     },
@@ -140,7 +145,9 @@ const customConfig = {
   headers: { "Content-Type": "application/json" }
 }
 
+
 export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData,setFavorites, addFavorite, removeFavorite } = roomSlice.actions;
+
 
 export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   console.log(room)
@@ -217,26 +224,27 @@ export const fetchRooms = (limit = 20, page = 1, minRent: string, maxRent: strin
   }
 };
 
-export const fetchRoomByName = (roomName: string): AppThunk => async (dispatch) => {
+export const fetchUserRooms = (userId: string): AppThunk => async (dispatch) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
 
-    const response = await axios.get(`${API_BASE_URL}/room/getByName`, {
-      params: { roomName: roomName },
+    const response = await axios.get(`${API_BASE_URL}/room/getUserRooms`, {
+      params: { userId },
     });
 
-    if (response?.status == 200) {
-      dispatch(addRoom(response.data.data)); // Assuming addRoom adds a single room to state
-      dispatch(setSuccess('Room fetched successfully.'));
+    if (response?.status === 200) {
+      dispatch(setUserRooms(response.data.data)); // Update this line
+      dispatch(setSuccess('User rooms fetched successfully.'));
     }
-
   } catch (error) {
-    dispatch(setError(error?.response?.data?.message || error?.message || 'Fetching room failed'));
+    dispatch(setError(error?.response?.data?.message || error?.message || 'Fetching rooms failed'));
   } finally {
     dispatch(setBusy(false));
   }
 };
+
+
 
 export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));

@@ -23,7 +23,9 @@ export default function MakeAnOrder({route}) {
   const [userId, setUserId] = useState('');
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
-      // console.log(value);
+
+      //  console.log(value);
+
     setUserId(value);
   });
   AsyncStorage.getItem('MobileNumber').then(value => {
@@ -33,8 +35,9 @@ export default function MakeAnOrder({route}) {
   const room = route.params.room;
   const generateOrderId = () => {
     const randomPart = Math.floor(1000000 + Math.random() * 9000000).toString();
-    setOrderId(`HomeScout_Order_id${randomPart}`)
-    return `HomeScout_Order_id${randomPart}`;
+    // setOrderId(order.order_id);
+    console.log(order.order_id);
+    return orderId;
   };
 
   const [order, setOrder] = useState({
@@ -45,7 +48,7 @@ export default function MakeAnOrder({route}) {
   const [orderStatus, setOrderStatus] = useState();
   const handleCreateOrder = async () => {
     const orderData = {
-      order_id: generateOrderId(),
+      order_id:orderId,
       order_amount: room.rent,
       order_currency: 'INR',
       customer_details: {
@@ -55,7 +58,7 @@ export default function MakeAnOrder({route}) {
       },
       order_meta: {
         return_url:
-          `https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id=${order_id}`,
+          `https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id=${orderId}`,
       },
       room_id: room._id,
     };
@@ -87,7 +90,7 @@ export default function MakeAnOrder({route}) {
             customer_phone: `+91${MobileNumber}`,
           },
           order_meta: {
-            return_url:`https://b8af79f41056.eu.ngrok.io?order_id=${order_id}`,
+            return_url:`https://b8af79f41056.eu.ngrok.io?order_id=${orderId}`,
           },
         }),
       })
