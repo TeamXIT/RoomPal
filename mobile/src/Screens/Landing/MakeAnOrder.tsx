@@ -26,9 +26,9 @@ export default function MakeAnOrder({route}) {
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
 
-         console.log(value);
-
-    setUserId(value);
+             console.log(value);
+            setUserId(value);
+   
   });
   AsyncStorage.getItem('MobileNumber').then(value => {
     setMobileNumber(value);
@@ -158,8 +158,14 @@ export default function MakeAnOrder({route}) {
   const updateStatus = async(message: any) => {
     setOrderStatus(message);
     await setOrderId(message);
-    await handleCreateOrder();
-    await makePayment(orderId);
+    try{
+      await handleCreateOrder();
+      await makePayment(orderId);
+    }catch(error){
+      console.log(error);
+    }
+   
+   
     console.log(message);
   };
   const _startCheckout = async () => {
