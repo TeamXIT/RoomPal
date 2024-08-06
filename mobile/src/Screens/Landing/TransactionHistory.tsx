@@ -3,16 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { primaryColor } from "../Styles/Styles";
 import { getPaymentsByStatus } from "../../reducers/payment/roomDataSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TransactionHistory = () => {
     const [selectedTab, setSelectedTab] = useState('Ongoing');
+    const [userId, setUserId] = useState('');
     const dispatch = useDispatch();
     const payments = useSelector((state) => state.app.payments);
     const roomData = useSelector((state) => state.app.room);
-
+    AsyncStorage.getItem('userId').then((value) => {
+        console.log('User ID:', value);
+        setUserId(value);
+    })
     useEffect(() => {
         console.log(selectedTab)
-        dispatch(getPaymentsByStatus(selectedTab));
+        dispatch(getPaymentsByStatus(selectedTab,userId));
     }, [selectedTab, dispatch]);
 
     useEffect(() => {

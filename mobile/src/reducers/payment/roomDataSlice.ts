@@ -134,15 +134,15 @@ const slice = createSlice({
 
 export const { setBusy, setError, setSuccess, setPayments, setOrders, setRoomData } = slice.actions;
 
-export const getPaymentsByStatus = (status: string) => async (dispatch) => {
+export const getPaymentsByStatus = (status: string,userId:string) => async (dispatch) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
 
-    const response = await axios.get(`${API_BASE_URL}/payment/getBystatus`, { params: { status } });
+    const response = await axios.get(`${API_BASE_URL}/payment/getBystatus`, { params: { status,userId } });
     if (response.data) {
-        // console.log(response.data);
+         console.log(response.data);
       const payments = response.data.data;
       dispatch(setPayments(payments));
       dispatch(setSuccess('Payments fetched successfully!'));
