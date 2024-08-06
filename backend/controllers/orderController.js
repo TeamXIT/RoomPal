@@ -48,8 +48,8 @@ const createOrder = async (req, res) => {
             room_id: room_id,
         });
         await newOrder.save();
-        const response = await Cashfree.PGCreateOrder('2022-09-01', request);
-        return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(response.data));
+        // const response = await Cashfree.PGCreateOrder('2022-09-01', request);
+        return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY());
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
     }
