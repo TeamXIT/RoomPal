@@ -31,6 +31,7 @@ const createOrder = async (req, res) => {
         }
         const order = await Order.findOne({order_id: order_id})
         if(order) {
+            // console.log(order)
           return res.status(400).json(baseResponses.constantMessages.ORDER_ID_ALREADY_EXISTS());
         }
         const newOrder = new Order({
@@ -49,7 +50,7 @@ const createOrder = async (req, res) => {
         });
         await newOrder.save();
         // const response = await Cashfree.PGCreateOrder('2022-09-01', request);
-        return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY());
+        return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(newOrder));
     } catch (error) {
         return res.status(500).json(baseResponses.error(error.message));
     }
