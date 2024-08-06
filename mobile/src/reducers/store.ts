@@ -4,6 +4,7 @@ import roomSlice from './room/roomSlice';
 import profileSlice from './profile/profileSlice';
 import  orderSlice  from './orders/orderSlice';
 import  paymentSlice  from './payment/paymentslice';
+import Slice from './payment/roomDataSlice'
 
 
 export const store = configureStore({
@@ -12,7 +13,8 @@ export const store = configureStore({
         room:roomSlice,
         profile:profileSlice,
         orders:orderSlice,
-        payment:paymentSlice
+        payment:paymentSlice,
+        app:Slice,
        
     },
 });
