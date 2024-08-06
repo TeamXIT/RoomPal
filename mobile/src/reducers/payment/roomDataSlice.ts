@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API_BASE_URL from '../config/apiConfig';
-import { roomData } from '../room/roomSlice';
 
 type Payment = {
   auth_id: string | null;
@@ -38,6 +37,7 @@ type Payment = {
   payment_time: Date | null;
   userId: string;
 };
+
 type Order = {
   order_id: string;
   order_amount: number;
@@ -52,6 +52,7 @@ type Order = {
   };
   room_id: string;
 };
+
 type Amenities = {
   wifi: boolean;
   airCondition: boolean;
@@ -68,6 +69,7 @@ type Location = {
   lat: number;
   lon: number;
 };
+
 type Room = {
   _id: string;
   userId: string;
@@ -93,7 +95,7 @@ type DataType = {
   };
   payments: Payment[];
   orders: Order[];
-  room: Room | null;
+  rooms: Room[];
 };
 
 const initialState: DataType = {
@@ -104,7 +106,7 @@ const initialState: DataType = {
   },
   payments: [],
   orders: [],
-  room: null,
+  rooms: [],
 };
 
 const slice = createSlice({
@@ -126,80 +128,40 @@ const slice = createSlice({
     setOrders: (state, action: PayloadAction<Order[]>) => {
       state.orders = action.payload;
     },
-    setRoomData: (state, action: PayloadAction<Room>) => {
-      state.room = action.payload;
+    setRooms: (state, action: PayloadAction<Room[]>) => {
+      state.rooms = action.payload;
     },
   },
 });
 
-export const { setBusy, setError, setSuccess, setPayments, setOrders, setRoomData } = slice.actions;
+export const { setBusy, setError, setSuccess, setPayments, setOrders, setRooms } = slice.actions;
 
-export const getPaymentsByStatus = (status: string,userId:string) => async (dispatch) => {
+export const getPaymentsByStatus = (status: string, userId: string) => async (dispatch) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
-
-    const response = await axios.get(`${API_BASE_URL}/payment/getBystatus`, { params: { status,userId } });
+    console.log(status,userId);
+    const response = await axios.get(`${API_BASE_URL}/payment/getBystatus`, { params: { status, userId } });
     if (response.data) {
-         console.log(response.data);
       const payments = response.data.data;
+      console.log(payments);
       dispatch(setPayments(payments));
       dispatch(setSuccess('Payments fetched successfully!'));
 
-      for (const payment of payments) {
-        dispatch(getOrdersByOrderId(payment.order_id));
-      }
+      const roomPromises = payments.map(async (payment) => {
+        const orderResponse = await axios.get(`${API_BASE_URL}/order/fetch-order`, { params: { order_id: payment.order_id } });
+        const roomResponse = await axios.get(`${API_BASE_URL}/room/getById`, { params: { room_id: orderResponse.data.data.room_id } });
+        return roomResponse.data.data;
+      });
+
+      const rooms = await Promise.all(roomPromises);
+      console.log(rooms);
+      dispatch(setRooms(rooms));
     } else {
       throw new Error('No payments found');
     }
   } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setBusy(false));
-  }
-};
-
-export const getOrdersByOrderId = (orderId: string) => async (dispatch) => {
-  try {
-    dispatch(setBusy(true));
-    dispatch(setError(''));
-    dispatch(setSuccess(''));
-
-    const response = await axios.get(`${API_BASE_URL}/order/fetch-order`, { params: { order_id: orderId } });
-    if (response.data) {
-        //  console.log(response.data.data);
-      const roomId = response.data.data.room_id;
-    //    console.log('roomid:',roomId);
-    dispatch(fetchRoomById(roomId));
-      dispatch(setOrders([response.data.data]));
-      dispatch(setSuccess('Order fetched successfully!'));
-    } else {
-      throw new Error('No orders found');
-    }
-  } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setBusy(false));
-  }
-};
-
-export const fetchRoomById = (roomId: string) => async (dispatch) => {
-  try {
-    dispatch(setBusy(true));
-    dispatch(setError(''));
-    dispatch(setSuccess(''));
-
-    const response = await axios.get(`${API_BASE_URL}/room/getById`, { params: { room_id: roomId } });
-   
-    if (response.status === 200) {  
-      dispatch(setRoomData(response.data.data));
-      dispatch(setSuccess('Room fetched successfully.'));
-    } else {
-      dispatch(setError('Failed to fetch room details.'));
-    }
-  } catch (error) {
-    console.log(error);
     dispatch(setError(error.message));
   } finally {
     dispatch(setBusy(false));

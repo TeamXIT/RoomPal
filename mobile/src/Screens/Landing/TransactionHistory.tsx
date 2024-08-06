@@ -10,39 +10,39 @@ const TransactionHistory = () => {
     const [userId, setUserId] = useState('');
     const dispatch = useDispatch();
     const payments = useSelector((state) => state.app.payments);
-    const roomData = useSelector((state) => state.app.room);
-    AsyncStorage.getItem('userId').then((value) => {
-        console.log('User ID:', value);
-        setUserId(value);
-    })
-    useEffect(() => {
-        console.log(selectedTab)
-        dispatch(getPaymentsByStatus(selectedTab,userId));
-    }, [selectedTab, dispatch]);
+    const rooms = useSelector((state) => state.app.rooms);
 
     useEffect(() => {
-        // console.log('Payments:', payments);
-        // console.log('Room Data:', roomData);
-    }, [payments, roomData]);
+        AsyncStorage.getItem('userId').then((value) => {
+            setUserId(value);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(getPaymentsByStatus(selectedTab, userId));
+        }
+    }, [selectedTab, dispatch, userId]);
 
     const renderBookings = () => {
-        // console.log(roomData);
-        if (!Array.isArray(roomData) || roomData.length === 0) {
+        if (!Array.isArray(rooms) || rooms.length === 0) {
             return <Text style={styles.noDataText}>No bookings available.</Text>;
         }
-        
-        return roomData.map((room, index) => (
+
+        return rooms.map((room, index) => (
             <View key={index} style={styles.bookingContainer}>
                 <View style={styles.bookingItem}>
-                    <Image style={styles.bookingImage} source={{ uri: roomData.images[0] }} />
+                    <Image style={styles.bookingImage} source={{ uri: `data:image/png;base64,${room.images[0]}` }} />
                     <View style={{ gap: 12 }}>
-                        <Text style={styles.bookingText}>{roomData.roomName}</Text>
+                        <Text style={styles.bookingText}>{room.roomName}</Text>
+                        <Text style={styles.bookingText}>{room.details}</Text>
                         <View style={{ flexDirection: 'row', gap: 10 }}>
                             <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-                            <Text style={styles.bookingText}>{roomData.location.lat}, {roomData.location.lon}</Text>
+                            <Text style={styles.bookingText}>{room.location.lat}, {room.location.lon}</Text>
                         </View>
+                       
                         <View style={styles.holdButton}>
-                            <Text style={styles.holdText}>{room.availability}</Text>
+                            <Text style={styles.holdText}>{room.availability}members</Text>
                         </View>
                     </View>
                 </View>
@@ -71,7 +71,7 @@ const TransactionHistory = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.transactionButtons, selectedTab === 'Rejected' && styles.activeButton]}
-                    onPress={() => setSelectedTab('FAILURE')}
+                    onPress={() => setSelectedTab('FAILED')}
                 >
                     <Text style={[styles.transactiontext, selectedTab === 'Rejected' && { color: '#FFFFFF' }]}>Rejected</Text>
                 </TouchableOpacity>
@@ -108,61 +108,60 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     transactiontext: {
-        fontSize: 14,
-        color: primaryColor
+        color: primaryColor,
+        fontWeight: '600',
+        fontSize: 14
+    },
+    noDataText: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: '#555',
+        marginVertical: 20
     },
     bookingContainer: {
-        width: '100%',
-        padding: 12,
         alignSelf: 'center',
+        width: '90%',
         backgroundColor: '#FFFFFF',
-        marginTop: 10
+        marginVertical: 10,
+        padding: 15,
+        borderRadius: 10
     },
     bookingItem: {
         flexDirection: 'row',
-        gap: 20,
+        gap: 20
     },
     bookingImage: {
-        width: 120,
-        height: 90,
-        borderRadius: 10
+        width: 80,
+        height: 80,
+        borderRadius: 20
     },
     bookingText: {
-        fontSize: 14,
-        color: '#000000'
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#262626'
     },
     holdButton: {
-        width: 60,
-        height: 23,
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: 48,
+        height: 20,
         backgroundColor: primaryColor,
-        borderRadius: 8
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     holdText: {
-        fontSize: 12,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        fontWeight: '500',
+        fontSize: 10
     },
     viewBookingButton: {
-        height: 33, 
-        width: '90%', 
-        borderRadius: 10, 
-        backgroundColor: primaryColor,
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        marginTop: 10, 
-        alignSelf: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 12
     },
     viewBookingText: {
-        fontSize: 16, 
-        color: '#FFFFFF', 
-        fontWeight: 'bold'
-    },
-    noDataText: {
-        fontSize: 16,
-        color: '#000',
-        textAlign: 'center',
-        marginTop: 20
+        color: primaryColor,
+        fontSize: 14,
+        fontWeight: '600'
     }
 });
 
