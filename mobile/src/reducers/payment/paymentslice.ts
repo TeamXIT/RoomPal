@@ -36,6 +36,7 @@ type Payment = {
   payment_offers: any[];
   payment_status: string | null;
   payment_time: Date | null;
+  userId: string | null;
 };
 
 type PaymentState = {
@@ -79,12 +80,13 @@ const { setBusy, setError, setSuccess, setPayments } = paymentSlice.actions;
 
 export const createPayment = (paymentData: Payment): AppThunk => async dispatch => {
   try {
-    console.log(paymentData)
+    const paymentDetails = {paymentDetails:paymentData}
+    console.log('paymentData', paymentDetails);
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
 
-    const response = await axios.post(`${API_BASE_URL}/payment/create-payment`, paymentData);
+    const response = await axios.post(`${API_BASE_URL}/payment/create-payment`, paymentDetails);
     console.log(response.status);
     if (response.data) {
       dispatch(setPayments(response.data));

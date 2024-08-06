@@ -26,7 +26,7 @@ export default function MakeAnOrder({route}) {
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
 
-      //  console.log(value);
+        console.log(value);
 
     setUserId(value);
   });
@@ -83,8 +83,10 @@ export default function MakeAnOrder({route}) {
      
     );
     const paymentData = response.data[0];
-    console.log(paymentData);
-    dispatch(createPayment(paymentData))
+    paymentData.userId = userId;
+    paymentData.orderId = orderId;
+     console.log(paymentData);
+     dispatch(createPayment(paymentData))
   }catch(error){
     console.log(error)
   }
@@ -134,10 +136,10 @@ export default function MakeAnOrder({route}) {
     };
     const onVerify = async (orderId: string) => {
       console.log('orderId is :' + orderId);
-      await setOrderId(orderId);
+    
+     
       updateStatus(orderId);
-      await handleCreateOrder();
-      await makePayment(orderId);
+    
     };
     const onError = (error: any, orderId: string) => {
       console.log(
@@ -153,8 +155,11 @@ export default function MakeAnOrder({route}) {
       CFPaymentGatewayService.removeEventSubscriber();
     };
   }, []);
-  const updateStatus = (message: any) => {
+  const updateStatus = async(message: any) => {
     setOrderStatus(message);
+    await setOrderId(message);
+    await handleCreateOrder();
+    await makePayment(orderId);
     console.log(message);
   };
   const _startCheckout = async () => {

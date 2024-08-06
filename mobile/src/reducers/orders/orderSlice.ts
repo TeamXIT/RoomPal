@@ -67,7 +67,7 @@ export const createOrders = (orderData: Order): AppThunk => async dispatch => {
     dispatch(setSuccess(''));
 
     const response = await axios.post(`${API_BASE_URL}/order/create-order`, orderData);
-    // console.log(response.data);
+     console.log(response.data);
     if (response.data) {
       dispatch(setOrders(response.data));
       dispatch(setSuccess('Order created successfully!'));
