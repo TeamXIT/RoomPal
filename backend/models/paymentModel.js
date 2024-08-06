@@ -57,7 +57,11 @@ const paymentSchema = new mongoose.Schema({
     
     payment_offers: { type: Array, default: [] },
     payment_status: { type: String, default: null },
-    payment_time: { type: Date, default: null }
+    payment_time: { type: Date, default: null },
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }
 },{timestamps:true, versionKey:false});
 
 const Payment = mongoose.model('payments', paymentSchema);
