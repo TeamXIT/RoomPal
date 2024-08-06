@@ -52,6 +52,7 @@ const createOrder = async (req, res) => {
         // const response = await Cashfree.PGCreateOrder('2022-09-01', request);
         return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(newOrder));
     } catch (error) {
+        console.error(error);
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
