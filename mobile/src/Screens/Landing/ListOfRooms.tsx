@@ -15,7 +15,8 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [localFavorites, setLocalFavorites] = useState(favorites); // Local state for immediate feedback
+  // const [localFavorites, setLocalFavorites] = useState(favorites); // Local state for immediate feedback
+  const [localFavorites, setLocalFavorites] = useState<string[]>([]);
 
 
   useEffect(() => {
@@ -28,8 +29,8 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
     });
   };
 
-  const handleDetails = (room) => {
-    navigation.navigate('RoomDetails', { room });
+  const handleDetails = (room,favorites) => {
+    navigation.navigate('RoomDetails', { room,favorites });
   };
 
   const filterRoomsByName = () => {
@@ -41,21 +42,56 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
 
   
   
-useEffect(() => {
-    setLocalFavorites(favorites); // Sync localFavorites with global favorites
-  }, [favorites]);
 
- 
+
+
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const favoritesData = await AsyncStorage.getItem('favorites');
+        if (favoritesData) {
+          setLocalFavorites(JSON.parse(favoritesData));
+        }
+      } catch (error) {
+        console.error('Error fetching favorites from AsyncStorage:', error);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
   
-  const handleFavorite = (roomId: string) => {
-    if (favorites.includes(roomId)) {
-      dispatch(removeFromFavorites(roomId));
-    } else {
-      dispatch(addToFavorites(roomId));
+  useEffect(() => {
+    setLocalFavorites(favorites);// Sync 
+    
+    
+    
+  }, [favorites]);
+  // const handleFavorite = (roomId: string) => {
+    // if (favorites.includes(roomId)) {
+      // dispatch(removeFromFavorites(roomId));
+    // } else {
+      // dispatch(addToFavorites(roomId));
+    // }
+  // };
+  
+  const handleFavorite = async (roomId: string) => {
+    try {
+      if (localFavorites.includes(roomId)) {
+        await dispatch(removeFromFavorites(roomId));
+        const updatedFavorites = localFavorites.filter(id => id !== roomId);
+        setLocalFavorites(updatedFavorites);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } else {
+        await dispatch(addToFavorites(roomId));
+        const updatedFavorites = [...localFavorites, roomId];
+        setLocalFavorites(updatedFavorites);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      }
+    } catch (error) {
+      console.error('Error updating favorites:', error);
     }
   };
-  
-
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -76,13 +112,10 @@ useEffect(() => {
                 ]}
               >
                 <Image
-                  source={localFavorites.includes(item._id) ? require('../Images/ic_favorites_red.png') : require('../Images/ic_favorites.png')} // Use different images
+                  source={localFavorites.includes(item._id) ? require('../Images/ic_favorites_yellow.png') : require('../Images/ic_favorites_gray.png')} // Use different images
                   style={{ height: 30, width: 30 }}
                 />
-                
-                
-                
-              </View>
+                </View>
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
@@ -153,7 +186,9 @@ useEffect(() => {
         <FlatList
           data={filteredData}
           renderItem={renderItem}
-          keyExtractor={(item) => item.roomId}
+          // keyExtractor={(item) => item.roomId}
+          keyExtractor={(item) => item._id}
+
           contentContainerStyle={{ paddingBottom: 52 }}
           onScroll={onScroll}
           onEndReachedThreshold={0.1}

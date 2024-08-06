@@ -31,11 +31,17 @@ const poolImage = require('../Images/ic_pool.png');
 const whatsappIcon = require('../Images/ic_whatsApp.png');
 const telegramIcon = require('../Images/ic_telegram.png');
 const { width } = Dimensions.get('window');
+import { addToFavorites, removeFromFavorites } from '../../reducers/room/roomSlice';
+import { RootState } from '../../reducers/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const RoomDetails = ({ route, navigation }) => {
+const RoomDetails = ({ route, navigation, item }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.room);
   const room = route.params.room // Access the room data from route.params
+
+  const [localFavorites, setLocalFavorites] = useState<string[]>([]);
+
   const carouselRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [roomName, setRoomName] = useState('');
@@ -50,6 +56,21 @@ const RoomDetails = ({ route, navigation }) => {
   const [images, setImages] = useState([]);
   const [whatsappLink, setWhatsappLink] = useState('');
   const [telegramLink, setTelegramLink] = useState('');
+
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const favoritesData = await AsyncStorage.getItem('favorites');
+        if (favoritesData) {
+          setLocalFavorites(JSON.parse(favoritesData));
+        }
+      } catch (error) {
+        console.error('Error fetching favorites from AsyncStorage:', error);
+      }
+    };
+    fetchFavorites();
+  }, []);
 
   useEffect(() => {
     if (room) {
@@ -79,6 +100,45 @@ const RoomDetails = ({ route, navigation }) => {
     { name: 'gym', icon: gymImage },
     { name: 'pool', icon: poolImage },
   ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const handleFavorite = async () => {
+    if (!room || !room._id) return;
+
+    try {
+      const roomId = room._id;
+      console.log('rooid in detail screen', roomId)
+      if (localFavorites.includes(roomId)) {
+        await dispatch(removeFromFavorites(roomId));
+        const updatedFavorites = localFavorites.filter(id => id !== roomId);
+        setLocalFavorites(updatedFavorites);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } else {
+        await dispatch(addToFavorites(roomId));
+        const updatedFavorites = [...localFavorites, roomId];
+        setLocalFavorites(updatedFavorites);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      }
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
+  };
+
 
   useEffect(() => {
     if (data && data[0]) {
@@ -158,28 +218,25 @@ const RoomDetails = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.Roomcontainer}>
       <View style={styles.carouselContainer}>
-      <View style={styles.headerContainer}>
+        <View style={styles.headerContainer}>
 
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backArrowContainer}>
-          <View
-            style={{
-              height: 35,
-              width: 35,
-              borderRadius: 20,
-              backgroundColor: '#FFFFFF',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image source={backArrowImage} style={styles.backArrow} />
-            
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity >
-            <Image source={require('../Images/ic_favorites.png')} style={styles.favoritesIcon} />
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backArrowContainer}>
+            <View
+              style={{
+                height: 35,
+                width: 35,
+                borderRadius: 20,
+                backgroundColor: '#FFFFFF',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image source={backArrowImage} style={styles.backArrow} />
+
+            </View>
           </TouchableOpacity>
-          </View>
+        </View>
 
         <Carousel
           ref={carouselRef}
@@ -199,10 +256,16 @@ const RoomDetails = ({ route, navigation }) => {
       </View>
 
       <View style={styles.detailsContainer}>
-
+       <View style={{flexDirection:'row',justifyContent:'space-between'}}>
         <Text style={styles.Roomtitle}>{roomName}</Text>
         {/* {roomName ? <Text style={styles.roomdetails}>{roomName}</Text> : null} */}
-
+           <TouchableOpacity onPress={handleFavorite}>
+             <Image
+               source={localFavorites.includes(room._id) ? require('../Images/ic_favorites_yellow.png') : require('../Images/ic_favorites_gray.png')}
+               style={{ height: 30, width: 30 }}
+             />
+           </TouchableOpacity>
+        </View>
         <View style={styles.ratingContainer}>
           <Text style={styles.Roomrating}>⭐4.9 </Text>
           <Text style={styles.middleDot}> •</Text>
@@ -457,7 +520,7 @@ const styles = StyleSheet.create({
   favoritesIcon: {
     height: 30,
     width: 30,
-    tintColor:'#FFFFFF'
+    tintColor: '#FFFFFF'
   },
 
 });

@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 type Room = {
-  _id:'';
+  roomId: string;
+  _id:string;
   userId: string;
   roomName: string;
   details: string[];
@@ -286,55 +287,12 @@ export const modifyRoomDetails = (roomId: string, updateData: Partial<Room>): Ap
     dispatch(setBusy(false));
   }
 };
-// export const addToFavorites = (roomId: string,userId:string): AppThunk => async (dispatch) => {
-  // try {
-    // dispatch(setBusy(true));
-    // dispatch(setError(''));
-    // dispatch(setSuccess(''));
-
-  //  const userId = await AsyncStorage.getItem('userId');
-    // console.log('Retrieved userId:', userId);
-
-    // if (!userId) {
-      // throw new Error('User ID not found');
-    // }
-
-    // console.log('user id:',userId)
-    // const response = await axios.put(`${API_BASE_URL}/addToFavourites`,  { params: { userId, roomId } });
-    // console.log('add responence:',response)
-    // if (response?.status === 200) {
-      // dispatch(addFavorite(roomId));
-      // dispatch(setSuccess('Room added to favorites.'));
-      // console.log('add feverite to feverite rooms')
-    // }
-  // } catch (error) {
-    // console.log("add error:",error)
-    // dispatch(setError(error?.response?.data?.message || error?.message || 'Adding to favorites failed.'));
-  // } finally {
-    // dispatch(setBusy(false));
-  // }
-// };
-
-
-
-
-
 
 export const addToFavorites = ( roomId: string,): AppThunk => async (dispatch) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
-
-    // Retrieve userId from AsyncStorage if not provided
-    // if (!userId) {
-      // userId = await AsyncStorage.getItem('userId');
-      // console.log('Retrieved userId:', userId);
-
-      // if (!userId) {
-        // throw new Error('User ID not found');
-      // }
-    // }
     console.log('user id in api:',roomId)
 
     const userId = await AsyncStorage.getItem('userId');
@@ -342,17 +300,19 @@ export const addToFavorites = ( roomId: string,): AppThunk => async (dispatch) =
       throw new Error('User ID not found');
     }
    
-   
+    console.log('User ID:', userId);
+    console.log('Room ID:', roomId);
 
    console.log('userid:',userId)
-    const response = await axios.put(`${API_BASE_URL}/user/addToFavourites?userId=${userId}&roomId=${roomId}`,  
-      { userId, roomId }, customConfig);
+    const response = await axios.put(`${API_BASE_URL}/user/addToFavourites?userId=${userId}&roomId=${roomId}`,  { userId, roomId }, customConfig);
     console.log('add response:', response);
 
     if (response?.status === 200) {
       dispatch(addFavorite(roomId));
       dispatch(setSuccess('Room added to favorites.'));
       console.log('add favorite to favorite rooms');
+    } else {
+      throw new Error('Failed to add room to favorites.');
     }
   } catch (error) {
     console.log('add error:', error);
