@@ -26,7 +26,7 @@ export default function MakeAnOrder({route}) {
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
 
-        console.log(value);
+         console.log(value);
 
     setUserId(value);
   });

@@ -87,7 +87,7 @@ export const createPayment = (paymentData: Payment): AppThunk => async dispatch 
     dispatch(setSuccess(''));
 
     const response = await axios.post(`${API_BASE_URL}/payment/create-payment`, paymentDetails);
-    console.log(response.status);
+    console.log(response.data);
     if (response.data) {
       dispatch(setPayments(response.data));
       dispatch(setSuccess('Payment created successfully!'));
