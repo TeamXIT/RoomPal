@@ -50,7 +50,7 @@ const Favorites = ({navigation}) => {
     navigation.navigate('RoomDetails', { room });
   };
 
-  const favoriteRooms = data.filter(room => localFavorites.includes(room._id));
+  const favoriteRooms = data.filter(room => localFavorites.includes(room._id)).reverse();
 
   const renderFavoriteItem = ({ item }: { item: Room }) => (
     <View style={styles.card}>
@@ -120,62 +120,6 @@ const Favorites = ({navigation}) => {
   );
 };
 
-// const styles = StyleSheet.create({
-  // container: {
-    // flex: 1,
-    // padding: 16,
-  // },
-  // header: {
-    // fontSize: 24,
-    // fontWeight: 'bold',
-    // marginBottom: 16,
-  // },
-  // itemContainer: {
-    // padding: 16,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#ccc',
-  // },
-  // roomName: {
-    // fontSize: 18,
-    // fontWeight: 'bold',
-  // },
-  // removeButton: {
-    // marginTop: 8,
-    // padding: 8,
-    // backgroundColor: 'red',
-    // borderRadius: 4,
-  // },
-  // removeButtonText: {
-    // color: '#fff',
-  // },
-  // emptyText: {
-    // textAlign: 'center',
-    // marginTop: 20,
-    // fontSize: 16,
-    // color: '#888',
-  // },
-  // card: {
-    // backgroundColor: '#FFFFFF',
-    // borderRadius: 12,
-    // marginBottom: 15,
-    // shadowColor: primaryColor,
-    // shadowOffset: {
-      // width: 2,
-      // height: 10,
-    // },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 5,
-    // elevation: 5,
-    // padding: 15,
-    // borderWidth: 1,
-    // borderColor: '#DDD',
-  // },
-  // image: {
-    // width: '40%',
-    // height: 180,
-    // borderRadius: 12,
-  // },
-// });
 
 export default Favorites;
 
