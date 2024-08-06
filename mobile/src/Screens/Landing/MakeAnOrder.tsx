@@ -72,6 +72,7 @@ export default function MakeAnOrder({route}) {
     }
   };
   const makePayment= async (orderId: string) => {
+    console.log(orderId)
     try{
     const response= await axios.get(`https://sandbox.cashfree.com/pg/orders/${orderId}/payments`,
       {headers:{

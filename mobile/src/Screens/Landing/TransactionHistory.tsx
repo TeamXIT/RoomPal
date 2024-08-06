@@ -6,7 +6,7 @@ import { getPaymentsByStatus } from "../../reducers/payment/roomDataSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TransactionHistory = () => {
-    const [selectedTab, setSelectedTab] = useState('Ongoing');
+    const [selectedTab, setSelectedTab] = useState('PENDING');
     const [userId, setUserId] = useState('');
     const dispatch = useDispatch();
     const payments = useSelector((state) => state.app.payments);
@@ -40,9 +40,8 @@ const TransactionHistory = () => {
                             <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
                             <Text style={styles.bookingText}>{room.location.lat}, {room.location.lon}</Text>
                         </View>
-                       
                         <View style={styles.holdButton}>
-                            <Text style={styles.holdText}>{room.availability}members</Text>
+                            <Text style={styles.holdText}>{room.availability} members</Text>
                         </View>
                     </View>
                 </View>
@@ -61,19 +60,19 @@ const TransactionHistory = () => {
                     style={[styles.transactionButtons, selectedTab === 'Ongoing' && styles.activeButton]}
                     onPress={() => setSelectedTab('PENDING')}
                 >
-                    <Text style={[styles.transactiontext, selectedTab === 'Ongoing' && { color: '#FFFFFF' }]}>Ongoing</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'Ongoing' && { color: '#FFFFFF' }]}>Ongoing</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.transactionButtons, selectedTab === 'Completed' && styles.activeButton]}
                     onPress={() => setSelectedTab('SUCCESS')}
                 >
-                    <Text style={[styles.transactiontext, selectedTab === 'Completed' && { color: '#FFFFFF' }]}>Completed</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'Completed' && { color: '#FFFFFF' }]}>Completed</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.transactionButtons, selectedTab === 'Rejected' && styles.activeButton]}
-                    onPress={() => setSelectedTab('FAILED')}
+                    style={[styles.transactionButtons, selectedTab === 'Canceled' && styles.activeButton]}
+                    onPress={() => setSelectedTab('USER_DROPPED')}
                 >
-                    <Text style={[styles.transactiontext, selectedTab === 'Rejected' && { color: '#FFFFFF' }]}>Rejected</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'Canceled' && { color: '#FFFFFF' }]}>Canceled</Text>
                 </TouchableOpacity>
             </View>
             {renderBookings()}
@@ -83,86 +82,95 @@ const TransactionHistory = () => {
 
 const styles = StyleSheet.create({
     scrollContainer: {
+        backgroundColor: '#FFFFFF',
         flex: 1,
-        width: '100%',
-        backgroundColor: '#F3F3F3'
+        padding: 10,
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 10,
-        width: '90%',
-        height: 46,
-        alignSelf: 'center',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-        marginTop: 10
+        marginBottom: 20,
     },
     transactionButtons: {
-        width: '30%',
+        height: 45,
+        width: 110,
+        borderRadius: 25,
+        borderColor: primaryColor,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 2,
     },
     activeButton: {
         backgroundColor: primaryColor,
-        borderRadius: 10
     },
-    transactiontext: {
+    transactionText: {
         color: primaryColor,
-        fontWeight: '600',
-        fontSize: 14
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     noDataText: {
         textAlign: 'center',
         fontSize: 18,
         color: '#555',
-        marginVertical: 20
+        marginVertical: 20,
     },
     bookingContainer: {
-        alignSelf: 'center',
-        width: '90%',
         backgroundColor: '#FFFFFF',
-        marginVertical: 10,
+        borderRadius: 12,
+        marginBottom: 15,
+        shadowColor: primaryColor,
+        shadowOffset: {
+            width: 2,
+            height: 10,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 5,
         padding: 15,
-        borderRadius: 10
+        borderWidth: 2,
+        borderColor: '#DDD',
     },
     bookingItem: {
         flexDirection: 'row',
-        gap: 20
+        marginBottom: 10,
     },
     bookingImage: {
-        width: 80,
-        height: 80,
-        borderRadius: 20
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+        marginRight: 30,
     },
     bookingText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#262626'
+        fontSize: 18,
+        color:"#000",
     },
     holdButton: {
-        width: 48,
-        height: 20,
-        backgroundColor: primaryColor,
-        borderRadius: 10,
+        height: 30,
+        width: 100,
+        backgroundColor: '#E1F5E9',
+        alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
+        borderRadius: 10,
     },
     holdText: {
-        color: '#FFFFFF',
-        fontWeight: '500',
-        fontSize: 10
+        color: 'green',
+        fontSize: 14,
     },
     viewBookingButton: {
-        justifyContent: 'center',
+        height: 33,
+        width: '90%',
+        borderRadius: 10,
+        backgroundColor: primaryColor,
         alignItems: 'center',
-        paddingVertical: 12
+        justifyContent: 'center',
+        marginTop: 10,
+        alignSelf: 'center',
     },
     viewBookingText: {
-        color: primaryColor,
-        fontSize: 14,
-        fontWeight: '600'
-    }
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+    },
 });
 
 export default TransactionHistory;
