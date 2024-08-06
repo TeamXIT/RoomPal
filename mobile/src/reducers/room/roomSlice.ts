@@ -2,10 +2,12 @@ import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 type Room = {
-  _id:'';
+  roomId: string;
+  _id:string;
   userId: string;
   roomName: string;
   details: string[];
@@ -51,6 +53,8 @@ type RoomState = {
   totalPages: number;
   totalCount: number;
   roomData: Room;
+  favorites: string[]; // Array of room IDs
+
 };
 
 const initialState: RoomState = {
@@ -88,6 +92,8 @@ const initialState: RoomState = {
     telegramLink: '',
     images: [],
   },
+  favorites: [], // Initialize empty favorites
+
 };
 
 export const roomSlice = createSlice({
@@ -123,6 +129,15 @@ export const roomSlice = createSlice({
     roomData: (state, action: PayloadAction<Room>) => {
       state.roomData = action.payload;
     },
+    setFavorites: (state, action: PayloadAction<string[]>) => {
+      state.favorites = action.payload;
+    },
+    addFavorite: (state, action: PayloadAction<string>) => {
+      state.favorites.push(action.payload);
+    },
+    removeFavorite: (state, action: PayloadAction<string>) => {
+      state.favorites = state.favorites.filter(roomId => roomId !== action.payload);
+    },
   },
 });
 
@@ -130,7 +145,9 @@ const customConfig = {
   headers: { "Content-Type": "application/json" }
 }
 
-export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData, setUserRooms } = roomSlice.actions;
+
+export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData,setFavorites, addFavorite, removeFavorite } = roomSlice.actions;
+
 
 export const createRoom = (room: Room): AppThunk => async (dispatch) => {
   console.log(room)
@@ -274,6 +291,70 @@ export const modifyRoomDetails = (roomId: string, updateData: Partial<Room>): Ap
     }
   } catch (error) {
     dispatch(setError(error?.response?.data?.message || error?.message || 'Updating room details failed'));
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+export const addToFavorites = ( roomId: string,): AppThunk => async (dispatch) => {
+  try {
+    dispatch(setBusy(true));
+    dispatch(setError(''));
+    dispatch(setSuccess(''));
+    console.log('user id in api:',roomId)
+
+    const userId = await AsyncStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+   
+    console.log('User ID:', userId);
+    console.log('Room ID:', roomId);
+
+   console.log('userid:',userId)
+    const response = await axios.put(`${API_BASE_URL}/user/addToFavourites?userId=${userId}&roomId=${roomId}`,  { userId, roomId }, customConfig);
+    console.log('add response:', response);
+
+    if (response?.status === 200) {
+      dispatch(addFavorite(roomId));
+      dispatch(setSuccess('Room added to favorites.'));
+      console.log('add favorite to favorite rooms');
+    } else {
+      throw new Error('Failed to add room to favorites.');
+    }
+  } catch (error) {
+    console.log('add error:', error);
+    dispatch(setError(error?.response?.data?.message || error?.message || 'Adding to favorites failed.'));
+  } finally {
+    dispatch(setBusy(false));
+  }
+};
+
+
+export const removeFromFavorites = (roomId: string): AppThunk => async (dispatch) => {
+  try {
+    dispatch(setBusy(true));
+    dispatch(setError(''));
+    dispatch(setSuccess(''));
+
+    const userId = await AsyncStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+
+    const response = await axios.put(`${API_BASE_URL}/user/removeFromFavourites?userId=${userId}&roomId=${roomId}`,  {   userId, roomId  });
+    console.log('remove response:', response);
+
+    if (response?.status === 200) {
+      dispatch(removeFavorite(roomId));
+      dispatch(setSuccess('Room removed from favorites.'));
+      console.log('remove feverite to feverite rooms')
+
+    }
+  } catch (error) {
+    console.log("remove error:",error)
+
+    dispatch(setError(error?.response?.data?.message || error?.message || 'Removing from favorites failed.'));
   } finally {
     dispatch(setBusy(false));
   }
