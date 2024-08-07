@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const { baseResponses } = require("../helpers/baseResponses");
+const { Room } = require("../models/roomModel");
 const mongoose = require("mongoose");
 module.exports = {
   getUserbyMobile: async (req, res) => {
@@ -89,5 +90,25 @@ module.exports = {
     } catch (error) {
       return res.status(500).json(baseResponses.error(error.message));
     }
+  },
+  getfavouritesListRooms:async (req, res) => {
+    try {
+      const { userId } = req.query;
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+      const rooms = await Room.find({ _id: { $in: user.favouritesList } });
+      if (!rooms) {
+        return res.status(404).json(baseResponses.constantMessages.ROOM_NOT_FOUND());
+      }
+      return res.status(200).json(baseResponses.success(rooms));
+    } catch (error) {
+      return res.status(500).json(baseResponses.error(error.message));
+
+}
   }
-};
+}
