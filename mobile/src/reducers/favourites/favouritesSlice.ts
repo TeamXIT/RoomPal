@@ -164,7 +164,7 @@ export const usersFavoritesList = (): AppThunk => async (dispatch) => {
         throw new Error('User ID not found');
       }
   
-      const response = await axios.put(`${API_BASE_URL}/user/favouritesList?userId=${userId}`,  { userId }, customConfig);
+      const response = await axios.get(`${API_BASE_URL}/user/favouritesList?userId=${userId}`,  { userId }, customConfig);
       console.log('favourite list  response',response.data);
       if (response?.status === 200) {
           console.log('favourite list  response',response.data);
