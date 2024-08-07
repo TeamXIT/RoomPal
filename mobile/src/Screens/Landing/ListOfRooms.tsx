@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomById, fetchRooms, addToFavorites, removeFromFavorites, } from '../../reducers/room/roomSlice';
+import { fetchRoomById, fetchRooms} from '../../reducers/room/roomSlice';
+import { addToFavorites, removeFromFavorites } from '../../reducers/favourites/favouritesSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
   const dispatch = useDispatch();
@@ -17,8 +19,10 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
   const [loading, setLoading] = useState(true);
   // const [localFavorites, setLocalFavorites] = useState(favorites); // Local state for immediate feedback
   const [localFavorites, setLocalFavorites] = useState<string[]>([]);
-
-
+  let count=0;
+  useEffect(() => {
+    dispatch()
+  })
   useEffect(() => {
     dispatch(fetchRooms(20, page, minRent, maxRent, gender, roomType, location, availability)).finally(() => setLoading(false));
   }, [dispatch, page]);
@@ -75,21 +79,16 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
     // }
   // };
   
-  const handleFavorite = async (roomId: string) => {
-    try {
-      if (localFavorites.includes(roomId)) {
-        await dispatch(removeFromFavorites(roomId));
-        const updatedFavorites = localFavorites.filter(id => id !== roomId);
-        setLocalFavorites(updatedFavorites);
-        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      } else {
-        await dispatch(addToFavorites(roomId));
-        const updatedFavorites = [...localFavorites, roomId];
-        setLocalFavorites(updatedFavorites);
-        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-      }
-    } catch (error) {
-      console.error('Error updating favorites:', error);
+  const handleFavorite = (roomId: string) => {
+   console.log('rooid: ', roomId)
+   console.log(count)
+    if(count%2==0){
+      dispatch(addToFavorites(roomId));
+      count=count+1;
+    }
+    else{
+      dispatch(removeFromFavorites(roomId));
+      count=count+1;
     }
   };
 

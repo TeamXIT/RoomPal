@@ -5,6 +5,7 @@ import profileSlice from './profile/profileSlice';
 import  orderSlice  from './orders/orderSlice';
 import  paymentSlice  from './payment/paymentslice';
 import Slice from './payment/roomDataSlice'
+import favoriteSlice from './favourites/favouritesSlice';
 
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
         orders:orderSlice,
         payment:paymentSlice,
         app:Slice,
+        favorite:favoriteSlice
        
     },
 });
