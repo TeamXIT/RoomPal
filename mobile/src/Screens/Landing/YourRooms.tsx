@@ -1,26 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserRooms } from '../../reducers/room/roomSlice'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const YourRooms = () => {
-  const rooms = [
-    {
-      roomId: '1',
-      roomName: 'Cozy Apartment',
-      rent: 12000,
-      gender: 'Female',
-      distance: 2,
-      images: ['base64encodedimage1'],
-    },
-    {
-      roomId: '2',
-      roomName: 'Spacious Condo',
-      rent: 15000,
-      gender: 'Male',
-      distance: 5,
-      images: ['base64encodedimage2'],
-    },
-    // Add more room objects here
-  ];
+const YourRooms = ({ navigation }) => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const userRooms = useSelector((state) => state.room.userRooms); 
+
+  useEffect(() => {
+    const getUserId = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (storedUserId) {
+          setUserId(storedUserId);
+        }
+      } catch (error) {
+        console.error('Failed to fetch userId from AsyncStorage', error);
+      }
+    };
+
+    getUserId();
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserRooms(userId));
+    }
+  }, [dispatch, userId]);
+
+  const handlePress = (room) => {
+    navigation.navigate('RoomDetails', { room });
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -31,8 +43,7 @@ const YourRooms = () => {
         />
         <View style={styles.info}>
           <Text style={[styles.name, { paddingBottom: 10 }]}>{item.roomName}</Text>
-          <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
-          </View>
+          <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}></View>
           <View style={{ flexDirection: 'row', gap: 30 }}>
             <Text style={[{ paddingLeft: 5, fontSize: 16 }]}>Rent</Text>
             <Text style={[{ paddingLeft: 51, fontSize: 16 }]}>Looking for</Text>
@@ -47,6 +58,7 @@ const YourRooms = () => {
           </View>
           <TouchableOpacity
             style={styles.detailsButton}
+            onPress={() => handlePress(item)}
           >
             <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
           </TouchableOpacity>
@@ -58,7 +70,7 @@ const YourRooms = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={rooms}
+        data={userRooms}
         renderItem={renderItem}
         keyExtractor={(item) => item.roomId}
         contentContainerStyle={{ paddingBottom: 52 }}

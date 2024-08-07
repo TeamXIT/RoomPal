@@ -34,7 +34,7 @@ const ProfileScreen = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.option} onPress={() => handleNavigation('Favorites')}>
-        <Image source={require('../Images/ic_favorites.png')} style={styles.optionIcon} />
+        <Image source={require('../Images/ic_star.png')} style={styles.optionIcon} />
         <Text style={styles.optionText}>Favorites</Text>
       </TouchableOpacity>
 

@@ -25,22 +25,23 @@ export default function MakeAnOrder({route}) {
   const [userId, setUserId] = useState('');
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
-
              console.log(value);
             setUserId(value);
-   
+
   });
   AsyncStorage.getItem('MobileNumber').then(value => {
     setMobileNumber(value);
   });
 
   const room = route.params.room;
-  // const generateOrderId = () => {
-  //   const randomPart = Math.floor(1000000 + Math.random() * 9000000).toString();
-  //   setOrderId(order.order_id);
-  //   console.log(order.order_id);
-  //   return o;
-  // };
+
+  const generateOrderId = () => {
+    const randomPart = Math.floor(1000000 + Math.random() * 9000000).toString();
+    // setOrderId(order.order_id);
+    console.log(order.order_id);
+    return orderId;
+  };
+
 
   const [order, setOrder] = useState({
     payment_session_id: '123456780',
@@ -51,7 +52,8 @@ export default function MakeAnOrder({route}) {
   const handleCreateOrder = async () => {
     console.log(orderId)
     const orderData = {
-      order_id: orderId,
+
+      order_id:orderId,
       order_amount: room.rent,
       order_currency: 'INR',
       customer_details: {

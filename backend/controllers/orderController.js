@@ -31,6 +31,7 @@ const createOrder = async (req, res) => {
         }
         const order = await Order.findOne({order_id: order_id})
         if(order) {
+            // console.log(order)
           return res.status(400).json(baseResponses.constantMessages.ORDER_ID_ALREADY_EXISTS());
         }
         const newOrder = new Order({
@@ -48,16 +49,17 @@ const createOrder = async (req, res) => {
             room_id: room_id,
         });
         await newOrder.save();
-        const response = await Cashfree.PGCreateOrder('2022-09-01', request);
-        return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(response.data));
+        // const response = await Cashfree.PGCreateOrder('2022-09-01', request);
+        return res.status(200).json(baseResponses.constantMessages.ORDER_CREATED_SUCCESSFULLY(newOrder));
     } catch (error) {
+        console.error(error);
         return res.status(500).json(baseResponses.error(error.message));
     }
 };
 
 const fetchOrder = async (req, res) => {
     try {
-        const order_id = req.query.order_id;
+        const {order_id} = req.query;
         // const response = await Cashfree.PGFetchOrder('2022-09-01', order_id);
         // res.status(200).json(baseResponses.constantMessages.ORDER_FETCHED_SUCCESSFULLY(response.data));
         const order = await Order.findOne({ order_id: order_id });

@@ -29,6 +29,7 @@ import TransactionHistory from './src/Screens/Landing/TransactionHistory';
 
 import BookingHistory from './src/Screens/Landing/BookingHistory';
 import YourRooms from './src/Screens/Landing/YourRooms';
+import Favorites from './src/Screens/Landing/Favorites';
 
 
 const Stack = createStackNavigator();
@@ -70,6 +71,13 @@ const Landing = () => (
 
 
     <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }}/>
+    <Stack.Screen name="Favorites" component={Favorites} options={{ 
+      headerShown: true ,
+      headerStyle: {
+        backgroundColor: '#f5f5f5', 
+      },
+      headerTintColor: "#814ABF"  }}/>
+
 
 
     

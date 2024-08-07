@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomById, fetchRooms } from '../../reducers/room/roomSlice';
+import { fetchRoomById, fetchRooms, addToFavorites, removeFromFavorites, } from '../../reducers/room/roomSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
   const dispatch = useDispatch();
-  const { data, screen, roomData, totalPages } = useSelector((state: RootState) => state.room);
+  const { data, screen, roomData, totalPages, favorites } = useSelector((state: RootState) => state.room);
 
   const { minRent, maxRent, gender, roomType, location, availability } = route.params || {};
 
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  // const [localFavorites, setLocalFavorites] = useState(favorites); // Local state for immediate feedback
+  const [localFavorites, setLocalFavorites] = useState<string[]>([]);
+
 
   useEffect(() => {
     dispatch(fetchRooms(20, page, minRent, maxRent, gender, roomType, location, availability)).finally(() => setLoading(false));
@@ -25,8 +29,8 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
     });
   };
 
-  const handleDetails = (room) => {
-    navigation.navigate('RoomDetails', { room });
+  const handleDetails = (room,favorites) => {
+    navigation.navigate('RoomDetails', { room,favorites });
   };
 
   const filterRoomsByName = () => {
@@ -35,7 +39,59 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
       room.roomName.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
+
   
+  
+
+
+
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const favoritesData = await AsyncStorage.getItem('favorites');
+        if (favoritesData) {
+          setLocalFavorites(JSON.parse(favoritesData));
+        }
+      } catch (error) {
+        console.error('Error fetching favorites from AsyncStorage:', error);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+  
+  useEffect(() => {
+    setLocalFavorites(favorites);// Sync 
+    
+    
+    
+  }, [favorites]);
+  // const handleFavorite = (roomId: string) => {
+    // if (favorites.includes(roomId)) {
+      // dispatch(removeFromFavorites(roomId));
+    // } else {
+      // dispatch(addToFavorites(roomId));
+    // }
+  // };
+  
+  const handleFavorite = async (roomId: string) => {
+    try {
+      if (localFavorites.includes(roomId)) {
+        await dispatch(removeFromFavorites(roomId));
+        const updatedFavorites = localFavorites.filter(id => id !== roomId);
+        setLocalFavorites(updatedFavorites);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } else {
+        await dispatch(addToFavorites(roomId));
+        const updatedFavorites = [...localFavorites, roomId];
+        setLocalFavorites(updatedFavorites);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      }
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -46,7 +102,22 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
           onError={() => console.log('Image failed to load')}
         />
         <View style={styles.info}>
-          <Text style={[styles.name, { paddingBottom: 10 }]}>{item.roomName}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={[styles.name, { paddingBottom: 10 }]}>{item.roomName}</Text>
+            <TouchableOpacity onPress={() => handleFavorite(item._id)}>
+              {/* <Image source={require('../Images/ic_favorites.png')} style={{height:30,width:30}}/> */}
+              <View
+                style={[
+                  { justifyContent: 'center', alignItems: 'center', borderRadius: 15, height: 30, width: 30, overflow: 'hidden' },
+                ]}
+              >
+                <Image
+                  source={localFavorites.includes(item._id) ? require('../Images/ic_favorites_yellow.png') : require('../Images/ic_favorites_gray.png')} // Use different images
+                  style={{ height: 30, width: 30 }}
+                />
+                </View>
+            </TouchableOpacity>
+          </View>
           <View style={{ flexDirection: 'row', gap: 5, paddingBottom: 10 }}>
             <Text style={styles.location}>{item.address}</Text>
           </View>
@@ -62,10 +133,11 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
             <Text style={styles.distance}>{item.distance} Km</Text>
             <Text style={{ fontSize: 16, color: '#000' }}> from your search</Text>
           </View>
-          <View style={{ flexDirection: 'row', gap: 20 }}>        
+          <View style={{ flexDirection: 'row', gap: 20 }}>
+            <Text style={[styles.match, { paddingBottom: 10 }]}>Match: {item.match}%</Text>
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={() => handleDetails(item)} 
+              onPress={() => handleDetails(item)}
             >
               <Text style={styles.detailsButtonText}>SEE DETAILS</Text>
             </TouchableOpacity>
@@ -109,12 +181,14 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
           <Image source={require('../Images/ic_filter.png')} style={styles.filterIcon} />
         </TouchableOpacity>
       </View>
-      
+
       {filteredData.length > 0 ? (
         <FlatList
           data={filteredData}
           renderItem={renderItem}
+          // keyExtractor={(item) => item.roomId}
           keyExtractor={(item) => item._id}
+
           contentContainerStyle={{ paddingBottom: 52 }}
           onScroll={onScroll}
           onEndReachedThreshold={0.1}
