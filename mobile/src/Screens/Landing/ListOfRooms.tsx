@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomById, fetchRooms} from '../../reducers/room/roomSlice';
-import { addToFavorites, removeFromFavorites } from '../../reducers/favourites/favouritesSlice';
+import { addToFavorites, removeFromFavorites, usersFavoritesList } from '../../reducers/favourites/favouritesSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,7 +21,7 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
   const [localFavorites, setLocalFavorites] = useState<string[]>([]);
   let count=0;
   useEffect(() => {
-    dispatch()
+    dispatch(usersFavoritesList())
   })
   useEffect(() => {
     dispatch(fetchRooms(20, page, minRent, maxRent, gender, roomType, location, availability)).finally(() => setLoading(false));

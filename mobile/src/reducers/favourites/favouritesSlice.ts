@@ -47,6 +47,7 @@ type FavoriteState = {
     success: string;
   };
   favorites: Room[]; // Array of favorite rooms
+  roomids:string[]; // Array of room ids
 };
 
 const initialState: FavoriteState = {
@@ -56,6 +57,7 @@ const initialState: FavoriteState = {
     success: '',
   },
   favorites: [],
+  roomids:[]
 };
 
 export const favoriteSlice = createSlice({
@@ -74,6 +76,9 @@ export const favoriteSlice = createSlice({
     setFavorites: (state, action: PayloadAction<Room[]>) => {
       state.favorites = action.payload;
     },
+    setRoomids: (state, action: PayloadAction<string[]>) => {
+        state.roomids = action.payload;
+      },
     // addFavorite: (state, action: PayloadAction<Room>) => {
     //   state.favorites.push(action.payload);
     // },
@@ -87,7 +92,7 @@ const customConfig = {
   headers: { "Content-Type": "application/json" }
 }
 
-export const { setBusy, setError, setSuccess, setFavorites } = favoriteSlice.actions;
+export const { setBusy, setError, setSuccess, setFavorites, setRoomids } = favoriteSlice.actions;
 
 export const addToFavorites = (roomId: string): AppThunk => async (dispatch) => {
     console.log(roomId);
@@ -106,7 +111,7 @@ export const addToFavorites = (roomId: string): AppThunk => async (dispatch) => 
    
     if (response?.status === 200) {
         console.log('add response',response.data);
-    //   dispatch(addFavorite(response.data.data));
+     
       dispatch(setSuccess('Room added to favorites.'));
     } else {
       throw new Error('Failed to add room to favorites.');
@@ -147,6 +152,32 @@ export const removeFromFavorites = (roomId: string): AppThunk => async (dispatch
   console.log('end');
 };
 
+export const usersFavoritesList = (): AppThunk => async (dispatch) => {
+    try {
+      dispatch(setBusy(true));
+      dispatch(setError(''));
+      dispatch(setSuccess(''));
+  
+      const userId = await AsyncStorage.getItem('userId');
+      console.log('fav list  userId',userId);
+      if (!userId) {
+        throw new Error('User ID not found');
+      }
+  
+      const response = await axios.put(`${API_BASE_URL}/user/favouritesList?userId=${userId}`,  { userId }, customConfig);
+      console.log('favourite list  response',response.data);
+      if (response?.status === 200) {
+          console.log('favourite list  response',response.data);
+          dispatch(setRoomids(response.data.message));
+        dispatch(setSuccess('Roomids fetched successfully.'));
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(setError(error.response?.data?.message || error?.message || 'Roomids fetched failed.'));
+    } finally {
+      dispatch(setBusy(false));
+    }
+  };
 export const fetchFavorites = (): AppThunk => async (dispatch) => {
   try {
     dispatch(setBusy(true));
@@ -160,8 +191,9 @@ export const fetchFavorites = (): AppThunk => async (dispatch) => {
     const response = await axios.get(`${API_BASE_URL}/user/getFavourites`, {
       params: { userId },
     });
+    console.log('favourite list  response',response.data);
     if (response?.status === 200) {
-      dispatch(setFavorites(response.data.data));
+      dispatch(setFavorites(response.data.message));
       dispatch(setSuccess('Favorites fetched successfully.'));
     }
   } catch (error) {
