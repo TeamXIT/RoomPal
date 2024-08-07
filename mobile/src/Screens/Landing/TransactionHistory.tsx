@@ -1,197 +1,78 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { primaryColor } from "../Styles/Styles";
-import { Button } from "react-native-paper";
+import { getPaymentsByStatus } from "../../reducers/payment/roomDataSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TransactionHistory = () => {
-    const [selectedTab, setSelectedTab] = useState('Ongoing');
+    const [selectedTab, setSelectedTab] = useState('PENDING');
+    const [userId, setUserId] = useState('');
+    const dispatch = useDispatch();
+    const payments = useSelector((state) => state.app.payments);
+    const rooms = useSelector((state) => state.app.rooms);
+
+    useEffect(() => {
+        AsyncStorage.getItem('userId').then((value) => {
+            setUserId(value);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(getPaymentsByStatus(selectedTab, userId));
+        }
+    }, [selectedTab, dispatch, userId]);
 
     const renderBookings = () => {
-        switch (selectedTab) {
-            case 'Ongoing':
-                return (
-                    <><><View style={styles.bookingContainer}>
-                        {/* Render Ongoing Bookings here */}
-                        <View style={styles.bookingItem}>
-                            <Image
-                                style={styles.bookingImage}
-                                source={{ uri: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/25/121661-living_rooms-interiors-interior_design.jpg' }} />
-                            <View style={{ gap: 12 }}>
-                                <Text style={styles.bookingText}>Royale President</Text>
-                                <View style={{ flexDirection: 'row', gap: 10 }}>
-                                    <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-                                    <Text style={styles.bookingText}>Nellore</Text>
-                                </View>
-                                <View style={styles.holdButton}>
-                                    <Text style={styles.holdText}>Hold</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{
-                            width: '100%',
-                            height: 1,
-                            backgroundColor: '#CCC',
-                        }}></View>
-                        <TouchableOpacity style={{
-                            height: 33, width: '90%', borderRadius: 10, backgroundColor: primaryColor,
-                            alignItems: 'center', justifyContent: 'center', marginTop: 10, alignSelf: 'center'
-                        }}>
-                            <Text style={{ fontSize: 16, color: '#FFFFFF', fontWeight: 'bold' }}>View Booking</Text>
-                        </TouchableOpacity>
-                    </View><View style={styles.bookingContainer}>
-                            {/* Render Ongoing Bookings here */}
-                            <View style={styles.bookingItem}>
-                                <Image
-                                    style={styles.bookingImage}
-                                    source={{ uri: 'https://1.bp.blogspot.com/-bA8VQA0Ytgw/UMd390JmHDI/AAAAAAAAbwI/YNSuLecpty8/s1600/Luxury+homes++interior+decoration+living+room+designs+ideas.+(2).jpg' }} />
-                                <View style={{ gap: 12 }}>
-                                    <Text style={styles.bookingText}>Martinez Cannes</Text>
-                                    <View style={{ flexDirection: 'row', gap: 10 }}>
-                                        <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-                                        <Text style={styles.bookingText}>Kadapa</Text>
-                                    </View>
-                                    <View style={styles.holdButton}>
-                                        <Text style={styles.holdText}>Hold</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={{
-                                width: '100%',
-                                height: 1,
-                                backgroundColor: '#CCC',
-                            }}></View>
-                            <TouchableOpacity style={{
-                                height: 33, width: '90%', borderRadius: 10, backgroundColor: '#814ABF',
-                                alignItems: 'center', justifyContent: 'center', marginTop: 10, alignSelf: 'center'
-                            }}>
-                                <Text style={{ fontSize: 16, color: '#FFFFFF', fontWeight: 'bold' }}>View Booking</Text>
-                            </TouchableOpacity>
-                        </View></><View style={styles.bookingContainer}>
-                            {/* Render Ongoing Bookings here */}
-                            <View style={styles.bookingItem}>
-                                <Image
-                                    style={styles.bookingImage}
-                                    source={{ uri: 'https://www.kalmarlighting.com/wp-content/uploads/2021/05/Kalmar-Project-London_Mansion_and_NY_Penthouse_Designed_by_Keech_Green-Living-room-980x735.jpg' }} />
-                                <View style={{ gap: 12 }}>
-                                    <Text style={styles.bookingText}>pg hostel</Text>
-                                    <View style={{ flexDirection: 'row', gap: 10 }}>
-                                        <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-                                        <Text style={styles.bookingText}>Prakasam</Text>
-                                    </View>
-                                    <View style={styles.holdButton}>
-                                        <Text style={styles.holdText}>Hold</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={{
-                                width: '100%',
-                                height: 1,
-                                backgroundColor: '#CCC',
-                            }}></View>
-                            <TouchableOpacity style={{
-                                height: 33, width: '90%', borderRadius: 10, backgroundColor: primaryColor,
-                                alignItems: 'center', justifyContent: 'center', marginTop: 10, alignSelf: 'center'
-                            }}>
-                                <Text style={{ fontSize: 16, color: '#FFFFFF', fontWeight: 'bold' }}>View Booking</Text>
-                            </TouchableOpacity>
-                        </View></>     
-             );
-            case 'Completed':
-                return (
-
-                    <View style={styles.bookingContainer}>
-                        {/* Render Ongoing Bookings here */}
-                        <View style={styles.bookingItem}>
-                            <Image
-                                style={styles.bookingImage}
-                                source={{ uri: 'https://media-cdn.tripadvisor.com/media/photo-s/12/fd/6c/ff/suite.jpg' }} />
-                            <View style={{ gap: 12 }}>
-                                <Text style={styles.bookingText}>Royale President</Text>
-                                <View style={{ flexDirection: 'row', gap: 10 }}>
-                                    <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-                                    <Text style={styles.bookingText}>Hydrabad</Text>
-                                </View>
-                                <View style={styles.holdButton}>
-                                    <Text style={styles.holdText}>Completed</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{
-                            width: '100%',
-                            height: 1,
-                            backgroundColor: '#CCC',
-
-                        }}></View>
-                        <TouchableOpacity style={{
-                            height: 33, width: '90%', borderRadius: 10, backgroundColor: '#E1F5E9',
-                            alignItems: 'center', justifyContent: 'center', marginTop: 20, alignSelf: 'center', marginBottom: 10
-                        }}>
-                            <Text style={{ fontSize: 16, color: 'green', }}> ✓   Your room booking is completed</Text>
-                        </TouchableOpacity>
-                    </View>
-                   
-
-                );
-            case 'Canceled':
-                return (
-                    <View style={styles.bookingContainer}>
-                    {/* Render Ongoing Bookings here */}
-                    <View style={styles.bookingItem}>
-                        <Image
-                            style={styles.bookingImage}
-                            source={{ uri: 'https://i.pinimg.com/originals/fc/89/f2/fc89f2954df0cebb66ea1ba9f5842c0d.jpg' }} />
-                        <View style={{ gap: 12 }}>
-                            <Text style={styles.bookingText}>Neeraj </Text>
-                            <View style={{ flexDirection: 'row', gap: 10 }}>
-                                <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
-                                <Text style={styles.bookingText}>Vijayavada</Text>
-                            </View>
-                            <View style={[styles.holdButton,{backgroundColor:'#FDDDDE'}]}>
-                                <Text style={[styles.holdText,{color:'red'}]}>Canceled</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={{
-                        width: '100%',
-                        height: 1,
-                        backgroundColor: '#CCC',
-                    }}></View>
-                    <TouchableOpacity style={{
-                        height: 33, width: '90%', borderRadius: 10, backgroundColor: '#FDDDDE',
-                        alignItems: 'center', justifyContent: 'center', marginTop: 20, alignSelf: 'center', marginBottom: 10
-                    }}>
-                        <Text style={{ fontSize: 16, color: 'red', }}>! You are canceled this room</Text>
-                    </TouchableOpacity>
-                </View>
-                                        
-                );
-            default:
-                return null;
+        if (!Array.isArray(rooms) || rooms.length === 0) {
+            return <Text style={styles.noDataText}>No bookings available.</Text>;
         }
+
+        return rooms.map((room, index) => (
+            <View key={index} style={styles.bookingContainer}>
+                <View style={styles.bookingItem}>
+                    <Image style={styles.bookingImage} source={{ uri: `data:image/png;base64,${room.images[0]}` }} />
+                    <View style={{ gap: 12 }}>
+                        <Text style={styles.bookingText}>{room.roomName}</Text>
+                        <Text style={styles.bookingText}>{room.details}</Text>
+                        <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <Image source={require('../Images/ic_location.png')} tintColor={primaryColor} />
+                            <Text style={styles.bookingText}>{room.location.lat}, {room.location.lon}</Text>
+                        </View>
+                        <View style={styles.holdButton}>
+                            <Text style={styles.holdText}>{room.availability} members</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={{ width: '100%', height: 1, backgroundColor: '#CCC' }}></View>
+                <TouchableOpacity style={styles.viewBookingButton}>
+                    <Text style={styles.viewBookingText}>View Booking</Text>
+                </TouchableOpacity>
+            </View>
+        ));
     };
 
     return (
         <ScrollView style={styles.scrollContainer}>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                
                     style={[styles.transactionButtons, selectedTab === 'Ongoing' && styles.activeButton]}
-                    onPress={() => setSelectedTab('Ongoing')}
+                    onPress={() => setSelectedTab('PENDING')}
                 >
-                    <Text style={[styles.transactiontext ,selectedTab === 'Ongoing' && {color:'#FFFFFF'}]}>Ongoing</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'Ongoing' && { color: '#FFFFFF' }]}>Ongoing</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.transactionButtons, selectedTab === 'Completed' && styles.activeButton]}
-                    onPress={() => setSelectedTab('Completed')}
+                    onPress={() => setSelectedTab('SUCCESS')}
                 >
-                    <Text style={[styles.transactiontext ,selectedTab === 'Completed' && {color:'#FFFFFF'}]}>Completed</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'Completed' && { color: '#FFFFFF' }]}>Completed</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.transactionButtons, selectedTab === 'Canceled' && styles.activeButton]}
-                    onPress={() => setSelectedTab('Canceled')}
+                    onPress={() => setSelectedTab('USER_DROPPED')}
                 >
-                    <Text style={[styles.transactiontext ,selectedTab === 'Canceled' && {color:'#FFFFFF'}]}>Canceled</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'Canceled' && { color: '#FFFFFF' }]}>Canceled</Text>
                 </TouchableOpacity>
             </View>
             {renderBookings()}
@@ -217,15 +98,21 @@ const styles = StyleSheet.create({
         borderColor: primaryColor,
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth:2
+        borderWidth: 2,
     },
     activeButton: {
-        backgroundColor: primaryColor, 
+        backgroundColor: primaryColor,
     },
-    transactiontext: {
+    transactionText: {
         color: primaryColor,
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    noDataText: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: '#555',
+        marginVertical: 20,
     },
     bookingContainer: {
         backgroundColor: '#FFFFFF',
@@ -245,7 +132,6 @@ const styles = StyleSheet.create({
     },
     bookingItem: {
         flexDirection: 'row',
-
         marginBottom: 10,
     },
     bookingImage: {
@@ -256,6 +142,7 @@ const styles = StyleSheet.create({
     },
     bookingText: {
         fontSize: 18,
+        color:"#000",
     },
     holdButton: {
         height: 30,
@@ -264,24 +151,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        
-        
-    },
-    CompletedButton: {
-        height: 30,
-        width: 130,
-        backgroundColor: '#E1F5E9',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10
     },
     holdText: {
         color: 'green',
         fontSize: 14,
-
-
     },
-
+    viewBookingButton: {
+        height: 33,
+        width: '90%',
+        borderRadius: 10,
+        backgroundColor: primaryColor,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        alignSelf: 'center',
+    },
+    viewBookingText: {
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+    },
 });
 
 export default TransactionHistory;

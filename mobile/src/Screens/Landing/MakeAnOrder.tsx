@@ -17,28 +17,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reducers/store';
 import {createOrders} from '../../reducers/orders/orderSlice';
+import axios from 'axios';
+import { createPayment } from '../../reducers/payment/paymentslice';
 export default function MakeAnOrder({route}) {
   const dispatch = useDispatch();
   const [MobileNumber, setMobileNumber] = useState('');
   const [userId, setUserId] = useState('');
   const [orderId, setOrderId] = useState('');
   AsyncStorage.getItem('userId').then(value => {
+             console.log(value);
+            setUserId(value);
 
-      //  console.log(value);
-
-    setUserId(value);
   });
   AsyncStorage.getItem('MobileNumber').then(value => {
     setMobileNumber(value);
   });
 
   const room = route.params.room;
+
   const generateOrderId = () => {
     const randomPart = Math.floor(1000000 + Math.random() * 9000000).toString();
     // setOrderId(order.order_id);
     console.log(order.order_id);
     return orderId;
   };
+
 
   const [order, setOrder] = useState({
     payment_session_id: '123456780',
@@ -47,7 +50,9 @@ export default function MakeAnOrder({route}) {
   });
   const [orderStatus, setOrderStatus] = useState();
   const handleCreateOrder = async () => {
+    console.log(orderId)
     const orderData = {
+
       order_id:orderId,
       order_amount: room.rent,
       order_currency: 'INR',
@@ -68,6 +73,27 @@ export default function MakeAnOrder({route}) {
       console.log(error);
     }
   };
+  const makePayment= async (orderId: string) => {
+    console.log(orderId)
+    try{
+    const response= await axios.get(`https://sandbox.cashfree.com/pg/orders/${orderId}/payments`,
+      {headers:{
+        'X-Client-Secret': X_CLIENT_SECRET,
+        'X-Client-Id': X_CLIENT_ID,
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+      }}
+     
+    );
+    const paymentData = response.data[0];
+    paymentData.userId = userId;
+    paymentData.orderId = orderId;
+     console.log(paymentData);
+     dispatch(createPayment(paymentData))
+  }catch(error){
+    console.log(error)
+  }
+}
   const createOrder = async () => {
     console.log('createOrder Started');
 
@@ -113,8 +139,10 @@ export default function MakeAnOrder({route}) {
     };
     const onVerify = async (orderId: string) => {
       console.log('orderId is :' + orderId);
+    
+     
       updateStatus(orderId);
-      await handleCreateOrder();
+    
     };
     const onError = (error: any, orderId: string) => {
       console.log(
@@ -130,8 +158,17 @@ export default function MakeAnOrder({route}) {
       CFPaymentGatewayService.removeEventSubscriber();
     };
   }, []);
-  const updateStatus = (message: any) => {
+  const updateStatus = async(message: any) => {
     setOrderStatus(message);
+    await setOrderId(message);
+    try{
+      await handleCreateOrder();
+      await makePayment(orderId);
+    }catch(error){
+      console.log(error);
+    }
+   
+   
     console.log(message);
   };
   const _startCheckout = async () => {
