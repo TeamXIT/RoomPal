@@ -91,6 +91,21 @@ module.exports = {
       return res.status(500).json(baseResponses.error(error.message));
     }
   },
+  fetchfavouriteList: async (req, res) => {
+    try {
+      const { userId } = req.query;
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json(baseResponses.constantMessages.USER_NOT_FOUND());
+      }
+      return res.status(200).json(baseResponses.success(user.favouritesList));
+    } catch (error) {
+      return res.status(500).json(baseResponses.error(error.message));
+    }
+  },
   getfavouritesListRooms:async (req, res) => {
     try {
       const { userId } = req.query;
