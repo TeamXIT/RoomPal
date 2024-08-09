@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
+import { API_BASE_URL } from '../config/appConfig';
 
 type Payment = {
   auth_id: string | null;
@@ -81,13 +81,11 @@ const { setBusy, setError, setSuccess, setPayments } = paymentSlice.actions;
 export const createPayment = (paymentData: Payment): AppThunk => async dispatch => {
   try {
     const paymentDetails = {paymentDetails:paymentData}
-    console.log('paymentData', paymentDetails);
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
 
     const response = await axios.post(`${API_BASE_URL}/payment/create-payment`, paymentDetails);
-    console.log(response.data);
     if (response.data) {
       dispatch(setPayments(response.data));
       dispatch(setSuccess('Payment created successfully!'));
@@ -95,7 +93,6 @@ export const createPayment = (paymentData: Payment): AppThunk => async dispatch 
       throw new Error('Payment creation failed');
     }
   } catch (error: any) {
-    console.log(error)
     dispatch(setError(error.message));
   } finally {
     dispatch(setBusy(false));
@@ -104,12 +101,11 @@ export const createPayment = (paymentData: Payment): AppThunk => async dispatch 
 
 export const getPaymentsByOrderId = (orderId: string): AppThunk => async dispatch => {
   try {
-    console.log('getPaymentsByOrderId', orderId);
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
+
     const response = await axios.get(`${API_BASE_URL}/payment/getPaymentsByOrderId`, { params: { order_id: orderId } });
-    //   console.log(response.data.data);
     if (response.data) {
       dispatch(setPayments(response.data.data));
       dispatch(setSuccess('Payments fetched successfully!'));
@@ -117,7 +113,6 @@ export const getPaymentsByOrderId = (orderId: string): AppThunk => async dispatc
       throw new Error('No payments found');
     }
   } catch (error: any) {
-    console.log(error)
     dispatch(setError(error.message));
   } finally {
     dispatch(setBusy(false));

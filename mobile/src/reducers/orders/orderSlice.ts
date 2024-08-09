@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
+import { API_BASE_URL } from '../config/appConfig';
 
 // Define the order type
 type Order = {
@@ -52,7 +52,6 @@ export const orderSlice = createSlice({
     },
     setOrders: (state, action: PayloadAction<Order[]>) => {
       state.orders = action.payload;
-      // console.log(state.orders);
     },
   },
 });
@@ -61,13 +60,11 @@ const { setBusy, setError, setSuccess, setOrders } = orderSlice.actions;
 
 export const createOrders = (orderData: Order): AppThunk => async dispatch => {
   try {
-    console.log(orderData)
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
 
     const response = await axios.post(`${API_BASE_URL}/order/create-order`, orderData);
-     console.log(response.data);
     if (response.data) {
       dispatch(setOrders(response.data));
       dispatch(setSuccess('Order created successfully!'));
@@ -75,7 +72,6 @@ export const createOrders = (orderData: Order): AppThunk => async dispatch => {
       throw new Error('Order creation failed');
     }
   } catch (error: any) {
-    console.log(error)
     dispatch(setError(error.message));
   } finally {
     dispatch(setBusy(false));
@@ -84,12 +80,10 @@ export const createOrders = (orderData: Order): AppThunk => async dispatch => {
 
 export const getOrdersByCustomerId = (customerId: string): AppThunk => async dispatch => {
   try {
-    console.log('getOrdersByCustomerId', customerId);
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
     const response = await axios.get(`${API_BASE_URL}/order/getUsersOrders`, { params: { customer_id: customerId } });
-      //  console.log(response.data.data);
     if (response.data) {
       dispatch(setOrders(response.data.data));
       dispatch(setSuccess('Orders fetched successfully!'));

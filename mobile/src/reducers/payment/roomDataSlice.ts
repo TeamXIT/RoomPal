@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API_BASE_URL from '../config/apiConfig';
+import { API_BASE_URL } from '../config/appConfig';
 
 type Payment = {
   auth_id: string | null;
@@ -141,11 +141,10 @@ export const getPaymentsByStatus = (status: string, userId: string) => async (di
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
-    console.log(status,userId);
+    
     const response = await axios.get(`${API_BASE_URL}/payment/getBystatus`, { params: { status, userId } });
     if (response.data) {
       const payments = response.data.data;
-      console.log(payments);
       dispatch(setPayments(payments));
       dispatch(setSuccess('Payments fetched successfully!'));
 
@@ -156,7 +155,6 @@ export const getPaymentsByStatus = (status: string, userId: string) => async (di
       });
 
       const rooms = await Promise.all(roomPromises);
-      console.log(rooms);
       dispatch(setRooms(rooms));
     } else {
       throw new Error('No payments found');

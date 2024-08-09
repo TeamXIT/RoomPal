@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_BASE_URL } from '../config/appConfig';
 
 
 type Room = {
   roomId: string;
-  _id:string;
+  _id: string;
   userId: string;
   roomName: string;
   details: string[];
@@ -49,7 +49,7 @@ type RoomState = {
     success: string;
   };
   data: Room[];
-  userRooms: Room[]; 
+  userRooms: Room[];
   totalPages: number;
   totalCount: number;
   roomData: Room;
@@ -64,11 +64,11 @@ const initialState: RoomState = {
     success: '',
   },
   data: [],
-  userRooms: [], 
+  userRooms: [],
   totalPages: 0,
   totalCount: 0,
   roomData: {
-    userId:'',
+    userId: '',
     roomName: '',
     details: [],
     availability: 0,
@@ -114,8 +114,8 @@ export const roomSlice = createSlice({
       state.totalPages = action.payload.totalPages;
       state.totalCount = action.payload.totalCount;
     },
-    setUserRooms: (state, action: PayloadAction<Room[]>) => { 
-      state.userRooms = action.payload; 
+    setUserRooms: (state, action: PayloadAction<Room[]>) => {
+      state.userRooms = action.payload;
     },
     addRoom: (state, action: PayloadAction<Room>) => {
       state.data.push(action.payload);
@@ -146,33 +146,30 @@ const customConfig = {
 }
 
 
-export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData,setFavorites, addFavorite, removeFavorite } = roomSlice.actions;
+export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData, setFavorites, addFavorite, removeFavorite } = roomSlice.actions;
 
 
 export const createRoom = (room: Room): AppThunk => async (dispatch) => {
-  console.log(room)
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
   try {
-    // console.log('create params:', room);
     const response = await axios.post(`${API_BASE_URL}/room/create`, {
-        userId: room.userId,
-        roomName: room.roomName,
-        details: room.details,
-        availability: room.availability,
-        roomType: room.roomType,
-        floor: room.floor,
-        rent: room.rent,
-        location: room.location,
-        amenities: room.amenities,
-        gender: room.gender,
-        images: room.images,
-        whatsappLink: room.whatsappLink,
-        telegramLink: room.telegramLink
+      userId: room.userId,
+      roomName: room.roomName,
+      details: room.details,
+      availability: room.availability,
+      roomType: room.roomType,
+      floor: room.floor,
+      rent: room.rent,
+      location: room.location,
+      amenities: room.amenities,
+      gender: room.gender,
+      images: room.images,
+      whatsappLink: room.whatsappLink,
+      telegramLink: room.telegramLink
     });
-    console.log(response)
-    if(response.status ==200){
+    if (response.status == 200) {
       dispatch(addRoom(response.data.data));
       dispatch(setSuccess('Room created successfully.'));
       dispatch(fetchRooms());
@@ -244,35 +241,29 @@ export const fetchUserRooms = (userId: string): AppThunk => async (dispatch) => 
   }
 };
 
-
-
 export const fetchRoomById = (roomId: string): AppThunk => async (dispatch) => {
   dispatch(setBusy(true));
   dispatch(setError(''));
   dispatch(setSuccess(''));
 
   try {
-    console.log('Fetching Room ID:',roomId ); // Ensure roomId is correctly logged
-
     const response = await axios.get(`${API_BASE_URL}/room/getById`, {
-
       params: { room_id: roomId },
-
     });
     if (response?.status === 200) {
-    //   console.log('Room details:', response.data);
-    // console.log(response.data);
-    dispatch(roomData(response.data.data));
-    dispatch(setSuccess('Room fetched successfully.'));
-  }else {
-    dispatch(setError('Failed to fetch room details.'));
-  }
+      //   console.log('Room details:', response.data);
+      // console.log(response.data);
+      dispatch(roomData(response.data.data));
+      dispatch(setSuccess('Room fetched successfully.'));
+    } else {
+      dispatch(setError('Failed to fetch room details.'));
+    }
   } catch (error) {
 
-    
+
 
     console.error(error);
-   dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
+    dispatch(setError(error.response?.data?.message || error.message || 'Fetching room failed'));
   } finally {
     dispatch(setBusy(false));
   }
@@ -296,23 +287,23 @@ export const modifyRoomDetails = (roomId: string, updateData: Partial<Room>): Ap
   }
 };
 
-export const addToFavorites = ( roomId: string,): AppThunk => async (dispatch) => {
+export const addToFavorites = (roomId: string,): AppThunk => async (dispatch) => {
   try {
     dispatch(setBusy(true));
     dispatch(setError(''));
     dispatch(setSuccess(''));
-    console.log('user id in api:',roomId)
+    console.log('user id in api:', roomId)
 
     const userId = await AsyncStorage.getItem('userId');
     if (!userId) {
       throw new Error('User ID not found');
     }
-   
+
     console.log('User ID:', userId);
     console.log('Room ID:', roomId);
 
-   console.log('userid:',userId)
-    const response = await axios.put(`${API_BASE_URL}/user/addToFavourites?userId=${userId}&roomId=${roomId}`,  { userId, roomId }, customConfig);
+    console.log('userid:', userId)
+    const response = await axios.put(`${API_BASE_URL}/user/addToFavourites?userId=${userId}&roomId=${roomId}`, { userId, roomId }, customConfig);
     console.log('add response:', response);
 
     if (response?.status === 200) {
@@ -342,7 +333,7 @@ export const removeFromFavorites = (roomId: string): AppThunk => async (dispatch
       throw new Error('User ID not found');
     }
 
-    const response = await axios.put(`${API_BASE_URL}/user/removeFromFavourites?userId=${userId}&roomId=${roomId}`,  {   userId, roomId  });
+    const response = await axios.put(`${API_BASE_URL}/user/removeFromFavourites?userId=${userId}&roomId=${roomId}`, { userId, roomId });
     console.log('remove response:', response);
 
     if (response?.status === 200) {
@@ -352,7 +343,7 @@ export const removeFromFavorites = (roomId: string): AppThunk => async (dispatch
 
     }
   } catch (error) {
-    console.log("remove error:",error)
+    console.log("remove error:", error)
 
     dispatch(setError(error?.response?.data?.message || error?.message || 'Removing from favorites failed.'));
   } finally {

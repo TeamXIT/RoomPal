@@ -1,2 +1,0 @@
-export const X_CLIENT_ID= 'TEST10123844e567d51edbee7c8a8cec44832101 '
-export const X_CLIENT_SECRET= 'cfsk_ma_test_42383a0c508319c6afbaaa8518324565_1b53e05d'

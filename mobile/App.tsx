@@ -30,6 +30,7 @@ import TransactionHistory from './src/Screens/Landing/TransactionHistory';
 import BookingHistory from './src/Screens/Landing/BookingHistory';
 import YourRooms from './src/Screens/Landing/YourRooms';
 import Favorites from './src/Screens/Landing/Favorites';
+import MapsScreen from './src/Screens/Landing/MapsScreen';
 
 
 const Stack = createStackNavigator();
@@ -58,49 +59,46 @@ const Landing = () => (
     <Stack.Screen name="RoomCreateScreen" component={RoomCreateScreen} />
     <Stack.Screen name="ListOfRooms" component={ListOfRooms} />
     <Stack.Screen name="FilterScreen" component={FilterScreen} />
-    <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }}/>
-    <Stack.Screen name="MakeAnOrder" component={MakeAnOrder}/>
-
+    <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: true }} />
+    <Stack.Screen name="MakeAnOrder" component={MakeAnOrder} />
     <Stack.Screen name="EditProfile" component={EditProfile} options={{
-        headerShown: true,
-        headerStyle: {
-          backgroundColor: '#f5f5f5', 
-        },
-        headerTintColor: "#814ABF",  
-      }}/>
-
-
-    <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }}/>
-    <Stack.Screen name="Favorites" component={Favorites} options={{ 
-      headerShown: true ,
+      headerShown: true,
       headerStyle: {
-        backgroundColor: '#f5f5f5', 
+        backgroundColor: '#f5f5f5',
       },
-      headerTintColor: "#814ABF"  }}/>
-
-
-
-    
-    <Stack.Screen name="BookingHistory" 
-    component={BookingHistory}  
-    options={{
+      headerTintColor: "#814ABF",
+    }} />
+    <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerShown: true }} />
+    <Stack.Screen name="Favorites" component={Favorites} options={{
+      headerShown: true,
+      headerStyle: {
+        backgroundColor: '#f5f5f5',
+      },
+      headerTintColor: "#814ABF"
+    }} />
+    <Stack.Screen name="BookingHistory"
+      component={BookingHistory}
+      options={{
         headerShown: true,
         headerStyle: {
-          backgroundColor: '#f5f5f5', 
+          backgroundColor: '#f5f5f5',
         },
-        headerTintColor: primaryColor,  
-      }}/>
-     <Stack.Screen name="YourRooms" 
-    component={YourRooms}  
-    options={{
+        headerTintColor: primaryColor,
+      }} />
+    <Stack.Screen name="YourRooms"
+      component={YourRooms}
+      options={{
         headerShown: true,
         headerStyle: {
-          backgroundColor: '#f5f5f5', 
+          backgroundColor: '#f5f5f5',
         },
-        headerTintColor: "#814ABF",  
-      }}/>
-    
-
+        headerTintColor: "#814ABF",
+      }} />
+    <Stack.Screen name="MapsScreen"
+      component={MapsScreen}
+      options={{
+        headerShown: false,
+      }} />
   </Stack.Navigator>
 );
 

@@ -1,13 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View,Text,TextInput,TouchableOpacity, Image,ScrollView,Alert,PermissionsAndroid,Platform,Linking,} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, Platform, } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Slider from 'react-native-slider';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Geolocation from 'react-native-geolocation-service';
 import { request, PERMISSIONS } from 'react-native-permissions';
-import ProfileComponent from '../molecule/ProfileComponent';
-import { primaryColor, styles } from '../Styles/Styles'; // Ensure this is correctly imported
-import TeamXLogoImage from '../molecule/TeamXLogoImage';
+import ProfileComponent from '../molecule/ProfileComponent'; // Ensure this is correctly imported
 import TeamXErrorText from '../molecule/TeamXErrorText';
 import { useDispatch } from 'react-redux';
 import { createRoom } from '../../reducers/room/roomSlice';
@@ -15,11 +12,10 @@ import { RadioButton } from 'react-native-paper';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const RoomCreateScreen = ({ setTabBarVisibility }) => {
+const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState([]);;
   const [detail, setDetail] = useState('');
   const [availability, setAvailability] = useState(1);
   const [amenities, setAmenities] = useState([
@@ -51,7 +47,6 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const [longitude, setLongitude] = useState(0);
   const [roomImages, setRoomImages] = useState([]); // State to hold room images URI
   const [imagePaths, setImagePaths] = useState([]); // State to hold image file paths
-
   const [rent, setRent] = useState(15000);
   const [floor, setFloor] = useState(1);
   const [roomType, setRoomType] = useState(''); // State for room type
@@ -81,10 +76,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const [userId, setUserId] = useState('');
   // const [lookingForFemale, setLookingForFemale] = useState(false);
   // const [lookingForFamily, setLookingForFamily] = useState(false);
-
-
   const [showMap, setShowMap] = useState(false); // State to control map visibility
-
   const detailsRef = useRef(null);
   const rentRef = useRef(null);
   const floorRef = useRef(null);
@@ -93,13 +85,12 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const addressRef = useRef(null);
 
   AsyncStorage.getItem('userId').then(value => {
-    console.log(value);
-  setUserId(value);
-});
+    setUserId(value);
+  });
   const handleSubmitData = async () => {
     try {
       let hasError = false;
-      
+
       if (!roomName) {
         setRoomNameError('Please provide your room name');
         hasError = true;
@@ -113,101 +104,93 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
         setDetails(detail);
         setDetailsError('');
       }
-    if (availability === 0) {
-      setAvailabilityError('Please select a capacity of at least 1');
-      hasError = true;
-    } else {
-      setAvailability(availability)
-      setAvailabilityError('');
-    }
+      if (availability === 0) {
+        setAvailabilityError('Please select a capacity of at least 1');
+        hasError = true;
+      } else {
+        setAvailability(availability)
+        setAvailabilityError('');
+      }
 
-    if (!whatsappLink) {
-      setWhatsappLinkError('Please provide your whatsapp link');
-      hasError = true;
-    } else {
-      setWhatsappLinkError('');
-    }
-    if (!telegramLink) {
-      setTelegramLinkError('Please provide your telegram link');
-      hasError = true;
-    } else {
-      setTelegramLinkError('');
-    }
-    if (!address) {
-      setAddressError('Please provide your address');
-      hasError = true;
-    } else {
-      setAddressError('');
-    }
-    // if (!location) {
-    //   setLocationError('Please provide your location');
-    //   hasError = true;
-    // } else {
-    //   setLocationError('');
-    // }
-    if (!rent) {
-      setRentError('Please provide your rent');
-      hasError = true;
-    } else {
-      setRentError('');
-    }
-    if (!floor) {
-      setFloorError('Please provide your floor');
-      hasError = true;
-    } else {
-      setFloorError('');
-    }
-    if (!roomType) {
-      setRoomTypeError('Please select your room type');
-      hasError = true;
-    } else {
-      setRoomTypeError('');
-    }
-    location = { lat: latitude, lon: longitude };
-    
+      if (!whatsappLink) {
+        setWhatsappLinkError('Please provide your whatsapp link');
+        hasError = true;
+      } else {
+        setWhatsappLinkError('');
+      }
+      if (!telegramLink) {
+        setTelegramLinkError('Please provide your telegram link');
+        hasError = true;
+      } else {
+        setTelegramLinkError('');
+      }
+      if (!address) {
+        setAddressError('Please provide your address');
+        hasError = true;
+      } else {
+        setAddressError('');
+      }
+      // if (!location) {
+      //   setLocationError('Please provide your location');
+      //   hasError = true;
+      // } else {
+      //   setLocationError('');
+      // }
+      if (!rent) {
+        setRentError('Please provide your rent');
+        hasError = true;
+      } else {
+        setRentError('');
+      }
+      if (!floor) {
+        setFloorError('Please provide your floor');
+        hasError = true;
+      } else {
+        setFloorError('');
+      }
+      if (!roomType) {
+        setRoomTypeError('Please select your room type');
+        hasError = true;
+      } else {
+        setRoomTypeError('');
+      }
+      location = { lat: latitude, lon: longitude };
 
-    const amenitiesObj = {
-      "wifi": amenities?.find(a => a.name === 'Wi-Fi')?.checked || false,
-      "airCondition": amenities?.find(a => a.name === 'Air Conditioning')?.checked || false,
-      "heater": amenities?.find(a => a.name === 'Heater')?.checked || false,
-      "washer": amenities?.find(a => a.name === 'Washer')?.checked || false,
-      "dryer": amenities?.find(a => a.name === 'Dryer')?.checked || false,
-      "kitchen": amenities?.find(a => a.name === 'Kitchen')?.checked || false,
-      "parking": amenities?.find(a => a.name === 'Parking')?.checked || false,
-      "gym": amenities?.find(a => a.name === 'Gym')?.checked || false,
-      "pool": amenities?.find(a => a.name === 'Pool')?.checked || false,
-    };
+      const amenitiesObj = {
+        "wifi": amenities?.find(a => a.name === 'Wi-Fi')?.checked || false,
+        "airCondition": amenities?.find(a => a.name === 'Air Conditioning')?.checked || false,
+        "heater": amenities?.find(a => a.name === 'Heater')?.checked || false,
+        "washer": amenities?.find(a => a.name === 'Washer')?.checked || false,
+        "dryer": amenities?.find(a => a.name === 'Dryer')?.checked || false,
+        "kitchen": amenities?.find(a => a.name === 'Kitchen')?.checked || false,
+        "parking": amenities?.find(a => a.name === 'Parking')?.checked || false,
+        "gym": amenities?.find(a => a.name === 'Gym')?.checked || false,
+        "pool": amenities?.find(a => a.name === 'Pool')?.checked || false,
+      };
 
-    if (!hasError) {
-      const images = roomImages; 
-      const gender = lookingFor;
-      console.log(details)
-      await dispatch(createRoom({
-        userId,
-        roomName,
-        details:details,
-        availability,
-        roomType,
-        floor,
-        rent,
-        location:{lat:latitude, lon:longitude},
-        amenities: amenitiesObj,
-        gender,
-        images,
-        whatsappLink,
-        telegramLink,
-      }));
-
-      // Alert.alert('Success', 'Room created successfully');
-      // navigation.navigate() // Uncomment and implement navigation if needed
+      if (!hasError) {
+        const images = roomImages;
+        const gender = lookingFor;
+        await dispatch(createRoom({
+          userId,
+          roomName,
+          details: details,
+          availability,
+          roomType,
+          floor,
+          rent,
+          location: { lat: latitude, lon: longitude },
+          amenities: amenitiesObj,
+          gender,
+          images,
+          whatsappLink,
+          telegramLink,
+        }));
+      }
     }
-  }
-    
-  catch (error) {
-    console.error('Error creating room:', error);
-    Alert.alert('Error', 'Failed to create room. Please try again later.');
-  }
-    
+    catch (error) {
+      Alert.alert('Error', 'Failed to create room. Please try again later.');
+    }
   };
 
   const requestLocationPermission = async () => {
@@ -233,20 +216,10 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
       );
       return;
     }
-
-    Geolocation.getCurrentPosition(
-      position => {
-        const { latitude, longitude } = position.coords;
-        const locationString = `${latitude}, ${longitude}`;
-        setLocation(locationString);
-      },
-      error => {
-        Alert.alert('Error', 'Unable to retrieve your location.');
-        console.error(error);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-    );
+    navigation.navigate('MapsScreen');
   };
+
+
   const handleAmenityChange = index => {
     const updatedAmenities = [...amenities];
     updatedAmenities[index].checked = !updatedAmenities[index].checked;
@@ -267,7 +240,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
   const handleAddRoomImage = async (imageUri) => {
     try {
       const base64Image = await RNFS.readFile(imageUri, 'base64');
-     
+
 
       setRoomImages([...roomImages, base64Image]);
       setImagePaths([...imagePaths, imageUri]);
@@ -323,7 +296,7 @@ const RoomCreateScreen = ({ setTabBarVisibility }) => {
       );
     }
 
-  return (
+    return (
       <ScrollView style={styles.imageContainer}>
         <View style={{ justifyContent: 'center', alignSelf: 'center' }}>
           <ProfileComponent setImageUri={handleAddRoomImage} />

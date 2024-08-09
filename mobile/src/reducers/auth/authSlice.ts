@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API_BASE_URL from '../config/apiConfig';
 import { AppThunk } from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_BASE_URL } from '../config/appConfig';
 
 type AuthState = {
   screen: {

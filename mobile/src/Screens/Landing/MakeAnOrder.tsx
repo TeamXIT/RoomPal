@@ -10,7 +10,7 @@ import {
   CFThemeBuilder,
 } from 'cashfree-pg-api-contract';
 
-import {X_CLIENT_ID, X_CLIENT_SECRET} from '../../reducers/config/cashfree';
+import {X_CLIENT_ID, X_CLIENT_SECRET} from '../../reducers/config/appConfig';
 import RoomCard from '../molecule/roomCard';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';

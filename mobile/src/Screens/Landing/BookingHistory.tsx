@@ -4,15 +4,15 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Dimensions
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../reducers/store';
 import axios from 'axios';
-import API_BASE_URL from '../../reducers/config/apiConfig';
 import { getOrdersByCustomerId } from '../../reducers/orders/orderSlice';
+import { API_BASE_URL } from '../../reducers/config/appConfig';
 const { width } = Dimensions.get('window');
 const BookingHistory = () => {
   const dispatch = useDispatch();
   const [userId, setUserId] = useState('');
-  const [roomIds, setRoomIds] = useState([]);
+  const [roomIds, setRoomIds] = useState<any[]>([]);
   const orderState = useSelector((state: RootState) => state.orders);
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -47,7 +47,6 @@ const BookingHistory = () => {
     if (orderState.orders.length > 0) {
       const ids = orderState.orders.map(order => order.room_id);
       setRoomIds(ids);
-      console.log('Room IDs:', ids);
     }
   }, [orderState.orders]);
 
@@ -83,11 +82,11 @@ const BookingHistory = () => {
               <Text style={styles.bookedLabel}>Booked</Text>
             </View>
             <View style={styles.cardContent}>
-            <Image
-                            source={{ uri: `data:image/png;base64,${room.images[0]}` }}
-                            style={styles.image}
-                            onError={() => console.log('Image failed to load')}
-                        />
+              <Image
+                source={{ uri: `data:image/png;base64,${room.images[0]}` }}
+                style={styles.image}
+                onError={() => console.log('Image failed to load')}
+              />
               <View style={styles.infoContainer}>
                 <Text style={styles.roomName}>{room.roomName}</Text>
                 <View style={styles.detailsContainer}>
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 12,
     marginRight: 20,
-    
+
   },
   bookedLabelContainer: {
     position: 'absolute',
