@@ -538,17 +538,16 @@ const RoomCreateScreen = ({ route,navigation, setTabBarVisibility }) => {
         <Text style={styles.label}>Latitude</Text>
         <View style={styles.coordinatesContainer}>
           <TextInput
-            style={[styles.input, { flex: 1 }]}
-            value={latitude}
-            onChangeText={setLatitude}
+            style={[styles.input, { flex: 1 }]}            
+            value={` ${latitude ? getLatitudeDirection(parseFloat(latitude)) : 'Enter latitude'}`}
+            onChangeText={(text) => setLatitude(text)}
             keyboardType="numeric"
             placeholder="Enter latitude"
             onFocus={() => setTabBarVisibility(false)}
             onBlur={() => setTabBarVisibility(true)}
+            editable={false}
           />
-          <Text style={styles.coordinateDirection}>
-            {latitude ? getLatitudeDirection(parseFloat(latitude)) : 'N/S'}
-          </Text>
+          <Text style={styles.coordinateDirection}>N/S</Text>
         </View>
       </View>
 
@@ -556,17 +555,17 @@ const RoomCreateScreen = ({ route,navigation, setTabBarVisibility }) => {
         <Text style={styles.label}>Longitude</Text>
         <View style={styles.coordinatesContainer}>
           <TextInput
-            style={[styles.input, { flex: 1 }]}
-            value={longitude}
-            onChangeText={setLongitude}
+            style={[styles.input, { flex: 1 }]}            
+            value={` ${longitude ? getLatitudeDirection(parseFloat(longitude)) : 'Enter longitude'}`}            
+            onChangeText={(text) => setLatitude(text)}
             keyboardType="numeric"
             placeholder="Enter longitude"
             onFocus={() => setTabBarVisibility(false)}
             onBlur={() => setTabBarVisibility(true)}
+            editable={false}
+
           />
-          <Text style={styles.coordinateDirection}>
-            {longitude ? getLongitudeDirection(parseFloat(longitude)) : 'E/W'}
-          </Text>
+          <Text style={styles.coordinateDirection}>E/W</Text>
         </View>
       </View>
 
