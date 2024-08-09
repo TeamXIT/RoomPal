@@ -440,6 +440,8 @@ detailsButtonText: {
     position: 'absolute',
     top: -3,
     right: 15,
+    height:30,
+    width:30,
   },
   deleteIcon: {
     width: 20,
@@ -454,6 +456,7 @@ detailsButtonText: {
     marginLeft: 10,
     fontSize: 16,
     color: '#814ABF',
+
   },
   searchBarContainer: {
     flexDirection: 'row',
