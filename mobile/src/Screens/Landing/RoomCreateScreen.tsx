@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, Platform, } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Slider from 'react-native-slider';
@@ -11,8 +11,9 @@ import { createRoom } from '../../reducers/room/roomSlice';
 import { RadioButton } from 'react-native-paper';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { styles } from '../Styles/Styles';
 
-const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
+const RoomCreateScreen = ({ route,navigation, setTabBarVisibility }) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
   const [details, setDetails] = useState([]);;
@@ -83,6 +84,14 @@ const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
   const whatsappLinkRef = useRef(null);
   const telegramLinkRef = useRef(null);
   const addressRef = useRef(null);
+
+  useEffect(() => {
+    if (route.params) {
+      const { latitude, longitude } = route.params;
+      setLatitude(latitude || 0);
+      setLongitude(longitude || 0);
+    }
+  }, [route.params]);
 
   AsyncStorage.getItem('userId').then(value => {
     setUserId(value);
