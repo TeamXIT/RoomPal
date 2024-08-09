@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert, Platform, } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Slider from 'react-native-slider';
@@ -11,8 +11,9 @@ import { createRoom } from '../../reducers/room/roomSlice';
 import { RadioButton } from 'react-native-paper';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { styles } from '../Styles/Styles';
 
-const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
+const RoomCreateScreen = ({ route,navigation, setTabBarVisibility }) => {
   const dispatch = useDispatch();
   const [roomName, setRoomName] = useState('');
   const [details, setDetails] = useState([]);;
@@ -83,6 +84,14 @@ const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
   const whatsappLinkRef = useRef(null);
   const telegramLinkRef = useRef(null);
   const addressRef = useRef(null);
+
+  useEffect(() => {
+    if (route.params) {
+      const { latitude, longitude } = route.params;
+      setLatitude(latitude || 0);
+      setLongitude(longitude || 0);
+    }
+  }, [route.params]);
 
   AsyncStorage.getItem('userId').then(value => {
     setUserId(value);
@@ -529,17 +538,16 @@ const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
         <Text style={styles.label}>Latitude</Text>
         <View style={styles.coordinatesContainer}>
           <TextInput
-            style={[styles.input, { flex: 1 }]}
-            value={latitude}
-            onChangeText={setLatitude}
+            style={[styles.input, { flex: 1 }]}            
+            value={` ${latitude ? getLatitudeDirection(parseFloat(latitude)) : 'Enter latitude'}`}
+            onChangeText={(text) => setLatitude(text)}
             keyboardType="numeric"
             placeholder="Enter latitude"
             onFocus={() => setTabBarVisibility(false)}
             onBlur={() => setTabBarVisibility(true)}
+            editable={false}
           />
-          <Text style={styles.coordinateDirection}>
-            {latitude ? getLatitudeDirection(parseFloat(latitude)) : 'N/S'}
-          </Text>
+          <Text style={styles.coordinateDirection}>N/S</Text>
         </View>
       </View>
 
@@ -547,17 +555,17 @@ const RoomCreateScreen = ({ navigation, setTabBarVisibility }) => {
         <Text style={styles.label}>Longitude</Text>
         <View style={styles.coordinatesContainer}>
           <TextInput
-            style={[styles.input, { flex: 1 }]}
-            value={longitude}
-            onChangeText={setLongitude}
+            style={[styles.input, { flex: 1 }]}            
+            value={` ${longitude ? getLatitudeDirection(parseFloat(longitude)) : 'Enter longitude'}`}            
+            onChangeText={(text) => setLatitude(text)}
             keyboardType="numeric"
             placeholder="Enter longitude"
             onFocus={() => setTabBarVisibility(false)}
             onBlur={() => setTabBarVisibility(true)}
+            editable={false}
+
           />
-          <Text style={styles.coordinateDirection}>
-            {longitude ? getLongitudeDirection(parseFloat(longitude)) : 'E/W'}
-          </Text>
+          <Text style={styles.coordinateDirection}>E/W</Text>
         </View>
       </View>
 
