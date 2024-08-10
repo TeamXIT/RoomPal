@@ -521,7 +521,7 @@ const RoomCreateScreen = ({ route,navigation, setTabBarVisibility }) => {
         <TeamXErrorText errorText={addressError} />
       </View>
 
-      <View style={styles.inputGroup}>
+      <View style={[styles.inputGroup,{marginBottom:-20}]}>
         <Text style={styles.label}>Location</Text>
         <TouchableOpacity
           style={[styles.button, { marginBottom: 10, width: 150, height: 40 }]}

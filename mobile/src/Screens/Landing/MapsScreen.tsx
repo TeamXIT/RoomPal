@@ -1,12 +1,84 @@
-import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, View, Text, Button } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, StyleSheet, View, Text, Button, Alert, Platform, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { PermissionsAndroid } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
+import { primaryColor } from "../Styles/Styles";
 
-const MapsScreen = ({navigation}) => {
+const MapsScreen = ({navigation,route}) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const { latitude, longitude } = route.params || {};
+
     const [selectedLocation, setSelectedLocation] = useState({
         latitude: 37.78825,
         longitude: -122.4324,
     });
+
+    const [region, setRegion] = useState({
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    });
+
+    useEffect(() => {
+        setIsLoading(true); // Start loading when the component mounts
+
+        requestLocationPermission();
+    }, []);
+     
+    const requestLocationPermission = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: "Location Access Permission",
+                        message: "We need to access your location to show your current position on the map.",
+                        buttonNeutral: "Ask Me Later",
+                        buttonNegative: "Cancel",
+                        buttonPositive: "OK"
+                    }
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    getCurrentLocation();
+                } else {
+                    Alert.alert('Permission Denied', 'Location permission is required to use this feature.');
+                    setIsLoading(false);
+                }
+            } catch (err) {
+                console.warn(err);
+                setIsLoading(false);
+            }
+        } else {
+            getCurrentLocation();
+        }
+    };
+
+    const getCurrentLocation = () => {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+
+                setSelectedLocation({ latitude, longitude });
+                setRegion({
+                    latitude,
+                    longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                });
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 500);
+            },
+            (error) => {
+
+                Alert.alert('Error', 'Failed to get current location');
+                setIsLoading(false);
+            },
+            { enableHighAccuracy: true, timeout: 20000 }
+        );
+    };
 
     // Handle map tap to set marker location
     const handleMapPress = (e) => {
@@ -20,27 +92,46 @@ const MapsScreen = ({navigation}) => {
         setSelectedLocation({ latitude, longitude });
     };
 
-    const handleSaveLocation = () => {
-      navigation.navigate('SelectLocation', {
-          latitude: selectedLocation.latitude,
-          longitude: selectedLocation.longitude,
-      });
-  };
+  const handleSaveLocation = () => {
+    Alert.alert(
+        'Confirm Location',
+        `Latitude: ${selectedLocation.latitude}\nLongitude: ${selectedLocation.longitude}`,
+        [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'Save',
+                onPress: () => {
+                    navigation.navigate('RoomCreateScreen', {
+                        latitude: selectedLocation.latitude,
+                        longitude: selectedLocation.longitude,
+                    });
+                },
+            },
+        ]
+    );
+};
+
+if (isLoading) {
+    return (
+        <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={primaryColor} />
+        </View>
+    );
+}
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <MapView
                     style={styles.mapStyle}
-                    initialRegion={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
+                    region={region} // Use region to center the map
+                    showsUserLocation={true} // Show the user's location
                     customMapStyle={mapStyle}
                     onPress={handleMapPress} // Update location on map tap
-                >
+                  >
                     <Marker
                         draggable
                         coordinate={selectedLocation}
@@ -54,7 +145,10 @@ const MapsScreen = ({navigation}) => {
                     <Text style={styles.coordinateText}>Latitude: {selectedLocation.latitude}</Text>
                     <Text style={styles.coordinateText}>Longitude: {selectedLocation.longitude}</Text>
                 </View>
-                <Button title="Save Location" onPress={handleSaveLocation} />
+                {/* <Button title="Save Location" onPress={handleSaveLocation} /> */}
+                <TouchableOpacity style={styles.saveButton} onPress={handleSaveLocation}>
+                    <Image source={require('../../Screens/Images/ic_save.png')} style={styles.saveIcon} />
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -170,5 +264,27 @@ const styles = StyleSheet.create({
     },
     coordinateText: {
         color: 'white',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    saveButton: {
+        position: 'absolute',
+        bottom: 80,
+        right: 20,
+        backgroundColor: primaryColor,
+        borderRadius: 30, // Make the button round
+        width: 60, // Set width for the button
+        height: 60, // Set height for the button
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5,
+    },
+    saveIcon: {
+        width: 30, // Adjust the icon size
+        height: 30, // Adjust the icon size
+        tintColor: '#FFF', // Optional: Tint the image color if needed
     },
 });
