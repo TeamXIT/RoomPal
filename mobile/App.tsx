@@ -31,6 +31,7 @@ import BookingHistory from './src/Screens/Landing/BookingHistory';
 import YourRooms from './src/Screens/Landing/YourRooms';
 import Favorites from './src/Screens/Landing/Favorites';
 import MapsScreen from './src/Screens/Landing/MapsScreen';
+import SelectLocation from './src/Screens/Landing/SelectLocation';
 
 
 const Stack = createStackNavigator();
@@ -99,7 +100,14 @@ const Landing = () => (
       options={{
         headerShown: false,
       }} />
+      <Stack.Screen name="SelectLocation"
+      component={SelectLocation}
+      options={{
+        headerShown: false,
+      }} />
   </Stack.Navigator>
+  
+
 );
 
 function App(): React.ReactElement {
