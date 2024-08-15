@@ -31,8 +31,6 @@ import BookingHistory from './src/Screens/Landing/BookingHistory';
 import YourRooms from './src/Screens/Landing/YourRooms';
 import Favorites from './src/Screens/Landing/Favorites';
 import MapsScreen from './src/Screens/Landing/MapsScreen';
-import SelectLocation from './src/Screens/Landing/SelectLocation';
-
 
 const Stack = createStackNavigator();
 const primaryColor = '#814ABF';
@@ -41,7 +39,7 @@ const primaryColor = '#814ABF';
 const AuthStack = createStackNavigator();
 
 const Authn = () => (
-  <Stack.Navigator initialRouteName="Intro" headerMode="none">
+  <Stack.Navigator initialRouteName="Intro" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Intro" component={RoomPalIntro} />
     <Stack.Screen name="LoginScreen" component={LoginScreen} />
     <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -54,7 +52,8 @@ const Authn = () => (
 );
 
 const Landing = () => (
-  <Stack.Navigator initialRouteName="Dashboard" headerMode="none">
+  
+  <Stack.Navigator initialRouteName="Dashboard" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Dashboard" component={Dashboard} />
     <Stack.Screen name="RoomDetails" component={RoomDetails} />
     <Stack.Screen name="RoomCreateScreen" component={RoomCreateScreen} />
@@ -100,21 +99,15 @@ const Landing = () => (
       options={{
         headerShown: false,
       }} />
-      <Stack.Screen name="SelectLocation"
-      component={SelectLocation}
-      options={{
-        headerShown: false,
-      }} />
+      
   </Stack.Navigator>
-  
-
 );
 
 function App(): React.ReactElement {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Authn" headerMode="none">
+        <Stack.Navigator initialRouteName="Authn" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Authn" component={Authn} />
           <Stack.Screen name="Landing" component={Landing} />
         </Stack.Navigator>
