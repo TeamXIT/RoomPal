@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Alert,Text } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker'; // Import image picker library
+import {styles} from '../Styles/Styles'
 
 const ProfileComponent = ({ setImageUri }) => {
     const handleSelectGallery = () => {
@@ -34,26 +35,12 @@ const ProfileComponent = ({ setImageUri }) => {
 
     return (
        
-        <TouchableOpacity onPress={handleSelectGallery} style={styles.smallbtn}>
+        <TouchableOpacity onPress={handleSelectGallery} style={styles.imagesmallbtn}>
             {/* <Image style={{ height: 35, width: 35 }} source={require('../Images/ic_imageUpload.png')} tintColor={'white'} /> */}
             <Text style={{color:'#FFFFFF',fontSize:16}}>Browse Image</Text>
         </TouchableOpacity>
         
     );
 };
-
-const styles = StyleSheet.create({
-    smallbtn: {
-        height: 40,
-        width: 200,
-        backgroundColor: '#814ABF',
-        borderRadius: 5,
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom:10
-        
-    },
-});
 
 export default ProfileComponent;

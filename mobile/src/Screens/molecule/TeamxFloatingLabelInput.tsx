@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Animated, Image } from "react-native";
+import {styles} from '../Styles/Styles'
 
 const TeamxFloatingLabelInput = ({ label, secureTextEntry, icon, ...props }) => {
   const [value, setValue] = useState("");
@@ -36,13 +37,13 @@ const TeamxFloatingLabelInput = ({ label, secureTextEntry, icon, ...props }) => 
   };
 
   return (
-    <View style={[styles.container, props.style]}>
-      <View style={styles.inputContainer}>
-        {icon && <Image source={icon} style={styles.icon} />}
+    <View style={[styles.floatingcontainer, props.style]}>
+      <View style={styles.floatinginputContainer}>
+        {icon && <Image source={icon} style={styles.floatingicon} />}
         <Animated.Text style={labelStyle}>{label}</Animated.Text>
         <TextInput
           {...props}
-          style={styles.input}
+          style={styles.floatinginput}
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChangeText={handleChangeText}
@@ -55,33 +56,5 @@ const TeamxFloatingLabelInput = ({ label, secureTextEntry, icon, ...props }) => 
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 10,
-    width: "100%",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#42e0d1",
-    marginBottom: 10,
-    position: "relative",
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    fontSize: 16,
-    color: "#fff",
-    paddingHorizontal: 10,
-    marginTop: 15, 
-  },
-  icon: {
-    width: 24,
-    height: 24,
-    marginRight: 10,
-    tintColor: "#fff",
-  },
-});
 
 export default TeamxFloatingLabelInput;

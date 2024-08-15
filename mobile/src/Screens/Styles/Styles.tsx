@@ -3,6 +3,12 @@ import { grey100 } from "react-native-paper/lib/typescript/styles/themes/v2/colo
 
 
 const primaryColor = '#814ABF';
+const secondaryColor = '#f3e8ff';//'#F2E8C6';
+
+// FontSizes
+const xSmallSize = 14;
+const ySmallSize = 16;
+const smallSize = 18;
 
 const styles = StyleSheet.create({
 
@@ -31,23 +37,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   submitButton: {
     backgroundColor: primaryColor,
     paddingVertical: 14,
@@ -71,7 +60,7 @@ const styles = StyleSheet.create({
   },
   radioLabel: {
     color: '#000',
-    fontSize: 18,
+    fontSize: smallSize,
     marginRight: 20,
   },
   radioCircle: {
@@ -120,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: primaryColor,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: smallSize,
     color: 'white',
   },
   buttonTextActive: {
@@ -137,18 +126,18 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   loginRedirectText: {
-    fontSize: 18,
+    fontSize: smallSize,
     color: '#000',
   },
   loginRedirectLink: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: smallSize,
     color: primaryColor,
     marginLeft: 5,
   },
   errorText: {
     color: 'red',
-    fontSize: 14,
+    fontSize: xSmallSize,
   },
   checkBoxContainer: {
     flexDirection: 'row',
@@ -166,10 +155,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   checkedCheckbox: {
-    backgroundColor: '#814ABF',
+    backgroundColor: primaryColor,
   },
   checkmark: {
-    fontSize: 14,
+    fontSize: xSmallSize,
     fontWeight: 'bold',
     color: '#fff',
   },
@@ -215,7 +204,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   introTextStyle: {
-    fontSize: 18,
+    fontSize: smallSize,
     color: '#666',
     textAlign: 'center',
     paddingLeft: 30,
@@ -224,7 +213,7 @@ const styles = StyleSheet.create({
   },
   introTitleStyle: {
     fontSize: 30,
-    color: '#814ABF',
+    color: primaryColor,
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 20,
@@ -245,7 +234,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   activeDotStyle: {
-    backgroundColor: '#814ABF', // Active dot color
+    backgroundColor: primaryColor, // Active dot color
     width: 14,
     height: 14,
     borderRadius: 7,
@@ -288,7 +277,7 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: xSmallSize,
   },
   card: {
     backgroundColor: '#FFFFFF',
@@ -322,31 +311,31 @@ const styles = StyleSheet.create({
     left:-15
 },
 name: {
-  fontSize: 18,
+  fontSize: smallSize,
   fontWeight: 'bold',
   color: '#000',
 },
 location: {
-  fontSize: 16,
+  fontSize: ySmallSize,
   color: '#666',
 },
 rent: {
-  fontSize: 16,
+  fontSize: ySmallSize,
   fontWeight: 'bold',
   color: '#000',
 },
 lookingFor: {
-  fontSize: 16,
+  fontSize: ySmallSize,
   fontWeight: 'bold',
   color: '#000',
 },
 match: {
-  fontSize: 16,
+  fontSize: ySmallSize,
   color: '#666',
   marginTop: 5,
 },
 distance: {
-  fontSize: 16,
+  fontSize: ySmallSize,
   color: '#000',
   fontWeight: 'bold',
 },
@@ -360,7 +349,7 @@ detailsButton: {
 },
 detailsButtonText: {
   color: '#fff',
-  fontSize: 14,
+  fontSize: xSmallSize,
   fontWeight: 'bold',
 },
   createcontainer: {
@@ -381,15 +370,15 @@ detailsButtonText: {
   },
   input: {
     height: 50,
-    borderColor: '#000',
+    borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 10,
-    fontSize: 18,
+    fontSize: smallSize,
     color: '#000',
   },
   linkText: {
-    fontSize: 18,
+    fontSize: smallSize,
     color: '#000',
   },
 
@@ -409,10 +398,10 @@ detailsButtonText: {
   },
   createbuttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: smallSize,
   },
   imageContainer: {
-    borderColor: 'black',
+    borderColor: '#ccc',
     borderWidth: 2,
     borderRadius: 10,
     paddingBottom: 20,
@@ -454,8 +443,8 @@ detailsButtonText: {
   },
   coordinateDirection: {
     marginLeft: 10,
-    fontSize: 16,
-    color: '#814ABF',
+    fontSize: ySmallSize,
+    color: primaryColor,
 
   },
   searchBarContainer: {
@@ -490,7 +479,7 @@ detailsButtonText: {
   },
   searchinput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: ySmallSize,
     color: '#000',
   },
   noResultsContainer: {
@@ -500,7 +489,7 @@ detailsButtonText: {
     padding: 20,
   },
   noResultsText: {
-    fontSize: 18,
+    fontSize: smallSize,
     color: '#666',
     textAlign: 'center',
   },
@@ -519,21 +508,17 @@ detailsButtonText: {
   },
   resetButton: {
     color: primaryColor,
-    fontSize: 16,
-  },
-  filterheaderTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: ySmallSize,
   },
   cancelButton: {
     color: primaryColor,
-    fontSize: 16,
+    fontSize: ySmallSize,
   },
   sectionContainer: {
     marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: ySmallSize,
     fontWeight: 'bold',
     marginBottom: 10,
     color: primaryColor,
@@ -553,7 +538,7 @@ detailsButtonText: {
     marginHorizontal: 5,
   },
   listingTypeText: {
-    fontSize: 14,
+    fontSize: xSmallSize,
     color: primaryColor,
   },
   selectedListingType: {
@@ -574,7 +559,7 @@ detailsButtonText: {
     marginHorizontal: 5,
   },
   genderText: {
-    fontSize: 14,
+    fontSize: xSmallSize,
     color: primaryColor,
   },
   selectedGender: {
@@ -593,10 +578,10 @@ detailsButtonText: {
     borderRadius: 5,
     paddingHorizontal: 10,
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: ySmallSize,
   },
   toText: {
-    fontSize: 16,
+    fontSize: ySmallSize,
     marginHorizontal: 10,
   },
   amenitiesContainer: {
@@ -644,7 +629,7 @@ detailsButtonText: {
     color: primaryColor,
   },
   counterText: {
-    fontSize: 18,
+    fontSize: smallSize,
   },
   filterapplyButton: {
     backgroundColor: primaryColor,
@@ -656,10 +641,1237 @@ detailsButtonText: {
   },
   filterapplyButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: ySmallSize,
     fontWeight: 'bold',
   },
+ //login screen styles 
+ logincontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  padding: 20,
+  backgroundColor: secondaryColor,
+},
+logininnerContainer: {
+  backgroundColor: '#fff',
+  padding: 20,
+  borderRadius: 10,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 10,
+  elevation: 5,
+  alignItems: 'center',
+},
+loginlabel: {
+  fontSize: ySmallSize,
+  color: '#6b21a8',
+  marginBottom: 5,
+  alignSelf: 'flex-start',
+  fontWeight: 'bold',
+},
+logininput: {
+  height: 50,
+  borderColor: '#ccc',
+  borderWidth: 1,
+  borderRadius: 10,
+  paddingHorizontal: 10,
+  marginBottom: 15,
+  backgroundColor: '#fff',
+  width: '100%',
+  fontSize: smallSize,
+},
+loginerrorText: {
+  color: 'red',
+  alignSelf: 'flex-start',
+  marginBottom: 10,
+},
+logincheckboxContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 10,
+  alignSelf: 'flex-start',
+},
+logincheckbox: {
+  marginRight: 10,
+},
+logincheckboxLabel: {
+  color: '#6b21a8',
+},
+loginbutton: {
+  backgroundColor: '#9333ea',
+  paddingVertical: 10,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginBottom: 20,
+  width: '100%',
+},
+loginbuttonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+},
+loginforgotPasswordContainer: {
+  alignSelf: 'flex-end',
+  marginBottom: 20,
+},
+loginlink: {
+  color: '#4169E1',
+  textAlign: 'right',
+},
+logintext: {
+  color: '#6b21a8',
+},
+loginregisterLink: {
+  color: '#4169E1',
+},
+logininlineTextContainer: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 10,
+},
+//forgot password styles
+forgotcontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  padding: 20,
+  backgroundColor: secondaryColor,
+},
+forgotinnerContainer: {
+  backgroundColor: '#fff',
+  padding: 20,
+  borderRadius: 10,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 10,
+  elevation: 5,
+  alignItems: 'center',
+},
+forgotlabel: {
+  fontSize: ySmallSize,
+  color: '#6b21a8',
+  marginBottom: 5,
+  alignSelf: 'flex-start',
+  fontWeight: "bold"
+},
+forgotinput: {
+  height: 50,
+  borderColor: '#ccc',
+  borderWidth: 1,
+  borderRadius: 10,
+  paddingHorizontal: 10,
+  marginBottom: 15,
+  backgroundColor: '#fff',
+  width: '100%',
+  fontSize:18
+},
+forgoterrorText: {
+  color: 'red',
+  alignSelf: 'flex-start',
+  marginBottom: 10,
+},
+forgotbutton: {
+  backgroundColor: '#9333ea',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingVertical: 10,
+  borderRadius: 5,
+  marginBottom: 20,
+  width: '100%',
+},
+forgotbuttonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+  marginRight: 10,
+},
+lockIcon: {
+  width: 15,
+  height: 15,
+  tintColor: 'white'
+},
+forgottext: {
+  color: '#6b21a8',
+},
+forgotregisterLink: {
+  color: '#4169E1',
+},
+forgotinlineTextContainer: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 10,
+},
+//resetpassword styles
+resetcontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  padding: 20,
+  backgroundColor: secondaryColor,
+},
+resetinnerContainer: {
+  backgroundColor: '#fff',
+  padding: 20,
+  borderRadius: 10,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 10,
+  elevation: 5,
+  alignItems: 'center',
+},
+resetlabel: {
+  fontSize: ySmallSize,
+  color: '#6b21a8',
+  marginBottom: 5,
+  alignSelf: 'flex-start',
+  fontWeight:"bold"
+},
+resetinput: {
+  height: 40,
+  borderColor: '#ccc',
+  borderWidth: 1,
+  borderRadius: 5,
+  paddingHorizontal: 10,
+  marginBottom: 15,
+  backgroundColor: '#fff',
+  width: '100%',
+  fontSize:18
+},
 
+resetbutton: {
+  backgroundColor: '#9333ea',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingVertical: 10,
+  borderRadius: 5,
+  marginBottom: 20,
+  width: '100%',
+},
+resetbuttonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+  marginRight: 10, 
+},
+resetlockIcon: {
+  width: 20,
+  height: 20,
+  tintColor:'white'
+},
+reseterrorText: {
+  color: 'red',
+  alignSelf: 'flex-start',
+  marginBottom: 10,
+},
+//success password styles
+successcontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 20,
+  backgroundColor: secondaryColor,
+},
+successText: {
+  textAlign: 'center',
+  marginBottom: 20,
+  paddingHorizontal: 30,
+  fontSize: 20,
+},
+successbutton: {
+  backgroundColor: '#9333ea',
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginBottom: 20,
+},
+successbuttonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+},
+successtickIcon:{
+  width:100,
+  height:100,
+  marginBottom:20
+},
+//unsuccess password styles
+unsuccesscontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 20,
+  backgroundColor: secondaryColor,
+},
+unsuccessText: {
+  textAlign: 'center',
+  marginBottom: 20,
+  paddingHorizontal: 30,
+  fontSize: 20,
+},
+unsuccessbutton: {
+  backgroundColor: '#9333ea',
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginBottom: 20,
+},
+unsuccessbuttonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+},
+unsuccesscrossIcon:{
+  width:100,
+  height:100,
+  marginBottom:20
+},
+//verification styles
+verificationcontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  padding: 20,
+  backgroundColor: secondaryColor,
+},
+verificationinnerContainer: {
+  backgroundColor: '#fff',
+  padding: 20,
+  borderRadius: 10,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 10,
+  elevation: 5,
+  alignItems: 'center',
+},
+verificationlabel: {
+  fontSize: ySmallSize,
+  color: '#6b21a8',
+  marginBottom: 5,
+  alignSelf: 'flex-start',
+  fontWeight: 'bold',
+},
+verificationinput: {
+  height: 50,
+  borderColor: '#ccc',
+  borderWidth: 1,
+  borderRadius: 10,
+  paddingHorizontal: 10,
+  marginBottom: 15,
+  backgroundColor: '#fff',
+  width: '100%',
+  fontSize:16
+},
+verificationotptext: {
+  textAlign: 'center',
+  marginBottom: 10,
+  padding: 10,
+  fontSize: smallSize,
+},
+verificationbutton: {
+  backgroundColor: '#9333ea',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingVertical: 10,
+  borderRadius: 5,
+  marginBottom: 20,
+  width: '100%',
+},
+verificationbuttonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+  marginRight: 10,
+},
+verificationlockIcon: {
+  width: 20,
+  height: 20,
+  tintColor: 'white',
+},
+verificationtext: {
+  color: '#6b21a8',
+},
+verificationregisterLink: {
+  color: '#4169E1',
+},
+verificationinlineTextContainer: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 10,
+},
+verificationerrorText: {
+  color: 'red',
+  alignSelf: 'flex-start',
+  marginBottom: 10,
+},
+//room details styles
+Roomcontainer: {
+  flex: 1,
+  backgroundColor: '#fff',
+},
+carouselContainer: {
+  marginBottom: 10,
+},
+backArrowContainer: {
+  height: 35,
+  width: 35,
+  borderRadius: 20,
+  backgroundColor: '#FFFFFF',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+backArrow: {
+  width: 24,
+  height: 24,
+},
+carouselImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+  alignItems: 'center',
+},
+paginationContainer: {
+  position: 'absolute',
+  bottom: 10,
+  left: 0,
+  right: 0,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+paginationText: {
+  color: 'white',
+  fontSize: ySmallSize,
+},
+detailsContainer: {
+  paddingHorizontal: 15,
+  paddingTop: 15,
+},
+Roomtitle: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  color: primaryColor
+},
+ratingContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginVertical: 5,
+},
+Roomrating: {
+  fontSize: smallSize,
+  fontWeight: 'bold',
+},
+middleDot: {
+  fontSize: smallSize,
+  marginHorizontal: 2,
+},
+Roomreviews: {
+  fontSize: smallSize,
+  color: 'gray',
+},
+roomamenitiesTitle: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginVertical: 10,
+  color: primaryColor
+},
+roomamenitiesContainer: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginVertical: 1,
+},
+roomamenityIcon: {
+  width: 35,
+  height: 35,
+  margin: 10,
+},
+amenityItem: {
+  alignItems: 'center',
+  marginVertical: 10,
+},
+amenityImage: {
+  width: 30,
+  height: 30,
+},
+amenityLabel: {
+  fontSize: 12,
+  textAlign: 'center',
+  marginTop: 5,
+},
+contactContainer: {
+  marginTop: 15,
+},
+contactButton: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 10,
+},
+contactIcon: {
+  width: 30,
+  height: 30,
+  marginRight: 10,
+},
+contactText: {
+  fontSize: ySmallSize,
+  color: '#555',
+},
+price: {
+  fontSize: smallSize,
+  fontWeight: 'bold',
+  color: primaryColor,
+  marginTop: 5,
+  marginBottom: 15,
+},
+bookButton: {
+  backgroundColor: '#4CAF50',
+  paddingHorizontal: 20,
+  paddingVertical: 10,
+  borderRadius: 5,
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: 1,
+  marginTop: 10,
+  marginBottom: 5
+},
+bookButtonText: {
+  color: 'white',
+  fontSize: smallSize,
+}, roomdetails: {
+  fontSize: smallSize,
+  color: 'black'
+},
+headerContainer: {
+  position: 'absolute',
+  top: 10,
+  left: 10,
+  right: 10,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  zIndex: 1,
+  alignItems: 'center',
+},
+favoritesContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+},
+favoritesIcon: {
+  height: 30,
+  width: 30,
+  tintColor: '#FFFFFF'
+},
+//booking styles
+bookingroomlistcontainer: {
+  flex: 1,
+  backgroundColor: '#FFFFFF',
+  paddingHorizontal: 20,
+  paddingTop: 5,
+},
+bookingcard: {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 12,
+  marginBottom: 15,
+  shadowColor: primaryColor,
+  shadowOffset: {
+    width: 2,
+    height: 10,
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+  elevation: 5,
+  padding: 10,
+  borderWidth: 1,
+  borderColor: '#DDD',
+  marginTop: 5,
+},
+bookingimage: {
+  width: 120,
+  height: 120,
+  borderRadius: 12,
+  marginRight: 20,
+},
+bookedLabelContainer: {
+  position: 'absolute',
+  top: 15,
+  right: 5,
+  backgroundColor: '#d4edda',
+  borderColor: '#155724',
+  borderWidth: 2,
+  borderRadius: 12,
+  paddingHorizontal: 10,
+  paddingVertical: 5,
+  zIndex: 1,
+},
+bookedLabel: {
+  color: '#155724',
+  fontWeight: 'bold',
+  fontSize: xSmallSize,
+},
+bookingcardContent: {
+  flexDirection: 'row',
+  alignItems: 'center',
+},
+bookinginfoContainer: {
+  flex: 1,
+},
+bookingroomName: {
+  fontSize: smallSize,
+  fontWeight: 'bold',
+  marginBottom: 10,
+  color: '#333',
+},
+bookingdetailsContainer: {
+  flexDirection: 'column',
+  marginBottom: 10,
+},
+bookingdetail: {
+  fontSize: ySmallSize,
+  color: '#555',
+  marginBottom: 5,
+},
+bookingdetailsButton: {
+  backgroundColor:primaryColor,
+  borderRadius: 8,
+  paddingVertical: 10,
+  paddingHorizontal: 15,
+  alignItems: 'center',
+},
+bookingdetailsButtonText: {
+  color: '#fff',
+  fontWeight: 'bold',
+  fontSize: ySmallSize,
+},
+//dashbord styles
+dashbordtabBar: {
+  position: 'absolute',
+  bottom: 5,
+  left: 20,
+  right: 20,
+  elevation: 0,
+  backgroundColor: primaryColor,
+  borderRadius: 15,
+  height: 60,
+  borderTopWidth: 0,
+},
+dashbordiconContainer: {
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+dashbordicon: {
+  width: 30,
+  height: 30,
+  tintColor: '#ccc',
+},
+dashbordiconFocused: {
+  tintColor: 'white',
+},
+dashbordcreateIconContainer: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#1E1E1E',
+  width: 70,
+  height: 70,
+  borderRadius: 35,
+  borderColor: 'white',
+  borderWidth: 3,
+  top: -5,
+},
+dashbordcreateIcon: {
+  width: 40,
+  height: 40,
+  tintColor: '#ccc',
+},
+dashbordcreateIconFocused: {
+  tintColor: 'white',
+},
+//edit screen styles
+editcontainer: {
+  flex: 1,
+  backgroundColor: '#F5F5F5',
+},
+edittitle: {
+  fontSize: 30,
+  fontWeight: 'bold',
+  textAlign: 'center',
+  color: primaryColor,
+  marginTop: 20,
+},
+editimageContainer: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 20,
+},
+editprofileImage: {
+  width: 120,
+  height: 120,
+  borderRadius: 60,
+  borderWidth: 2,
+  borderColor: primaryColor,
+},
+editButton: {
+  backgroundColor: 'white',
+  position: 'absolute',
+  bottom: 0,
+  right: 130,
+  width: 40,
+  height: 40,
+  borderRadius: 20,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+editIcon: {
+  width: 25,
+  height: 25,
+  tintColor: primaryColor,
+},
+editlabel: {
+  fontSize: smallSize,
+  color: primaryColor,
+  fontWeight: 'bold',
+  marginBottom: 7,
+  marginLeft:7
+},
+editprofileInput: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 10,
+  backgroundColor: '#FFF',
+  height: 50,
+  borderRadius: 10,
+  borderColor: primaryColor,
+  borderWidth: 1,
+},
+edittextInput: {
+  flex: 1,
+  fontSize: smallSize,
+  marginLeft: 10,
+  color: "#000"
+},
+editinputIcon: {
+  width: 25,
+  height: 25,
+  marginLeft: 10,
+},
+editInputIcon: {
+  width: 25,
+  height: 25,
+  tintColor: primaryColor,
+  marginRight: 10,
+},
+editableInputContainer: {
+  flex: 1,
+  flexDirection: 'row',
+  alignItems: 'center',
+},
+editmodalContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
+editmodalView: {
+  width: '80%',
+  backgroundColor: 'white',
+  borderRadius: 20,
+  padding: 20,
+  alignItems: 'center',
+},
+editmodalTitle: {
+  fontSize: smallSize,
+  fontWeight: 'bold',
+  marginBottom: 10,
+},
+editmodalTextInput: {
+  width: '100%',
+  height: 40,
+  borderColor: primaryColor,
+  borderWidth: 1,
+  paddingHorizontal: 10,
+  marginBottom: 20,
+},
+editmodalButtons: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  width: '100%',
+},
+editProfileButton: {
+  backgroundColor: primaryColor,
+  padding: 15,
+  borderRadius: 10,
+  margin: 20,
+  marginBottom: 100,
+  marginTop: -70,
+  alignItems: 'center',
+},
+editProfileButtonText: {
+  color: 'white',
+  fontSize: smallSize,
+  fontWeight: 'bold',
+},
+//filter screen styles
+filterscreencontainer: {
+  flex: 1,
+  backgroundColor: '#f8f8f8',
+  paddingHorizontal: 20,
+  paddingTop: 20,
+},
+filtersceenheader: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 20,
+},
+filterheaderButton: {
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  backgroundColor: primaryColor,
+  borderRadius: 5,
+},
+filterheaderButtonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+},
+filterheaderTitle: {
+  fontSize: smallSize,
+  fontWeight: 'bold',
+},
+filtersectionContainer: {
+  marginBottom: 20,
+},
+filtersectionTitle: {
+  fontSize: ySmallSize,
+  fontWeight: 'bold',
+  marginBottom: 10,
+  color: primaryColor,
+},
+filtergenderContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 20,
+},
+filtergenderButton: {
+  flex: 1,
+  alignItems: 'center',
+  paddingVertical: 10,
+  borderWidth: 1,
+  borderColor: primaryColor,
+  borderRadius: 5,
+  marginHorizontal: 5,
+},
+filtergenderText: {
+  fontSize: xSmallSize,
+  color: primaryColor,
+},
+filterselectedGender: {
+  backgroundColor: primaryColor,
+},
+filterpriceRangeContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 20,
+},
+filterpriceInput: {
+  flex: 1,
+  height: 40,
+  borderColor: primaryColor,
+  borderWidth: 1,
+  borderRadius: 5,
+  paddingHorizontal: 10,
+  textAlign: 'center',
+  fontSize: ySmallSize,
+},
+filtertoText: {
+  fontSize: ySmallSize,
+  marginHorizontal: 10,
+},
+filtercounterContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  borderWidth: 1,
+  borderColor: primaryColor,
+  borderRadius: 5,
+  paddingHorizontal: 20,
+},
+filtercounterButton: {
+  padding: 10,
+},
+filtercounterButtonText: {
+  fontSize: 20,
+  color: primaryColor,
+},
+filtercounterText: {
+  fontSize: smallSize,
+},
+filterfilterapplyButton: {
+  backgroundColor: primaryColor,
+  paddingVertical: 15,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginTop: 20,
+  marginBottom: 50,
+},
+filterscreenapplyButtonText: {
+  color: '#fff',
+  fontSize: ySmallSize,
+  fontWeight: 'bold',
+},
+makeordercontainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+makeorderbtn: {
+  marginTop: 20,
+  backgroundColor: primaryColor,
+  width: '50%',
+  height: 50,
+  padding: 10,
+  borderRadius: 20,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+//map styles
+mapcontainer: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+},
+mapStyle: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+},
+mapcoordinateDisplay: {
+  position: 'absolute',
+  top: 10,
+  left: 10,
+  padding: 10,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  borderRadius: 5,
+},
+mapcoordinateText: {
+  color: 'white',
+},
+maploadingContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+mapsaveButton: {
+  position: 'absolute',
+  bottom: 80,
+  right: 20,
+  backgroundColor: primaryColor,
+  borderRadius: 30, 
+  width: 60, 
+  height: 60,
+  justifyContent: 'center',
+  alignItems: 'center',
+  elevation: 5,
+},
+mapsaveIcon: {
+  width: 30, 
+  height: 30,
+  tintColor: '#FFF', 
+},
+//profile styles
+profilemaincontainer: {
+  flex: 1,
+  backgroundColor: '#F5F5F5',
+  paddingHorizontal: 20,
+  paddingTop: 50,
+},
+profileContainer: {
+  alignItems: 'center',
+  marginBottom: 40,
+},
+profileImage: {
+  width: 120,
+  height: 120,
+  borderRadius: 60,
+  borderWidth: 3,
+  borderColor: primaryColor,
+  marginBottom: 15,
+},
+profileuserName: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  color: primaryColor,
+},
+profileuserEmail: {
+  fontSize: ySmallSize,
+  color: '#888',
+},
+profileoption: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 20,
+  paddingHorizontal: 15,
+  backgroundColor: '#FFF',
+  borderRadius: 10,
+  marginTop: 15,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 5,
+  elevation: 5,
+},
+profileoptionIcon: {
+  width: 30,
+  height: 30,
+  marginRight: 20,
+  tintColor: primaryColor,
+},
+profileoptionText: {
+  fontSize: smallSize,
+  color: '#333',
+},
+profilelogoutButton: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 20,
+  paddingHorizontal: 15,
+  backgroundColor: '#FFF',
+  borderRadius: 10,
+  marginTop: 15,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 5,
+  elevation: 5,
+  
+},
+profilelogoutText: {
+  fontSize: smallSize,
+  color: primaryColor,
+  fontWeight: 'bold',
+},
+profilemodalContainer: {
+  flex: 1,
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
+profilemodalContent: {
+  width: '100%',
+  backgroundColor: 'white',
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  padding: 20,
+  alignItems: 'center',
+},
+profilemodalTitle: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: primaryColor,
+  marginBottom: 10,
+},
+profilemodalMessage: {
+  fontSize: ySmallSize,
+  color: '#333',
+  marginBottom: 20,
+  textAlign: 'center',
+},
+profileconfirmButton: {
+  backgroundColor: primaryColor,
+  paddingVertical: 12,
+  paddingHorizontal: 50,
+  borderRadius: 8,
+  marginBottom: 10,
+},
+profileconfirmButtonText: {
+  color: '#FFF',
+  fontSize: ySmallSize,
+  fontWeight: 'bold',
+},
+profilecancelButton: {
+  paddingVertical: 12,
+  paddingHorizontal: 50,
+  borderRadius: 8,
+  backgroundColor: '#F0F0F0',
+},
+profilecancelButtonText: {
+  color: '#333',
+  fontSize: ySmallSize,
+},
+//transaction styles
+transactionscrollContainer: {
+  backgroundColor: '#FFFFFF',
+  flex: 1,
+  padding: 10,
+},
+transactionbuttonContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 20,
+},
+transactionButtons: {
+  height: 45,
+  width: 110,
+  borderRadius: 25,
+  borderColor: primaryColor,
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderWidth: 2,
+},
+transactionactiveButton: {
+  backgroundColor: primaryColor,
+},
+transactionText: {
+  color: primaryColor,
+  fontSize: smallSize,
+  fontWeight: 'bold',
+},
+transactionnoDataText: {
+  textAlign: 'center',
+  fontSize: smallSize,
+  color: '#555',
+  marginVertical: 20,
+},
+transactionbookingContainer: {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 12,
+  marginBottom: 15,
+  shadowColor: primaryColor,
+  shadowOffset: {
+      width: 2,
+      height: 10,
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
+  elevation: 5,
+  padding: 15,
+  borderWidth: 2,
+  borderColor: '#DDD',
+},
+transactionbookingItem: {
+  flexDirection: 'row',
+  marginBottom: 10,
+},
+transactionbookingImage: {
+  width: 100,
+  height: 100,
+  borderRadius: 10,
+  marginRight: 30,
+},
+transactionbookingText: {
+  fontSize: smallSize,
+  color:"#000",
+},
+transactionholdButton: {
+  height: 30,
+  width: 100,
+  backgroundColor: '#E1F5E9',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 10,
+},
+transactionholdText: {
+  color: 'green',
+  fontSize: xSmallSize,
+},
+transactionviewBookingButton: {
+  height: 33,
+  width: '90%',
+  borderRadius: 10,
+  backgroundColor: primaryColor,
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: 10,
+  alignSelf: 'center',
+},
+transactionviewBookingText: {
+  fontSize: ySmallSize,
+  color: '#FFFFFF',
+  fontWeight: 'bold',
+},
+
+//image oicker styles
+imagesmallbtn: {
+  height: 40,
+  width: 200,
+  backgroundColor: primaryColor,
+  borderRadius: 5,
+  borderWidth: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom:10
+  
+},
+//room card styles
+cardContainer: {
+  height: '60%',
+  backgroundColor: '#FFFFFF',
+  borderRadius: 10,
+  padding: 15,
+  overflow: 'hidden',
+  marginBottom: 20,
+  elevation: 3, // Add shadow for Android
+  shadowColor: '#000', // Add shadow for iOS
+  shadowOffset: { width: 0, height: 3 },
+  shadowOpacity: 0.3,
+  shadowRadius: 5,
+  borderWidth: 1,
+  borderColor: '#ddd',
+},
+cardDetails: {
+  padding: 10,
+  flex: 1,
+},
+cardTitle: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  marginBottom: 5,
+  textAlign: 'center',
+  color: primaryColor,
+},
+cardrow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 10,
+},
+cardValues: {
+  fontSize: 20,
+},
+cardDetail: {
+  color: primaryColor,
+  fontSize: 22,
+  fontWeight: 'bold',
+},
+//floating styles
+floatingcontainer: {
+  marginTop: 10,
+  width: "100%",
+},
+floatinginputContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  borderBottomWidth: 1,
+  borderBottomColor: "#42e0d1",
+  marginBottom: 10,
+  position: "relative",
+},
+floatinginput: {
+  flex: 1,
+  height: 50,
+  fontSize: ySmallSize,
+  color: "#fff",
+  paddingHorizontal: 10,
+  marginTop: 15, 
+},
+floatingicon: {
+  width: 24,
+  height: 24,
+  marginRight: 10,
+  tintColor: "#fff",
+},
 
 });
 

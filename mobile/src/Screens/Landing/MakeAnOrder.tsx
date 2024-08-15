@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {CFPaymentGatewayService} from 'react-native-cashfree-pg-sdk';
+import{styles} from '../Styles/Styles'
 import {
   CFDropCheckoutPayment,
   CFEnvironment,
@@ -254,9 +255,9 @@ export default function MakeAnOrder({route}) {
     createOrder();
   }, []);
   return (
-    <View style={styles.container}>
+    <View style={styles.makeordercontainer}>
       <RoomCard room={room} />
-      <TouchableOpacity style={styles.btn} onPress={_startCheckout}>
+      <TouchableOpacity style={styles.makeorderbtn} onPress={_startCheckout}>
         <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
           Pay now
         </Text>
@@ -265,42 +266,6 @@ export default function MakeAnOrder({route}) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: 200,
-    height: 200,
-  },
-  card: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-    width: '90%',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'center',
-  },
-  btn: {
-    marginTop: 20,
-    backgroundColor: '#814ABF',
-    width: '50%',
-    height: 50,
-    padding: 10,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 function dispatch(arg0: Promise<unknown>) {
   throw new Error('Function not implemented.');

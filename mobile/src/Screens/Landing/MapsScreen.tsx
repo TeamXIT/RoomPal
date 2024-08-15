@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, View, Text, Button, Alert, Platform, Activity
 import MapView, { Marker } from 'react-native-maps';
 import { PermissionsAndroid } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import { primaryColor } from "../Styles/Styles";
+import { primaryColor,styles } from "../Styles/Styles";
 
 const MapsScreen = ({navigation,route}) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -116,7 +116,7 @@ const MapsScreen = ({navigation,route}) => {
 
 if (isLoading) {
     return (
-        <View style={styles.loadingContainer}>
+        <View style={styles.maploadingContainer}>
             <ActivityIndicator size="large" color={primaryColor} />
         </View>
     );
@@ -124,7 +124,7 @@ if (isLoading) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
+            <View style={styles.mapcontainer}>
                 <MapView
                     style={styles.mapStyle}
                     region={region} // Use region to center the map
@@ -141,13 +141,13 @@ if (isLoading) {
                         description={`Lat: ${selectedLocation.latitude}, Lng: ${selectedLocation.longitude}`}
                     />
                 </MapView>
-                <View style={styles.coordinateDisplay}>
-                    <Text style={styles.coordinateText}>Latitude: {selectedLocation.latitude}</Text>
-                    <Text style={styles.coordinateText}>Longitude: {selectedLocation.longitude}</Text>
+                <View style={styles.mapcoordinateDisplay}>
+                    <Text style={styles.mapcoordinateText}>Latitude: {selectedLocation.latitude}</Text>
+                    <Text style={styles.mapcoordinateText}>Longitude: {selectedLocation.longitude}</Text>
                 </View>
                 {/* <Button title="Save Location" onPress={handleSaveLocation} /> */}
-                <TouchableOpacity style={styles.saveButton} onPress={handleSaveLocation}>
-                    <Image source={require('../../Screens/Images/ic_save.png')} style={styles.saveIcon} />
+                <TouchableOpacity style={styles.mapsaveButton} onPress={handleSaveLocation}>
+                    <Image source={require('../../Screens/Images/ic_save.png')} style={styles.mapsaveIcon} />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -237,54 +237,3 @@ const mapStyle = [
     },
 ];
 
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
-    mapStyle: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
-    coordinateDisplay: {
-        position: 'absolute',
-        top: 10,
-        left: 10,
-        padding: 10,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        borderRadius: 5,
-    },
-    coordinateText: {
-        color: 'white',
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    saveButton: {
-        position: 'absolute',
-        bottom: 80,
-        right: 20,
-        backgroundColor: primaryColor,
-        borderRadius: 30, // Make the button round
-        width: 60, // Set width for the button
-        height: 60, // Set height for the button
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 5,
-    },
-    saveIcon: {
-        width: 30, // Adjust the icon size
-        height: 30, // Adjust the icon size
-        tintColor: '#FFF', // Optional: Tint the image color if needed
-    },
-});
