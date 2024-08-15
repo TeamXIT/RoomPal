@@ -146,7 +146,7 @@ const customConfig = {
 }
 
 
-export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData, setFavorites, addFavorite, removeFavorite } = roomSlice.actions;
+export const { setBusy, setError, setSuccess, setRooms, addRoom, updateRoom, roomData, setFavorites, addFavorite, removeFavorite, setUserRooms } = roomSlice.actions;
 
 
 export const createRoom = (room: Room): AppThunk => async (dispatch) => {

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomById, fetchRooms} from '../../reducers/room/roomSlice';
+import { fetchRooms} from '../../reducers/room/roomSlice';
 import { addToFavorites, removeFromFavorites, usersFavoritesList } from '../../reducers/favourites/favouritesSlice';
 import { RootState } from '../../reducers/store';
 import { primaryColor, styles } from '../Styles/Styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
+  useEffect(() => {
+   
+  }, [navigation, setTabBarVisibility, route]);
+
   const dispatch = useDispatch();
   const { data, screen, roomData, totalPages, favorites } = useSelector((state: RootState) => state.room);
  
@@ -171,8 +174,8 @@ const ListOfRooms = ({ navigation, setTabBarVisibility, route }) => {
           placeholderTextColor="#666"
           style={styles.searchinput}
           value={searchQuery}
-          onFocus={() => setTabBarVisibility(false)}
-          onBlur={() => setTabBarVisibility(true)}
+          // onFocus={() => setTabBarVisibility(false)}
+          // onBlur={() => setTabBarVisibility(true)}
           onChangeText={setSearchQuery}
         />
         <TouchableOpacity onPress={() => handleFilterPress({})}>
