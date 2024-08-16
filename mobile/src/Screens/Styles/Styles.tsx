@@ -4,7 +4,11 @@ import { grey100 } from "react-native-paper/lib/typescript/styles/themes/v2/colo
 
 const primaryColor = '#814ABF';
 const secondaryColor = '#f3e8ff';//'#F2E8C6';
-
+const whitebgcolor = '#fff';
+const whiteTextColor ='#fff'
+const blackTextColor = '#000'
+const inputBorderColor ='#ccc';
+const blackBorderColor = '#000'
 // FontSizes
 const xSmallSize = 14;
 const ySmallSize = 16;
@@ -18,7 +22,7 @@ const styles = StyleSheet.create({
   registercontainer: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: whitebgcolor,
   },
   title: {
     fontSize: 28,
@@ -47,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   submitButtonText: {
-    color: '#fff',
+    color: whiteTextColor,
     fontSize: 20,
   },
   radioContainer: {
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   radioLabel: {
-    color: '#000',
+    color: blackTextColor,
     fontSize: smallSize,
     marginRight: 20,
   },
@@ -68,7 +72,7 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: blackBorderColor,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -110,10 +114,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: smallSize,
-    color: 'white',
+    color: whiteTextColor,
   },
   buttonTextActive: {
-    color: '#fff',
+    color: whiteTextColor,
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
   },
   loginRedirectText: {
     fontSize: smallSize,
-    color: '#000',
+    color: blackTextColor,
   },
   loginRedirectLink: {
     fontWeight: 'bold',
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: blackBorderColor,
     borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -160,11 +164,11 @@ const styles = StyleSheet.create({
   checkmark: {
     fontSize: xSmallSize,
     fontWeight: 'bold',
-    color: '#fff',
+    color: whiteTextColor,
   },
   checkboxlabel: {
     fontSize: 20,
-    color: '#000',
+    color: blackTextColor,
   },
   logoContainer: {
     flexDirection: 'row',
@@ -276,7 +280,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   applyButtonText: {
-    color: '#fff',
+    color: whiteTextColor,
     fontSize: xSmallSize,
   },
   card: {
@@ -313,7 +317,7 @@ const styles = StyleSheet.create({
 name: {
   fontSize: smallSize,
   fontWeight: 'bold',
-  color: '#000',
+  color: blackTextColor,
 },
 location: {
   fontSize: ySmallSize,
@@ -322,12 +326,12 @@ location: {
 rent: {
   fontSize: ySmallSize,
   fontWeight: 'bold',
-  color: '#000',
+  color: blackTextColor,
 },
 lookingFor: {
   fontSize: ySmallSize,
   fontWeight: 'bold',
-  color: '#000',
+  color: blackTextColor,
 },
 match: {
   fontSize: ySmallSize,
@@ -336,7 +340,7 @@ match: {
 },
 distance: {
   fontSize: ySmallSize,
-  color: '#000',
+  color: blackTextColor,
   fontWeight: 'bold',
 },
 detailsButton: {
@@ -348,7 +352,7 @@ detailsButton: {
   borderRadius: 8,
 },
 detailsButtonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: xSmallSize,
   fontWeight: 'bold',
 },
@@ -370,16 +374,16 @@ detailsButtonText: {
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: inputBorderColor,
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 10,
     fontSize: smallSize,
-    color: '#000',
+    color: blackTextColor,
   },
   linkText: {
     fontSize: smallSize,
-    color: '#000',
+    color: blackTextColor,
   },
 
   checkboxGroup: {
@@ -397,11 +401,11 @@ detailsButtonText: {
     marginBottom: 30,
   },
   createbuttonText: {
-    color: '#fff',
+    color: whiteTextColor,
     fontSize: smallSize,
   },
   imageContainer: {
-    borderColor: '#ccc',
+    borderColor: inputBorderColor,
     borderWidth: 2,
     borderRadius: 10,
     paddingBottom: 20,
@@ -450,7 +454,7 @@ detailsButtonText: {
   searchBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: whitebgcolor,
     borderRadius: 20,
     padding: 10,
     marginBottom: 10,
@@ -480,7 +484,7 @@ detailsButtonText: {
   searchinput: {
     flex: 1,
     fontSize: ySmallSize,
-    color: '#000',
+    color:blackTextColor,
   },
   noResultsContainer: {
     flex: 1,
@@ -640,7 +644,7 @@ detailsButtonText: {
     marginBottom: 50,
   },
   filterapplyButtonText: {
-    color: '#fff',
+    color: whiteTextColor,
     fontSize: ySmallSize,
     fontWeight: 'bold',
   },
@@ -652,7 +656,7 @@ detailsButtonText: {
   backgroundColor: secondaryColor,
 },
 logininnerContainer: {
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   padding: 20,
   borderRadius: 10,
   shadowColor: '#000',
@@ -671,12 +675,12 @@ loginlabel: {
 },
 logininput: {
   height: 50,
-  borderColor: '#ccc',
+  borderColor: inputBorderColor,
   borderWidth: 1,
   borderRadius: 10,
   paddingHorizontal: 10,
   marginBottom: 15,
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   width: '100%',
   fontSize: smallSize,
 },
@@ -706,7 +710,7 @@ loginbutton: {
   width: '100%',
 },
 loginbuttonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
 },
 loginforgotPasswordContainer: {
@@ -737,7 +741,7 @@ forgotcontainer: {
   backgroundColor: secondaryColor,
 },
 forgotinnerContainer: {
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   padding: 20,
   borderRadius: 10,
   shadowColor: '#000',
@@ -756,12 +760,12 @@ forgotlabel: {
 },
 forgotinput: {
   height: 50,
-  borderColor: '#ccc',
+  borderColor: inputBorderColor,
   borderWidth: 1,
   borderRadius: 10,
   paddingHorizontal: 10,
   marginBottom: 15,
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   width: '100%',
   fontSize:18
 },
@@ -781,7 +785,7 @@ forgotbutton: {
   width: '100%',
 },
 forgotbuttonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
   marginRight: 10,
 },
@@ -810,7 +814,7 @@ resetcontainer: {
   backgroundColor: secondaryColor,
 },
 resetinnerContainer: {
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   padding: 20,
   borderRadius: 10,
   shadowColor: '#000',
@@ -829,12 +833,12 @@ resetlabel: {
 },
 resetinput: {
   height: 40,
-  borderColor: '#ccc',
+  borderColor: inputBorderColor,
   borderWidth: 1,
   borderRadius: 5,
   paddingHorizontal: 10,
   marginBottom: 15,
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   width: '100%',
   fontSize:18
 },
@@ -850,7 +854,7 @@ resetbutton: {
   width: '100%',
 },
 resetbuttonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
   marginRight: 10, 
 },
@@ -887,7 +891,7 @@ successbutton: {
   marginBottom: 20,
 },
 successbuttonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
 },
 successtickIcon:{
@@ -918,7 +922,7 @@ unsuccessbutton: {
   marginBottom: 20,
 },
 unsuccessbuttonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
 },
 unsuccesscrossIcon:{
@@ -934,7 +938,7 @@ verificationcontainer: {
   backgroundColor: secondaryColor,
 },
 verificationinnerContainer: {
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   padding: 20,
   borderRadius: 10,
   shadowColor: '#000',
@@ -953,12 +957,12 @@ verificationlabel: {
 },
 verificationinput: {
   height: 50,
-  borderColor: '#ccc',
+  borderColor: inputBorderColor,
   borderWidth: 1,
   borderRadius: 10,
   paddingHorizontal: 10,
   marginBottom: 15,
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
   width: '100%',
   fontSize:16
 },
@@ -979,7 +983,7 @@ verificationbutton: {
   width: '100%',
 },
 verificationbuttonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
   marginRight: 10,
 },
@@ -1008,7 +1012,7 @@ verificationerrorText: {
 //room details styles
 Roomcontainer: {
   flex: 1,
-  backgroundColor: '#fff',
+  backgroundColor: whitebgcolor,
 },
 carouselContainer: {
   marginBottom: 10,
@@ -1040,7 +1044,7 @@ paginationContainer: {
   alignItems: 'center',
 },
 paginationText: {
-  color: 'white',
+  color: whiteTextColor,
   fontSize: ySmallSize,
 },
 detailsContainer: {
@@ -1134,11 +1138,11 @@ bookButton: {
   marginBottom: 5
 },
 bookButtonText: {
-  color: 'white',
+  color: whiteTextColor,
   fontSize: smallSize,
 }, roomdetails: {
   fontSize: smallSize,
-  color: 'black'
+  color: blackTextColor
 },
 headerContainer: {
   position: 'absolute',
@@ -1236,7 +1240,7 @@ bookingdetailsButton: {
   alignItems: 'center',
 },
 bookingdetailsButtonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontWeight: 'bold',
   fontSize: ySmallSize,
 },
@@ -1404,7 +1408,7 @@ editProfileButton: {
   alignItems: 'center',
 },
 editProfileButtonText: {
-  color: 'white',
+  color: whiteTextColor,
   fontSize: smallSize,
   fontWeight: 'bold',
 },
@@ -1428,7 +1432,7 @@ filterheaderButton: {
   borderRadius: 5,
 },
 filterheaderButtonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
 },
 filterheaderTitle: {
@@ -1512,7 +1516,7 @@ filterfilterapplyButton: {
   marginBottom: 50,
 },
 filterscreenapplyButtonText: {
-  color: '#fff',
+  color: whiteTextColor,
   fontSize: ySmallSize,
   fontWeight: 'bold',
 },
@@ -1557,7 +1561,7 @@ mapcoordinateDisplay: {
   borderRadius: 5,
 },
 mapcoordinateText: {
-  color: 'white',
+  color: whiteTextColor,
 },
 maploadingContainer: {
   flex: 1,
