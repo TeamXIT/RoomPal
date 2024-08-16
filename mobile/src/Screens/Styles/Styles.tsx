@@ -8,11 +8,25 @@ const whitebgcolor = '#fff';
 const whiteTextColor ='#fff'
 const blackTextColor = '#000'
 const inputBorderColor ='#ccc';
-const blackBorderColor = '#000'
+const blackBorderColor = '#000';
+const whiteTinColor ='#fff'
+const shadowBorderColor = '#DDD';
+const redColorText = 'red';
+const blueColor = '#666';
+const lightBlueColor = '#FFF'
+
 // FontSizes
 const xSmallSize = 14;
 const ySmallSize = 16;
 const smallSize = 18;
+const largeSize = 20;
+const ylargeSize =24
+const xLargeSize =30;
+//border radius
+const minimumBorderRadius= 10;
+const smallBorderRadius = 5
+//border width
+const smallBorderWidth = 1.5
 
 const styles = StyleSheet.create({
 
@@ -33,7 +47,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: primaryColor,
-    fontSize: 20,
+    fontSize: largeSize,
     fontWeight: 'bold',
     marginBottom: 5,
   },
@@ -45,14 +59,14 @@ const styles = StyleSheet.create({
     backgroundColor: primaryColor,
     paddingVertical: 14,
     paddingHorizontal: 130,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center'
   },
   submitButtonText: {
     color: whiteTextColor,
-    fontSize: 20,
+    fontSize: largeSize,
   },
   radioContainer: {
     flexDirection: 'row',
@@ -70,8 +84,8 @@ const styles = StyleSheet.create({
   radioCircle: {
     height: 20,
     width: 20,
-    borderRadius: 10,
-    borderWidth: 1,
+    borderRadius: minimumBorderRadius,
+    borderWidth: smallBorderWidth,
     borderColor: blackBorderColor,
     alignItems: 'center',
     justifyContent: 'center',
@@ -79,7 +93,7 @@ const styles = StyleSheet.create({
   selectedDot: {
     height: 10,
     width: 10,
-    borderRadius: 5,
+    borderRadius:smallBorderRadius,
     backgroundColor: primaryColor,
   },
   buttonGroup: {
@@ -91,10 +105,9 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     paddingVertical: 10,
-    // borderRadius: 5,
     borderTopLeftRadius: 21,
     borderBottomLeftRadius: 21,
-    borderWidth: 1,
+    borderWidth: smallBorderWidth,
     borderColor: primaryColor,
     marginHorizontal: 5,
   },
@@ -102,10 +115,9 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: 'center',
     paddingVertical: 10,
-    // borderRadius: 5,
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
-    borderWidth: 1,
+    borderWidth: smallBorderWidth,
     borderColor: primaryColor,
     marginHorizontal: 5,
   },
@@ -140,7 +152,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   errorText: {
-    color: 'red',
+    color: redColorText,
     fontSize: xSmallSize,
   },
   checkBoxContainer: {
@@ -151,7 +163,7 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
-    borderWidth: 1,
+    borderWidth:smallBorderWidth,
     borderColor: blackBorderColor,
     borderRadius: 3,
     justifyContent: 'center',
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
     color: whiteTextColor,
   },
   checkboxlabel: {
-    fontSize: 20,
+    fontSize: largeSize,
     color: blackTextColor,
   },
   logoContainer: {
@@ -185,7 +197,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   logoText: {
-    fontSize: 24,
+    fontSize: ylargeSize,
     fontWeight: 'bold',
     color:primaryColor
   },
@@ -205,18 +217,18 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     resizeMode: 'contain',
-    borderRadius: 10,
+    borderRadius: minimumBorderRadius,
   },
   introTextStyle: {
     fontSize: smallSize,
-    color: '#666',
+    color: blueColor,
     textAlign: 'center',
     paddingLeft: 30,
     paddingRight: 30,
     paddingBottom: 30
   },
   introTitleStyle: {
-    fontSize: 30,
+    fontSize: xLargeSize,
     color: primaryColor,
     textAlign: 'center',
     fontWeight: 'bold',
@@ -227,14 +239,14 @@ const styles = StyleSheet.create({
   },
   introbuttonText: {
 
-    fontSize: 20,
+    fontSize: largeSize,
     fontWeight: 'bold',
   },
   dotStyle: {
     backgroundColor: '#a67dcf', // Middle dot color
     width: 10,
     height: 10,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     marginHorizontal: 8,
   },
   activeDotStyle: {
@@ -245,20 +257,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   errorTextStyle: {
-    color: 'red',
+    color: redColorText,
     fontSize: 12,
     marginTop: 5,
   },
   roomlistcontainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: whitebgcolor,
     paddingHorizontal: 20,
     paddingTop: 5,
 },
 
   dropdownPicker: {
     backgroundColor: '#f1f1f1',
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     width: 100,
   },
   dropdownContainer: {
@@ -266,14 +278,14 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: '#f1f1f1',
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     marginTop: 10,
     width: 100,
   },
   applyButton: {
     backgroundColor: primaryColor,
     padding: 10,
-    borderRadius: 5,
+    borderRadius:smallBorderRadius,
     width: 100,
     height: 50,
     alignItems: 'center',
@@ -284,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: xSmallSize,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: whitebgcolor,
     borderRadius: 12,
     marginBottom: 15,
     shadowColor: primaryColor,
@@ -296,8 +308,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     padding: 15,
-    borderWidth: 1,
-    borderColor: '#DDD', 
+    borderWidth: smallBorderWidth,
+    borderColor: shadowBorderColor, 
 },
   
   image: {
@@ -321,7 +333,7 @@ name: {
 },
 location: {
   fontSize: ySmallSize,
-  color: '#666',
+  color: blueColor,
 },
 rent: {
   fontSize: ySmallSize,
@@ -335,7 +347,7 @@ lookingFor: {
 },
 match: {
   fontSize: ySmallSize,
-  color: '#666',
+  color: blueColor,
   marginTop: 5,
 },
 distance: {
@@ -359,11 +371,11 @@ detailsButtonText: {
   createcontainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: whitebgcolor,
     
   },
   createtitle: {
-    fontSize: 30,
+    fontSize: xLargeSize,
     fontWeight: 'bold',
     marginBottom: 10,
     alignSelf: 'center',
@@ -375,9 +387,9 @@ detailsButtonText: {
   input: {
     height: 50,
     borderColor: inputBorderColor,
-    borderWidth: 1,
+    borderWidth: smallBorderWidth,
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: minimumBorderRadius,
     fontSize: smallSize,
     color: blackTextColor,
   },
@@ -396,7 +408,7 @@ detailsButtonText: {
   button: {
     backgroundColor: primaryColor,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     alignItems: 'center',
     marginBottom: 30,
   },
@@ -406,8 +418,8 @@ detailsButtonText: {
   },
   imageContainer: {
     borderColor: inputBorderColor,
-    borderWidth: 2,
-    borderRadius: 10,
+    borderWidth: smallBorderWidth,
+    borderRadius: minimumBorderRadius,
     paddingBottom: 20,
     paddingLeft: 30,
     paddingRight: 30,
@@ -422,7 +434,7 @@ detailsButtonText: {
   roomImage: {
     width: 50,
     height: 50,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     marginRight: 20,
   },
   roomImageWrapper: {
@@ -466,8 +478,8 @@ detailsButtonText: {
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
-    borderWidth: 1,
-    borderColor: '#DDD', 
+    borderWidth: smallBorderWidth,
+    borderColor: shadowBorderColor, 
   },
   searchIcon: {
     width: 20,
@@ -494,7 +506,7 @@ detailsButtonText: {
   },
   noResultsText: {
     fontSize: smallSize,
-    color: '#666',
+    color: blueColor,
     textAlign: 'center',
   },
   
@@ -536,9 +548,9 @@ detailsButtonText: {
     flex: 1,
     alignItems: 'center',
     paddingVertical: 10,
-    borderWidth: 1,
+    borderWidth: smallBorderWidth,
     borderColor: primaryColor,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     marginHorizontal: 5,
   },
   listingTypeText: {
@@ -557,9 +569,9 @@ detailsButtonText: {
     flex: 1,
     alignItems: 'center',
     paddingVertical: 10,
-    borderWidth: 1,
+    borderWidth: smallBorderWidth,
     borderColor: primaryColor,
-    borderRadius: 5,
+    borderRadius:smallBorderRadius,
     marginHorizontal: 5,
   },
   genderText: {
@@ -578,8 +590,8 @@ detailsButtonText: {
     flex: 1,
     height: 40,
     borderColor: primaryColor,
-    borderWidth: 1,
-    borderRadius: 5,
+    borderWidth: smallBorderWidth,
+    borderRadius: smallBorderRadius,
     paddingHorizontal: 10,
     textAlign: 'center',
     fontSize: ySmallSize,
@@ -599,8 +611,8 @@ detailsButtonText: {
     justifyContent: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderWidth: 1,
-    borderRadius: 5,
+    borderWidth: smallBorderWidth,
+    borderRadius: smallBorderRadius,
     marginHorizontal: 5,
     marginBottom: 10,
     borderColor: primaryColor,
@@ -611,7 +623,7 @@ detailsButtonText: {
     tintColor: primaryColor,
   },
   selectedAmenityIcon: {
-    tintColor: '#fff',
+    tintColor: whiteTinColor,
   },
   selectedAmenity:{
     backgroundColor:primaryColor,
@@ -620,16 +632,16 @@ detailsButtonText: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
+    borderWidth: smallBorderWidth,
     borderColor: primaryColor,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     paddingHorizontal: 20,
   },
   counterButton: {
     padding: 10,
   },
   counterButtonText: {
-    fontSize: 20,
+    fontSize: largeSize,
     color: primaryColor,
   },
   counterText: {
@@ -638,7 +650,7 @@ detailsButtonText: {
   filterapplyButton: {
     backgroundColor: primaryColor,
     paddingVertical: 15,
-    borderRadius: 5,
+    borderRadius: smallBorderRadius,
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 50,
@@ -658,7 +670,7 @@ detailsButtonText: {
 logininnerContainer: {
   backgroundColor: whitebgcolor,
   padding: 20,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   shadowColor: '#000',
   shadowOpacity: 0.1,
   shadowOffset: { width: 0, height: 2 },
@@ -676,8 +688,8 @@ loginlabel: {
 logininput: {
   height: 50,
   borderColor: inputBorderColor,
-  borderWidth: 1,
-  borderRadius: 10,
+  borderWidth: smallBorderWidth,
+  borderRadius: minimumBorderRadius,
   paddingHorizontal: 10,
   marginBottom: 15,
   backgroundColor: whitebgcolor,
@@ -685,7 +697,7 @@ logininput: {
   fontSize: smallSize,
 },
 loginerrorText: {
-  color: 'red',
+  color: redColorText,
   alignSelf: 'flex-start',
   marginBottom: 10,
 },
@@ -704,7 +716,7 @@ logincheckboxLabel: {
 loginbutton: {
   backgroundColor: '#9333ea',
   paddingVertical: 10,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   alignItems: 'center',
   marginBottom: 20,
   width: '100%',
@@ -743,7 +755,7 @@ forgotcontainer: {
 forgotinnerContainer: {
   backgroundColor: whitebgcolor,
   padding: 20,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   shadowColor: '#000',
   shadowOpacity: 0.1,
   shadowOffset: { width: 0, height: 2 },
@@ -761,8 +773,8 @@ forgotlabel: {
 forgotinput: {
   height: 50,
   borderColor: inputBorderColor,
-  borderWidth: 1,
-  borderRadius: 10,
+  borderWidth:smallBorderWidth,
+  borderRadius: minimumBorderRadius,
   paddingHorizontal: 10,
   marginBottom: 15,
   backgroundColor: whitebgcolor,
@@ -770,7 +782,7 @@ forgotinput: {
   fontSize:18
 },
 forgoterrorText: {
-  color: 'red',
+  color: redColorText,
   alignSelf: 'flex-start',
   marginBottom: 10,
 },
@@ -780,7 +792,7 @@ forgotbutton: {
   justifyContent: 'center',
   alignItems: 'center',
   paddingVertical: 10,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   marginBottom: 20,
   width: '100%',
 },
@@ -792,7 +804,7 @@ forgotbuttonText: {
 lockIcon: {
   width: 15,
   height: 15,
-  tintColor: 'white'
+  tintColor: whiteTinColor
 },
 forgottext: {
   color: '#6b21a8',
@@ -816,7 +828,7 @@ resetcontainer: {
 resetinnerContainer: {
   backgroundColor: whitebgcolor,
   padding: 20,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   shadowColor: '#000',
   shadowOpacity: 0.1,
   shadowOffset: { width: 0, height: 2 },
@@ -834,8 +846,8 @@ resetlabel: {
 resetinput: {
   height: 40,
   borderColor: inputBorderColor,
-  borderWidth: 1,
-  borderRadius: 5,
+  borderWidth: smallBorderWidth,
+  borderRadius: smallBorderRadius,
   paddingHorizontal: 10,
   marginBottom: 15,
   backgroundColor: whitebgcolor,
@@ -849,7 +861,7 @@ resetbutton: {
   justifyContent: 'center',
   alignItems: 'center',
   paddingVertical: 10,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   marginBottom: 20,
   width: '100%',
 },
@@ -861,10 +873,10 @@ resetbuttonText: {
 resetlockIcon: {
   width: 20,
   height: 20,
-  tintColor:'white'
+  tintColor: whiteTinColor
 },
 reseterrorText: {
-  color: 'red',
+  color: redColorText,
   alignSelf: 'flex-start',
   marginBottom: 10,
 },
@@ -880,13 +892,13 @@ successText: {
   textAlign: 'center',
   marginBottom: 20,
   paddingHorizontal: 30,
-  fontSize: 20,
+  fontSize: largeSize,
 },
 successbutton: {
   backgroundColor: '#9333ea',
   paddingVertical: 10,
   paddingHorizontal: 20,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   alignItems: 'center',
   marginBottom: 20,
 },
@@ -911,13 +923,13 @@ unsuccessText: {
   textAlign: 'center',
   marginBottom: 20,
   paddingHorizontal: 30,
-  fontSize: 20,
+  fontSize: largeSize,
 },
 unsuccessbutton: {
   backgroundColor: '#9333ea',
   paddingVertical: 10,
   paddingHorizontal: 20,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   alignItems: 'center',
   marginBottom: 20,
 },
@@ -940,7 +952,7 @@ verificationcontainer: {
 verificationinnerContainer: {
   backgroundColor: whitebgcolor,
   padding: 20,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   shadowColor: '#000',
   shadowOpacity: 0.1,
   shadowOffset: { width: 0, height: 2 },
@@ -958,8 +970,8 @@ verificationlabel: {
 verificationinput: {
   height: 50,
   borderColor: inputBorderColor,
-  borderWidth: 1,
-  borderRadius: 10,
+  borderWidth: smallBorderWidth,
+  borderRadius: minimumBorderRadius,
   paddingHorizontal: 10,
   marginBottom: 15,
   backgroundColor: whitebgcolor,
@@ -978,7 +990,7 @@ verificationbutton: {
   justifyContent: 'center',
   alignItems: 'center',
   paddingVertical: 10,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   marginBottom: 20,
   width: '100%',
 },
@@ -990,7 +1002,7 @@ verificationbuttonText: {
 verificationlockIcon: {
   width: 20,
   height: 20,
-  tintColor: 'white',
+  tintColor: whiteTinColor,
 },
 verificationtext: {
   color: '#6b21a8',
@@ -1005,7 +1017,7 @@ verificationinlineTextContainer: {
   marginBottom: 10,
 },
 verificationerrorText: {
-  color: 'red',
+  color: redColorText,
   alignSelf: 'flex-start',
   marginBottom: 10,
 },
@@ -1021,7 +1033,7 @@ backArrowContainer: {
   height: 35,
   width: 35,
   borderRadius: 20,
-  backgroundColor: '#FFFFFF',
+  backgroundColor: whitebgcolor,
   justifyContent: 'center',
   alignItems: 'center',
 },
@@ -1052,7 +1064,7 @@ detailsContainer: {
   paddingTop: 15,
 },
 Roomtitle: {
-  fontSize: 24,
+  fontSize: ylargeSize,
   fontWeight: 'bold',
   color: primaryColor
 },
@@ -1074,7 +1086,7 @@ Roomreviews: {
   color: 'gray',
 },
 roomamenitiesTitle: {
-  fontSize: 20,
+  fontSize: largeSize,
   fontWeight: 'bold',
   marginVertical: 10,
   color: primaryColor
@@ -1130,7 +1142,7 @@ bookButton: {
   backgroundColor: '#4CAF50',
   paddingHorizontal: 20,
   paddingVertical: 10,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   alignItems: 'center',
   justifyContent: 'center',
   flex: 1,
@@ -1161,17 +1173,17 @@ favoritesContainer: {
 favoritesIcon: {
   height: 30,
   width: 30,
-  tintColor: '#FFFFFF'
+  tintColor: whiteTinColor
 },
 //booking styles
 bookingroomlistcontainer: {
   flex: 1,
-  backgroundColor: '#FFFFFF',
+  backgroundColor: whitebgcolor,
   paddingHorizontal: 20,
   paddingTop: 5,
 },
 bookingcard: {
-  backgroundColor: '#FFFFFF',
+  backgroundColor: whitebgcolor,
   borderRadius: 12,
   marginBottom: 15,
   shadowColor: primaryColor,
@@ -1183,8 +1195,8 @@ bookingcard: {
   shadowRadius: 5,
   elevation: 5,
   padding: 10,
-  borderWidth: 1,
-  borderColor: '#DDD',
+  borderWidth:smallBorderWidth,
+  borderColor: shadowBorderColor,
   marginTop: 5,
 },
 bookingimage: {
@@ -1266,7 +1278,7 @@ dashbordicon: {
   tintColor: '#ccc',
 },
 dashbordiconFocused: {
-  tintColor: 'white',
+  tintColor: whiteTinColor,
 },
 dashbordcreateIconContainer: {
   alignItems: 'center',
@@ -1285,7 +1297,7 @@ dashbordcreateIcon: {
   tintColor: '#ccc',
 },
 dashbordcreateIconFocused: {
-  tintColor: 'white',
+  tintColor: whiteTinColor,
 },
 //edit screen styles
 editcontainer: {
@@ -1293,7 +1305,7 @@ editcontainer: {
   backgroundColor: '#F5F5F5',
 },
 edittitle: {
-  fontSize: 30,
+  fontSize: xLargeSize,
   fontWeight: 'bold',
   textAlign: 'center',
   color: primaryColor,
@@ -1339,11 +1351,11 @@ editprofileInput: {
   flexDirection: 'row',
   alignItems: 'center',
   marginBottom: 10,
-  backgroundColor: '#FFF',
+  backgroundColor: lightBlueColor,
   height: 50,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   borderColor: primaryColor,
-  borderWidth: 1,
+  borderWidth: smallBorderWidth,
 },
 edittextInput: {
   flex: 1,
@@ -1389,7 +1401,7 @@ editmodalTextInput: {
   width: '100%',
   height: 40,
   borderColor: primaryColor,
-  borderWidth: 1,
+  borderWidth: smallBorderWidth,
   paddingHorizontal: 10,
   marginBottom: 20,
 },
@@ -1401,7 +1413,7 @@ editmodalButtons: {
 editProfileButton: {
   backgroundColor: primaryColor,
   padding: 15,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   margin: 20,
   marginBottom: 100,
   marginTop: -70,
@@ -1429,7 +1441,7 @@ filterheaderButton: {
   paddingVertical: 10,
   paddingHorizontal: 20,
   backgroundColor: primaryColor,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
 },
 filterheaderButtonText: {
   color: whiteTextColor,
@@ -1457,9 +1469,9 @@ filtergenderButton: {
   flex: 1,
   alignItems: 'center',
   paddingVertical: 10,
-  borderWidth: 1,
+  borderWidth: smallBorderWidth,
   borderColor: primaryColor,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   marginHorizontal: 5,
 },
 filtergenderText: {
@@ -1478,8 +1490,8 @@ filterpriceInput: {
   flex: 1,
   height: 40,
   borderColor: primaryColor,
-  borderWidth: 1,
-  borderRadius: 5,
+  borderWidth: smallBorderWidth,
+  borderRadius: smallBorderRadius,
   paddingHorizontal: 10,
   textAlign: 'center',
   fontSize: ySmallSize,
@@ -1492,16 +1504,16 @@ filtercounterContainer: {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
-  borderWidth: 1,
+  borderWidth: smallBorderWidth,
   borderColor: primaryColor,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   paddingHorizontal: 20,
 },
 filtercounterButton: {
   padding: 10,
 },
 filtercounterButtonText: {
-  fontSize: 20,
+  fontSize: largeSize,
   color: primaryColor,
 },
 filtercounterText: {
@@ -1510,7 +1522,7 @@ filtercounterText: {
 filterfilterapplyButton: {
   backgroundColor: primaryColor,
   paddingVertical: 15,
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
   alignItems: 'center',
   marginTop: 20,
   marginBottom: 50,
@@ -1558,7 +1570,7 @@ mapcoordinateDisplay: {
   left: 10,
   padding: 10,
   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  borderRadius: 5,
+  borderRadius: smallBorderRadius,
 },
 mapcoordinateText: {
   color: whiteTextColor,
@@ -1605,7 +1617,7 @@ profileImage: {
   marginBottom: 15,
 },
 profileuserName: {
-  fontSize: 24,
+  fontSize: ylargeSize,
   fontWeight: 'bold',
   color: primaryColor,
 },
@@ -1618,8 +1630,8 @@ profileoption: {
   alignItems: 'center',
   paddingVertical: 20,
   paddingHorizontal: 15,
-  backgroundColor: '#FFF',
-  borderRadius: 10,
+  backgroundColor: lightBlueColor,
+  borderRadius: minimumBorderRadius,
   marginTop: 15,
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 2 },
@@ -1642,8 +1654,8 @@ profilelogoutButton: {
   alignItems: 'center',
   paddingVertical: 20,
   paddingHorizontal: 15,
-  backgroundColor: '#FFF',
-  borderRadius: 10,
+  backgroundColor: lightBlueColor,
+  borderRadius: minimumBorderRadius,
   marginTop: 15,
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 2 },
@@ -1672,7 +1684,7 @@ profilemodalContent: {
   alignItems: 'center',
 },
 profilemodalTitle: {
-  fontSize: 20,
+  fontSize:largeSize,
   fontWeight: 'bold',
   color: primaryColor,
   marginBottom: 10,
@@ -1707,7 +1719,7 @@ profilecancelButtonText: {
 },
 //transaction styles
 transactionscrollContainer: {
-  backgroundColor: '#FFFFFF',
+  backgroundColor: whitebgcolor,
   flex: 1,
   padding: 10,
 },
@@ -1740,7 +1752,7 @@ transactionnoDataText: {
   marginVertical: 20,
 },
 transactionbookingContainer: {
-  backgroundColor: '#FFFFFF',
+  backgroundColor: whitebgcolor,
   borderRadius: 12,
   marginBottom: 15,
   shadowColor: primaryColor,
@@ -1753,7 +1765,7 @@ transactionbookingContainer: {
   elevation: 5,
   padding: 15,
   borderWidth: 2,
-  borderColor: '#DDD',
+  borderColor: shadowBorderColor,
 },
 transactionbookingItem: {
   flexDirection: 'row',
@@ -1762,7 +1774,7 @@ transactionbookingItem: {
 transactionbookingImage: {
   width: 100,
   height: 100,
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   marginRight: 30,
 },
 transactionbookingText: {
@@ -1775,7 +1787,7 @@ transactionholdButton: {
   backgroundColor: '#E1F5E9',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
 },
 transactionholdText: {
   color: 'green',
@@ -1784,7 +1796,7 @@ transactionholdText: {
 transactionviewBookingButton: {
   height: 33,
   width: '90%',
-  borderRadius: 10,
+  borderRadius: minimumBorderRadius,
   backgroundColor: primaryColor,
   alignItems: 'center',
   justifyContent: 'center',
@@ -1802,8 +1814,8 @@ imagesmallbtn: {
   height: 40,
   width: 200,
   backgroundColor: primaryColor,
-  borderRadius: 5,
-  borderWidth: 1,
+  borderRadius: smallBorderRadius,
+  borderWidth: smallBorderWidth,
   justifyContent: 'center',
   alignItems: 'center',
   marginBottom:10
@@ -1812,8 +1824,8 @@ imagesmallbtn: {
 //room card styles
 cardContainer: {
   height: '60%',
-  backgroundColor: '#FFFFFF',
-  borderRadius: 10,
+  backgroundColor: whitebgcolor,
+  borderRadius: minimumBorderRadius,
   padding: 15,
   overflow: 'hidden',
   marginBottom: 20,
@@ -1822,15 +1834,15 @@ cardContainer: {
   shadowOffset: { width: 0, height: 3 },
   shadowOpacity: 0.3,
   shadowRadius: 5,
-  borderWidth: 1,
-  borderColor: '#ddd',
+  borderWidth: smallBorderWidth,
+  borderColor: shadowBorderColor,
 },
 cardDetails: {
   padding: 10,
   flex: 1,
 },
 cardTitle: {
-  fontSize: 24,
+  fontSize: ylargeSize,
   fontWeight: 'bold',
   marginBottom: 5,
   textAlign: 'center',
@@ -1842,7 +1854,7 @@ cardrow: {
   marginBottom: 10,
 },
 cardValues: {
-  fontSize: 20,
+  fontSize: largeSize,
 },
 cardDetail: {
   color: primaryColor,
@@ -1866,7 +1878,7 @@ floatinginput: {
   flex: 1,
   height: 50,
   fontSize: ySmallSize,
-  color: "#fff",
+  color: whiteTextColor,
   paddingHorizontal: 10,
   marginTop: 15, 
 },
@@ -1874,7 +1886,7 @@ floatingicon: {
   width: 24,
   height: 24,
   marginRight: 10,
-  tintColor: "#fff",
+  tintColor: whiteTinColor,
 },
 
 });

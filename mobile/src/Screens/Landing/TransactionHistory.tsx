@@ -57,22 +57,22 @@ const TransactionHistory = () => {
         <ScrollView style={styles.transactionscrollContainer}>
             <View style={styles.transactionbuttonContainer}>
                 <TouchableOpacity
-                    style={[styles.transactionButtons, selectedTab === 'Ongoing' && styles.transactionactiveButton]}
+                    style={[styles.transactionButtons, selectedTab === 'PENDING' && styles.transactionactiveButton]}
                     onPress={() => setSelectedTab('PENDING')}
                 >
-                    <Text style={[styles.transactionText, selectedTab === 'Ongoing' && { color: '#FFFFFF' }]}>Ongoing</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'PENDING' && { color: '#FFFFFF' }]}>Ongoing</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.transactionButtons, selectedTab === 'Completed' && styles.transactionactiveButton]}
+                    style={[styles.transactionButtons, selectedTab === 'SUCCESS' && styles.transactionactiveButton]}
                     onPress={() => setSelectedTab('SUCCESS')}
                 >
-                    <Text style={[styles.transactionText, selectedTab === 'Completed' && { color: '#FFFFFF' }]}>Completed</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'SUCCESS' && { color: '#FFFFFF' }]}>Completed</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.transactionButtons, selectedTab === 'Canceled' && styles.transactionactiveButton]}
+                    style={[styles.transactionButtons, selectedTab === 'USER_DROPPED' && styles.transactionactiveButton]}
                     onPress={() => setSelectedTab('USER_DROPPED')}
                 >
-                    <Text style={[styles.transactionText, selectedTab === 'Canceled' && { color: '#FFFFFF' }]}>Canceled</Text>
+                    <Text style={[styles.transactionText, selectedTab === 'USER_DROPPED' && { color: '#FFFFFF' }]}>Canceled</Text>
                 </TouchableOpacity>
             </View>
             {renderBookings()}
