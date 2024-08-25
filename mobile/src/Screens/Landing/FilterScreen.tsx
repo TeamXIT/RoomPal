@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 
-const primaryColor = '#814ABF';
+import {styles} from '../Styles/Styles'
 
 const FilterScreen = ({ navigation }) => {
   const [minRent, setMinPrice] = useState('');
@@ -53,92 +53,92 @@ const FilterScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.filtercontainer}>
-      <View style={styles.filterheader}>
-        <TouchableOpacity style={styles.headerButton} onPress={handleBack}>
-          <Text style={styles.headerButtonText}>Back</Text>
+    <ScrollView style={styles.filterscreencontainer}>
+      <View style={styles.filtersceenheader}>
+        <TouchableOpacity style={styles.filterheaderButton} onPress={handleBack}>
+          <Text style={styles.filterheaderButtonText}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.filterheaderTitle}>Filters</Text>
-        <TouchableOpacity style={styles.headerButton} onPress={handleResetFilters}>
-          <Text style={styles.headerButtonText}>Reset</Text>
+        <TouchableOpacity style={styles.filterheaderButton} onPress={handleResetFilters}>
+          <Text style={styles.filterheaderButtonText}>Reset</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>Gender</Text>
-      <View style={styles.genderContainer}>
+      <Text style={styles.filtersectionTitle}>Gender</Text>
+      <View style={styles.filtergenderContainer}>
         <TouchableOpacity
-          style={[styles.genderButton, gender === 'male' && styles.selectedGender]}
+          style={[styles.filtergenderButton, gender === 'male' && styles.filterselectedGender]}
           onPress={() => handleGenderSelection('male')}
         >
-          <Text style={[styles.genderText, gender === 'male' && { color: '#fff' }]}>Male</Text>
+          <Text style={[styles.filtergenderText, gender === 'male' && { color: '#fff' }]}>Male</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.genderButton, gender === 'female' && styles.selectedGender]}
+          style={[styles.filtergenderButton, gender === 'female' && styles.filterselectedGender]}
           onPress={() => handleGenderSelection('female')}
         >
-          <Text style={[styles.genderText, gender === 'female' && { color: '#fff' }]}>Female</Text>
+          <Text style={[styles.filtergenderText, gender === 'female' && { color: '#fff' }]}>Female</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.genderButton, gender === 'family' && styles.selectedGender]}
+          style={[styles.filtergenderButton, gender === 'family' && styles.filterselectedGender]}
           onPress={() => handleGenderSelection('family')}
         >
-          <Text style={[styles.genderText, gender === 'family' && { color: '#fff' }]}>family</Text>
+          <Text style={[styles.filtergenderText, gender === 'family' && { color: '#fff' }]}>family</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>Room Type</Text>
-      <View style={styles.genderContainer}>
+      <Text style={styles.filtersectionTitle}>Room Type</Text>
+      <View style={styles.filtergenderContainer}>
         <TouchableOpacity
-          style={[styles.genderButton, roomType === 'individual' && styles.selectedGender]}
+          style={[styles.filtergenderButton, roomType === 'individual' && styles.filterselectedGender]}
           onPress={() => handleRoomTypeSelection('individual')}
         >
-          <Text style={[styles.genderText, roomType === 'individual' && { color: '#fff' }]}>Individual</Text>
+          <Text style={[styles.filtergenderText, roomType === 'individual' && { color: '#fff' }]}>Individual</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.genderButton, roomType === 'apartment' && styles.selectedGender]}
+          style={[styles.filtergenderButton, roomType === 'apartment' && styles.filterselectedGender]}
           onPress={() => handleRoomTypeSelection('apartment')}
         >
-          <Text style={[styles.genderText, roomType === 'apartment' && { color: '#fff' }]}>Apartment</Text>
+          <Text style={[styles.filtergenderText, roomType === 'apartment' && { color: '#fff' }]}>Apartment</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>Location</Text>
+      <Text style={styles.filtersectionTitle}>Location</Text>
       <TextInput
-        style={styles.priceInput}
+        style={styles.filterpriceInput}
         placeholder="Enter location"
         value={location}
         onChangeText={setLocation}
       />
 
-      <Text style={styles.sectionTitle}>Availability</Text>
-      <View style={styles.counterContainer}>
+      <Text style={styles.filtersectionTitle}>Availability</Text>
+      <View style={styles.filtercounterContainer}>
         <TouchableOpacity
-          style={styles.counterButton}
+          style={styles.filtercounterButton}
           onPress={() => decreaseValue(setAvailability)}
         >
-          <Text style={styles.counterButtonText}>-</Text>
+          <Text style={styles.filtercounterButtonText}>-</Text>
         </TouchableOpacity>
-        <Text style={styles.counterText}>{availability}</Text>
+        <Text style={styles.filtercounterText}>{availability}</Text>
         <TouchableOpacity
-          style={styles.counterButton}
+          style={styles.filtercounterButton}
           onPress={() => increaseValue(setAvailability)}
         >
-          <Text style={styles.counterButtonText}>+</Text>
+          <Text style={styles.filtercounterButtonText}>+</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>Price Range (₹)</Text>
-      <View style={styles.priceRangeContainer}>
+      <Text style={styles.filtersectionTitle}>Price Range (₹)</Text>
+      <View style={styles.filterpriceRangeContainer}>
         <TextInput
-          style={styles.priceInput}
+          style={styles.filterpriceInput}
           placeholder="min"
           keyboardType="numeric"
           value={minRent}
           onChangeText={setMinPrice}
         />
-        <Text style={styles.toText}>to</Text>
+        <Text style={styles.filtertoText}>to</Text>
         <TextInput
-          style={styles.priceInput}
+          style={styles.filterpriceInput}
           placeholder="max"
           keyboardType="numeric"
           value={maxRent}
@@ -146,121 +146,11 @@ const FilterScreen = ({ navigation }) => {
         />
       </View>
 
-      <TouchableOpacity style={styles.filterapplyButton} onPress={handleApplyFilters}>
-        <Text style={styles.filterapplyButtonText}>Apply Filters</Text>
+      <TouchableOpacity style={styles.filterfilterapplyButton} onPress={handleApplyFilters}>
+        <Text style={styles.filterscreenapplyButtonText}>Apply Filters</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  filtercontainer: {
-    flex: 1,
-    backgroundColor: '#f8f8f8',
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  filterheader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: primaryColor,
-    borderRadius: 5,
-  },
-  headerButtonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  filterheaderTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  sectionContainer: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: primaryColor,
-  },
-  genderContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  genderButton: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: primaryColor,
-    borderRadius: 5,
-    marginHorizontal: 5,
-  },
-  genderText: {
-    fontSize: 14,
-    color: primaryColor,
-  },
-  selectedGender: {
-    backgroundColor: primaryColor,
-  },
-  priceRangeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  priceInput: {
-    flex: 1,
-    height: 40,
-    borderColor: primaryColor,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  toText: {
-    fontSize: 16,
-    marginHorizontal: 10,
-  },
-  counterContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: primaryColor,
-    borderRadius: 5,
-    paddingHorizontal: 20,
-  },
-  counterButton: {
-    padding: 10,
-  },
-  counterButtonText: {
-    fontSize: 20,
-    color: primaryColor,
-  },
-  counterText: {
-    fontSize: 18,
-  },
-  filterapplyButton: {
-    backgroundColor: primaryColor,
-    paddingVertical: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 50,
-  },
-  filterapplyButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default FilterScreen;

@@ -6,7 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile, updateProfile } from '../../reducers/profile/profileSlice';
 import { RootState } from '../../reducers/store';
-import { primaryColor } from '../Styles/Styles';
+import { primaryColor,styles } from '../Styles/Styles';
 import { setMobileNumber } from '../../reducers/auth/authSlice';
 import RNFS from 'react-native-fs';
 import { format, parseISO } from 'date-fns';
@@ -186,10 +186,10 @@ const EditProfile = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={styles.editcontainer}>
         <View>
-          <View style={styles.imageContainer}>
-            <Image source={imageUri} style={styles.profileImage} />
+          <View style={styles.editimageContainer}>
+            <Image source={imageUri} style={styles.editprofileImage} />
             {isEditing && (
               <TouchableOpacity style={styles.editButton} onPress={handleSelectGallery}>
                 <Image source={require('../Images/ic_editImage.png')} style={styles.editIcon} />
@@ -199,11 +199,11 @@ const EditProfile = () => {
         </View>
         <Text style={{ textAlign: 'center', color: primaryColor, fontSize: 20, marginTop: 10, fontWeight: 'bold' }}>{fullName}</Text>
         <View style={{ marginLeft: 20, marginRight: 20, marginTop: 20, marginBottom: 80 }}>
-          <Text style={styles.label}>Full Name</Text>
-          <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_person.png')} style={styles.inputIcon} />
+          <Text style={styles.editlabel}>Full Name</Text>
+          <View style={styles.editprofileInput}>
+            <Image source={require('../Images/ic_person.png')} style={styles.editinputIcon} />
             <TextInput
-              style={styles.textInput}
+              style={styles.edittextInput}
               value={fullName}
               onChangeText={setFullName}
               placeholder="Enter your full name"
@@ -213,11 +213,11 @@ const EditProfile = () => {
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             )}
           </View>
-          <Text style={styles.label}>Email</Text>
-          <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_email.png')} style={styles.inputIcon} />
+          <Text style={styles.editlabel}>Email</Text>
+          <View style={styles.editprofileInput}>
+            <Image source={require('../Images/ic_email.png')} style={styles.editinputIcon} />
             <TextInput
-              style={styles.textInput}
+              style={styles.edittextInput}
               value={email}
               onChangeText={setEmail}
               placeholder="Enter your email"
@@ -227,13 +227,13 @@ const EditProfile = () => {
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             )}
           </View>
-          <Text style={styles.label}>Date of Birth</Text>
-          <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_dob.png')} style={styles.inputIcon} />
+          <Text style={styles.editlabel}>Date of Birth</Text>
+          <View style={styles.editprofileInput}>
+            <Image source={require('../Images/ic_dob.png')} style={styles.editinputIcon} />
             {isEditing ? (
               <TouchableOpacity onPress={showDatePicker} style={{ flex: 1 }}>
                 <TextInput
-                  style={styles.textInput}
+                  style={styles.edittextInput}
                   value={formatDateFromISO(dateOfBirth)}
                   editable={false}
                   onFocus={showDatePicker}
@@ -241,7 +241,7 @@ const EditProfile = () => {
                 />
               </TouchableOpacity>
             ) : (
-              <Text style={styles.textInput}>{formatDateFromISO(dateOfBirth)}</Text>
+              <Text style={styles.edittextInput}>{formatDateFromISO(dateOfBirth)}</Text>
             )}
             <DateTimePickerModal
               textColor='black'
@@ -254,9 +254,9 @@ const EditProfile = () => {
               <Image source={require('../Images/ic_editText.png')} style={styles.editInputIcon} />
             )}
           </View>
-          <Text style={styles.label}>Gender</Text>
-          <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_gender.png')} style={styles.back} />
+          <Text style={styles.editlabel}>Gender</Text>
+          <View style={styles.editprofileInput}>
+            <Image source={require('../Images/ic_gender.png')} style={styles.editinputIcon} />
             {isEditing ? (
               <DropDownPicker
                 open={genderTypeOpen}
@@ -274,12 +274,12 @@ const EditProfile = () => {
                 dropDownDirection='TOP'
               />
             ) : (
-              <Text style={styles.textInput}>{gender}</Text>
+              <Text style={styles.edittextInput}>{gender}</Text>
             )}
           </View>
-          <Text style={styles.label}>Make Mobile Number Private</Text>
-          <View style={styles.profileInput}>
-            <Image source={require('../Images/ic_phone.png')} style={styles.inputIcon} />
+          <Text style={styles.editlabel}>Make Mobile Number Private</Text>
+          <View style={styles.editprofileInput}>
+            <Image source={require('../Images/ic_phone.png')} style={styles.editinputIcon} />
             {isEditing ? (
               <DropDownPicker
                 open={makeMobilePrivateOpen}
@@ -299,7 +299,7 @@ const EditProfile = () => {
                 textStyle={{ fontSize: 18 }}
               />
             ) : (
-              <Text style={styles.textInput}>{makeMobilePrivate ? 'True' : 'False'}</Text>
+              <Text style={styles.edittextInput}>{makeMobilePrivate ? 'True' : 'False'}</Text>
             )}
           </View>
         </View>
@@ -310,131 +310,4 @@ const EditProfile = () => {
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: primaryColor,
-    marginTop: 20,
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 2,
-    borderColor: primaryColor,
-  },
-  editButton: {
-    backgroundColor: 'white',
-    position: 'absolute',
-    bottom: 0,
-    right: 130,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  editIcon: {
-    width: 25,
-    height: 25,
-    tintColor: primaryColor,
-  },
-  label: {
-    fontSize: 18,
-    color: primaryColor,
-    fontWeight: 'bold',
-    marginBottom: 7,
-    marginLeft:7
-  },
-  profileInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    backgroundColor: '#FFF',
-    height: 50,
-    borderRadius: 10,
-    borderColor: primaryColor,
-    borderWidth: 1,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 18,
-    marginLeft: 10,
-    color: "#000"
-  },
-  inputIcon: {
-    width: 25,
-    height: 25,
-    marginLeft: 10,
-  },
-  editInputIcon: {
-    width: 25,
-    height: 25,
-    tintColor: primaryColor,
-    marginRight: 10,
-  },
-  editableInputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalView: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  modalTextInput: {
-    width: '100%',
-    height: 40,
-    borderColor: primaryColor,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  editProfileButton: {
-    backgroundColor: primaryColor,
-    padding: 15,
-    borderRadius: 10,
-    margin: 20,
-    marginBottom: 100,
-    marginTop: -70,
-    alignItems: 'center',
-  },
-  editProfileButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
-
 export default EditProfile;

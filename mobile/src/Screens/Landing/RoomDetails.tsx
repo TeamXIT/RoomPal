@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { useDispatch, useSelector } from 'react-redux';
-import { primaryColor } from '../Styles/Styles';
+import { primaryColor,styles } from '../Styles/Styles';
 
 // Importing local images
 const backArrowImage = require('../Images/ic_backArrow.png');
@@ -94,22 +94,6 @@ const RoomDetails = ({ route, navigation, item }) => {
     { name: 'pool', icon: poolImage },
   ];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const handleFavorite = () => {
     console.log('room_id: ', room_id);
     if (room_id.includes(room._id)) {
@@ -140,7 +124,8 @@ const RoomDetails = ({ route, navigation, item }) => {
 
   const renderCarouselItem = ({ item }) => {
     return (
-      <View style={styles.carouselItem}>
+      <View style={{width: width,
+        height: 200,}}>
         <Image source={{ uri: `data:image/png;base64,${item}` }} style={styles.carouselImage} />
       </View>
     );
@@ -252,14 +237,14 @@ const RoomDetails = ({ route, navigation, item }) => {
           <Text style={styles.middleDot}> •</Text>
           <Text style={styles.Roomreviews}>324 reviews</Text>
         </View>
-        <Text style={styles.amenitiesTitle}>Amenities and facilities</Text>
-        <View style={styles.amenitiesContainer}>
+        <Text style={styles.roomamenitiesTitle}>Amenities and facilities</Text>
+        <View style={styles.roomamenitiesContainer}>
           {amenitiesIcons.map((amenity, index) => (
             room.amenities && room.amenities[amenity.name] ? (
               <Image
                 key={index}
                 source={amenity.icon}
-                style={styles.amenityIcon}
+                style={styles.roomamenityIcon}
               />
             ) : null
           ))}
@@ -331,179 +316,5 @@ const RoomDetails = ({ route, navigation, item }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  Roomcontainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  carouselContainer: {
-    marginBottom: 10,
-  },
-  backArrowContainer: {
-    // position: 'absolute',
-    // top: 10,
-    // left: 10,
-    // zIndex: 1,
-    height: 35,
-    width: 35,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backArrow: {
-    width: 24,
-    height: 24,
-  },
-  carouselItem: {
-    width: width,
-    height: 200,
-  },
-  carouselImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    alignItems: 'center',
-
-  },
-  paginationContainer: {
-    position: 'absolute',
-    bottom: 10,
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  paginationText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  detailsContainer: {
-    paddingHorizontal: 15,
-    paddingTop: 15,
-  },
-  Roomtitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  Roomrating: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  middleDot: {
-    fontSize: 18,
-    marginHorizontal: 2,
-  },
-  Roomreviews: {
-    fontSize: 18,
-    color: 'gray',
-  },
-  amenitiesTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    color: primaryColor
-  },
-  // amenitiesContainer: {
-  // flexDirection: 'row',
-  // flexWrap: 'wrap',
-  // justifyContent: 'space-between',
-  // },
-  amenitiesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginVertical: 1,
-  },
-  amenityIcon: {
-    width: 35,
-    height: 35,
-    margin: 10,
-
-  },
-
-  amenityItem: {
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  amenityImage: {
-    width: 30,
-    height: 30,
-  },
-  amenityLabel: {
-    fontSize: 12,
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  contactContainer: {
-    marginTop: 15,
-  },
-  contactButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  contactIcon: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
-  contactText: {
-    fontSize: 16,
-    color: '#555',
-  },
-  price: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginTop: 5,
-    marginBottom: 15,
-
-  },
-  bookButton: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    marginTop: 10,
-    marginBottom: 5
-  },
-  bookButtonText: {
-    color: 'white',
-    fontSize: 18,
-  }, roomdetails: {
-    fontSize: 18,
-    color: 'black'
-  },
-  headerContainer: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    right: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    zIndex: 1,
-    alignItems: 'center',
-
-  },
-  favoritesContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  favoritesIcon: {
-    height: 30,
-    width: 30,
-    tintColor: '#FFFFFF'
-  },
-
-});
 
 export default RoomDetails;

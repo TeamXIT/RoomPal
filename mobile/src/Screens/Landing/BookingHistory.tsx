@@ -6,6 +6,8 @@ import { RootState } from '../../reducers/store';
 import axios from 'axios';
 import { getOrdersByCustomerId } from '../../reducers/orders/orderSlice';
 import { API_BASE_URL } from '../../reducers/config/appConfig';
+import {styles} from '../Styles/Styles'
+
 const { width } = Dimensions.get('window');
 const BookingHistory = () => {
   const dispatch = useDispatch();
@@ -75,26 +77,26 @@ const BookingHistory = () => {
 
   return (
     <ScrollView>
-      <View style={styles.roomlistcontainer}>
+      <View style={styles.bookingroomlistcontainer}>
         {rooms.map((room, index) => (
-          <View key={index} style={styles.card}>
+          <View key={index} style={styles.bookingcard}>
             <View style={styles.bookedLabelContainer}>
               <Text style={styles.bookedLabel}>Booked</Text>
             </View>
-            <View style={styles.cardContent}>
+            <View style={styles.bookingcardContent}>
               <Image
                 source={{ uri: `data:image/png;base64,${room.images[0]}` }}
-                style={styles.image}
+                style={styles.bookingimage}
                 onError={() => console.log('Image failed to load')}
               />
-              <View style={styles.infoContainer}>
-                <Text style={styles.roomName}>{room.roomName}</Text>
-                <View style={styles.detailsContainer}>
-                  <Text style={styles.detail}>Rent: ₹{room.rent}</Text>
-                  <Text style={styles.detail}>Looking For: {room.gender}</Text>
+              <View style={styles.bookinginfoContainer}>
+                <Text style={styles.bookingroomName}>{room.roomName}</Text>
+                <View style={styles.bookingdetailsContainer}>
+                  <Text style={styles.bookingdetail}>Rent: ₹{room.rent}</Text>
+                  <Text style={styles.bookingdetail}>Looking For: {room.gender}</Text>
                 </View>
-                <TouchableOpacity style={styles.detailsButton}>
-                  <Text style={styles.detailsButtonText}>See Details</Text>
+                <TouchableOpacity style={styles.bookingdetailsButton}>
+                  <Text style={styles.bookingdetailsButtonText}>See Details</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -104,93 +106,5 @@ const BookingHistory = () => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  roomlistcontainer: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
-    paddingTop: 5,
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    marginBottom: 15,
-    shadowColor: '#814ABF',
-    shadowOffset: {
-      width: 2,
-      height: 10,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    elevation: 5,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#DDD',
-    marginTop: 5,
-  },
-  cardImage: {
-    width: 300,
-    height: width / 2,
-  },
-  image: {
-    width: 120,
-    height: 120,
-    borderRadius: 12,
-    marginRight: 20,
-
-  },
-  bookedLabelContainer: {
-    position: 'absolute',
-    top: 15,
-    right: 5,
-    backgroundColor: '#d4edda',
-    borderColor: '#155724',
-    borderWidth: 2,
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    zIndex: 1,
-  },
-  bookedLabel: {
-    color: '#155724',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  cardContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  infoContainer: {
-    flex: 1,
-  },
-  roomName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
-  },
-  detailsContainer: {
-    flexDirection: 'column',
-    marginBottom: 10,
-  },
-  detail: {
-    fontSize: 16,
-    color: '#555',
-    marginBottom: 5,
-  },
-  detailsButton: {
-    backgroundColor: '#814ABF',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    alignItems: 'center',
-  },
-  detailsButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
 
 export default BookingHistory;

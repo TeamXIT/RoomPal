@@ -6,6 +6,7 @@ import { signIn } from '../../reducers/auth/authSlice';
 import TeamXLogoImage from '../molecule/TeamXLogoImage';
 import PhoneInput from 'react-native-phone-number-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {styles} from '../Styles/Styles'
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -70,16 +71,16 @@ const LoginScreen = ({ navigation }) => {
   }, [success, navigation]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
+    <View style={styles.logincontainer}>
+      <View style={styles.logininnerContainer}>
         <TeamXLogoImage />
-        <Text style={styles.label}>Mobile Number</Text>
+        <Text style={styles.loginlabel}>Mobile Number</Text>
         <PhoneInput
           defaultValue={mobileNumber}
           defaultCode="IN"
           layout="first"
           onChangeText={setMobileNumber}
-          containerStyle={[styles.input, { width: '100%' }]}
+          containerStyle={[styles.logininput, { width: '100%' }]}
           textContainerStyle={{
             paddingVertical: 10,
             backgroundColor: 'white',
@@ -94,128 +95,42 @@ const LoginScreen = ({ navigation }) => {
           placeholder="Enter mobile number"
           keyboardType="number-pad"
         />
-        {mobileNumberError ? <Text style={styles.errorText}>{mobileNumberError}</Text> : null}
-        <Text style={styles.label}>Password</Text>
+        {mobileNumberError ? <Text style={styles.loginerrorText}>{mobileNumberError}</Text> : null}
+        <Text style={styles.loginlabel}>Password</Text>
         <TextInput
-          style={styles.input}
+          style={styles.logininput}
           placeholder="Enter password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
         />
-        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-        {generalError ? <Text style={styles.errorText}>{generalError}</Text> : null}
-        <View style={styles.checkboxContainer}>
+        {passwordError ? <Text style={styles.loginerrorText}>{passwordError}</Text> : null}
+        {generalError ? <Text style={styles.loginerrorText}>{generalError}</Text> : null}
+        <View style={styles.logincheckboxContainer}>
           <CheckBox
             value={rememberMe}
             onValueChange={setRememberMe}
             tintColors={{ true: '#6b21a8', false: '#6b21a8' }}
           />
-          <Text style={styles.checkboxLabel}>Remember me</Text>
+          <Text style={styles.logincheckboxLabel}>Remember me</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-          <Text style={styles.buttonText}>Login ➜</Text>
+        <TouchableOpacity style={styles.loginbutton} onPress={handleLoginPress}>
+          <Text style={styles.loginbuttonText}>Login ➜</Text>
         </TouchableOpacity>
-        <View style={styles.forgotPasswordContainer}>
+        <View style={styles.loginforgotPasswordContainer}>
           <TouchableOpacity onPress={handleForgotPasswordPress}>
-            <Text style={styles.link}>Forgot Password?</Text>
+            <Text style={styles.loginlink}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.inlineTextContainer}>
-          <Text style={styles.text}>Don't have an account? </Text>
+        <View style={styles.logininlineTextContainer}>
+          <Text style={styles.logintext}>Don't have an account? </Text>
           <TouchableOpacity onPress={handleRegisterPress}>
-            <Text style={styles.registerLink}>Register here</Text>
+            <Text style={styles.loginregisterLink}>Register here</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#f3e8ff',
-  },
-  innerContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 5,
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 16,
-    color: '#6b21a8',
-    marginBottom: 5,
-    alignSelf: 'flex-start',
-    fontWeight: 'bold',
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-    width: '100%',
-  },
-  errorText: {
-    color: 'red',
-    alignSelf: 'flex-start',
-    marginBottom: 10,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    alignSelf: 'flex-start',
-  },
-  checkbox: {
-    marginRight: 10,
-  },
-  checkboxLabel: {
-    color: '#6b21a8',
-  },
-  button: {
-    backgroundColor: '#9333ea',
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 20,
-    width: '100%',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  forgotPasswordContainer: {
-    alignSelf: 'flex-end',
-    marginBottom: 20,
-  },
-  link: {
-    color: '#4169E1',
-    textAlign: 'right',
-  },
-  text: {
-    color: '#6b21a8',
-  },
-  registerLink: {
-    color: '#4169E1',
-  },
-  inlineTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-});
 
 export default LoginScreen;
